@@ -5,7 +5,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { Button } from "./button";
 import { Popover, PopoverTrigger, PopoverContent } from "./popover";
-import { HamburgerMenuIcon } from '@radix-ui/react-icons'
+import { HamburgerMenuIcon } from "@radix-ui/react-icons";
 
 const logo = require("@/assets/logo-white.png");
 
@@ -31,7 +31,7 @@ export function Navbar() {
   const currentPath = usePathname();
 
   return (
-    <header className="sticky top-0 bg-background flex w-full justify-between h-20 items-center gap-4 px-4 md:px-6 md:mb-12">
+    <header className="sticky top-0 bg-background flex w-full justify-between h-20 items-center gap-4 px-4 md:px-6 z-50">
       <nav className="flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
         <Link
           href="/"

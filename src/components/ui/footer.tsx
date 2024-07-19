@@ -35,12 +35,12 @@ const Footer = () => {
       <section className="relative h-[480px] flex items-start justify-center">
         <Image
           src={footerPhoto.default.src}
-          alt="TC Co. - connecting african communities photo"
+          alt="TC Co. - connecting with us photo"
           layout="fill"
           objectFit="cover"
           className="z-0 object-top"
         />
-        <div className="z-10 text-white container px-20 mt-[90px]">
+        <div className="z-10 text-white container lg:px-20 mt-[90px]">
           <h1 className="text-2xl md:text-3xl lg:text-5xl font-display uppercase text-primary mb-3">
             {content.footer.about.title}
           </h1>
@@ -53,8 +53,8 @@ const Footer = () => {
           </Button>
         </div>
       </section>
-      <footer className="relative py-16 px-4 md:px-8 text-white">
-        <div className="relative z-10 container px-20 grid md:grid-cols-3 gap-8">
+      <footer className="relative py-16 text-white">
+        <div className="relative z-10 container lg:px-20 grid md:grid-cols-3 gap-8">
           <div className="">
             <Link href="/" className="">
               <Image
@@ -66,7 +66,7 @@ const Footer = () => {
               />
             </Link>
           </div>
-          <div className="flex gap-24 justify-end col-span-2">
+          <div className="flex gap-24 md:justify-end md:col-span-2">
             <div className="grid gap-2">
               {content.footer.footerPages.links.map((link: any, index: any) => (
                 <Link key={link.url} href={`/${link.url}`} className="">
@@ -75,7 +75,7 @@ const Footer = () => {
               ))}
             </div>
             <div>
-              <div className="flex space-x-6">
+              <div className="hidden md:flex space-x-6 ">
                 {content.footer.social.links.map((link: any, index: number) => (
                   <Link
                     key={link.url}
@@ -92,8 +92,22 @@ const Footer = () => {
             </div>
           </div>
         </div>
-        <div className="container px-20">
+        <div className="container lg:px-20">
           <p className="text-md mt-10">(C) All rights reserved, 2024</p>
+          <div className="flex space-x-6 md:hidden mt-5">
+            {content.footer.social.links.map((link: any, index: number) => (
+              <Link
+                key={link.url}
+                href={link.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-600 hover:text-gray-800 transition-colors duration-200"
+              >
+                {getIconForSocialMedia(link.name)}
+                <span className="sr-only">{link.name}</span>
+              </Link>
+            ))}
+          </div>
         </div>
       </footer>
     </>

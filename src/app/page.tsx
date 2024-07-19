@@ -1,27 +1,32 @@
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import content from '@/data/content.json'; 
-// import { getContent } from "@/content";
+import content from "@/data/content.json";
+import { nl2br } from "@/content";
+import { ArrowRightIcon } from "@radix-ui/react-icons";
+const heroPhoto = require("@/assets/hero-photo.jpg");
 
 export default async function Home() {
-  // const content = await getContent();
   return (
     <main className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative h-screen flex items-center justify-center">
+      <section className="relative h-[90vh] flex items-center justify-center">
         <Image
-          src={content.hero.background}
+          src={heroPhoto.default.src}
           alt="TC Co. - connecting african communities photo"
           layout="fill"
           objectFit="cover"
-          className="z-0"
+          className="z-0 object-top"
         />
-        <div className="z-10 text-center text-white">
-          <h1 className="text-4xl md:text-6xl font-bold mb-4">
-            {content.hero.title}
+        <div className="z-10 text-white container lg:px-20">
+          <h1 className="text-4xl md:text-7xl lg:text-7xl font-display uppercase mb-4">
+            {nl2br(content.hero.title)}
           </h1>
-          <p className="text-xl md:text-2xl mb-8">{content.hero.subtitle}</p>
-          <Button size="lg">{content.hero.buttonText}</Button>
+          <p className="text-[13px] md:text-2xl lg:text-2xl mb-4">
+            {nl2br(content.hero.subtitle)}
+          </p>
+          <Button size="lg">
+            {content.hero.buttonText} <ArrowRightIcon className="ml-3" />
+          </Button>
         </div>
       </section>
 
@@ -94,8 +99,6 @@ export default async function Home() {
           </div>
         </div>
       </section>
-
-      
     </main>
   );
 }
