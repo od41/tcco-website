@@ -1,9 +1,10 @@
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { getContent } from "@/content";
+import content from '@/data/content.json'; 
+// import { getContent } from "@/content";
 
 export default async function Home() {
-  const content = await getContent();
+  // const content = await getContent();
   return (
     <main className="min-h-screen">
       {/* Hero Section */}
@@ -94,43 +95,7 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Footer Section */}
-      <footer className="relative py-16 px-4 md:px-8 text-white">
-        <Image
-          src="/footer-bg.jpg"
-          alt="Footer background"
-          layout="fill"
-          objectFit="cover"
-          className="z-0"
-        />
-        <div className="relative z-10 max-w-6xl mx-auto grid md:grid-cols-3 gap-8">
-          <div>
-            <h3 className="text-xl font-bold mb-4">
-              {content.footer.about.title}
-            </h3>
-            <p>{content.footer.about.content}</p>
-          </div>
-          <div>
-            <h3 className="text-xl font-bold mb-4">
-              {content.footer.contact.title}
-            </h3>
-            <p>Email: {content.footer.contact.email}</p>
-            <p>Phone: {content.footer.contact.phone}</p>
-          </div>
-          <div>
-            <h3 className="text-xl font-bold mb-4">
-              {content.footer.social.title}
-            </h3>
-            <div className="flex space-x-4">
-              {content.footer.social.links.map((link: any, index: any) => (
-                <a key={index} href={link.url} className="hover:text-gray-300">
-                  {link.name}
-                </a>
-              ))}
-            </div>
-          </div>
-        </div>
-      </footer>
+      
     </main>
   );
 }

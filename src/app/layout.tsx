@@ -3,13 +3,14 @@ import "./globals.css";
 import { Navbar } from "@/components/ui/navbar";
 import { ThemeProvider } from "@/components/theme-provider";
 import localFont from "next/font/local";
+import Footer from "@/components/ui/footer";
 
 const fontSans = localFont({
-  src: "../assets/nunito-var.ttf",
+  src: "../assets/recoleta-regular.ttf",
   variable: "--font-sans",
 });
 const displaySans = localFont({
-  src: "../assets/recoleta-regular.ttf",
+  src: "../assets/biorhyme-bold.ttf",
   variable: "--font-display",
 });
 
@@ -36,6 +37,7 @@ export default function RootLayout({
         >
           <Navbar />
           {children}
+          <Footer />
         </ThemeProvider>
       </body>
     </html>
