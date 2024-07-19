@@ -5,11 +5,11 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { Button } from "./button";
 import { Popover, PopoverTrigger, PopoverContent } from "./popover";
-import { Menu } from "lucide-react";
+import { HamburgerMenuIcon } from '@radix-ui/react-icons'
 
 const logo = require("@/assets/logo-white.png");
 
-const links: { title: string; href: string; description: string }[] = [
+export const links: { title: string; href: string; description: string }[] = [
   {
     title: "Home",
     href: "/",
@@ -67,7 +67,7 @@ export function Navbar() {
       <Popover>
         <PopoverTrigger asChild>
           <Button variant="outline" size="icon" className="shrink-0 md:hidden">
-            <Menu className="h-5 w-5" />
+            <HamburgerMenuIcon className="h-5 w-5" />
             <span className="sr-only">Toggle navigation menu</span>
           </Button>
         </PopoverTrigger>

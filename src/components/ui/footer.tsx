@@ -3,45 +3,60 @@ import Image from "next/image";
 import content from "@/data/content.json";
 import { Button } from "./button";
 import Link from "next/link";
+import { nl2br } from "@/content";
+import {
+  ArrowRightIcon,
+  InstagramLogoIcon,
+  TwitterLogoIcon,
+  LinkedInLogoIcon,
+  Link2Icon,
+} from "@radix-ui/react-icons";
 
 const logo = require("@/assets/logo-white.png");
+const footerPhoto = require("@/assets/footer-photo.jpg");
 
 const Footer = () => {
+  const getIconForSocialMedia = (name: string) => {
+    switch (name.toLowerCase()) {
+      case "instagram":
+        return <InstagramLogoIcon className="w-6 h-6 text-white" />;
+      case "x":
+        return <TwitterLogoIcon className="w-6 h-6 text-white" />;
+      case "linkedin":
+        return <LinkedInLogoIcon className="w-6 h-6 text-white" />;
+      // Add more cases as needed
+      default:
+        return <Link2Icon className="w-6 h-6 text-white" />;
+    }
+  };
   return (
     <>
       {/* Footer Section */}
-      <section className="relative h-screen flex items-center justify-center">
+      <section className="relative h-[480px] flex items-start justify-center">
         <Image
-          src={content.hero.background}
+          src={footerPhoto.default.src}
           alt="TC Co. - connecting african communities photo"
           layout="fill"
           objectFit="cover"
-          className="z-0"
+          className="z-0 object-top"
         />
-        <div className="z-10 text-center text-white">
-          <h1 className="text-4xl md:text-6xl font-bold mb-4">
+        <div className="z-10 text-white container px-20 mt-[90px]">
+          <h1 className="text-2xl md:text-3xl lg:text-5xl font-display uppercase text-primary mb-3">
             {content.footer.about.title}
           </h1>
-          <p className="text-xl md:text-2xl mb-8">
-            {content.footer.about.subtitle}
-          </p>
-          <Button size="lg">{content.footer.about.buttonText}</Button>
+          <div className="text-xl md:text-xl mb-4 leading-7">
+            {nl2br(content.footer.about.subtitle)}
+          </div>
+          <Button size="lg">
+            {content.footer.about.buttonText}{" "}
+            <ArrowRightIcon className="ml-3" />
+          </Button>
         </div>
       </section>
       <footer className="relative py-16 px-4 md:px-8 text-white">
-        {/* <Image
-          src="/footer-bg.jpg"
-          alt="Footer background"
-          layout="fill"
-          objectFit="cover"
-          className="z-0"
-        /> */}
-        <div className="relative z-10 max-w-6xl mx-auto grid md:grid-cols-3 gap-8">
-          <div>
-            <Link
-              href="/"
-              className="flex items-center gap-2 text-lg font-semibold md:text-base"
-            >
+        <div className="relative z-10 container px-20 grid md:grid-cols-3 gap-8">
+          <div className="">
+            <Link href="/" className="">
               <Image
                 src={logo.default.src}
                 // className="h-6 w-6"
@@ -51,25 +66,34 @@ const Footer = () => {
               />
             </Link>
           </div>
-          <div>
-            <h3 className="text-xl font-bold mb-4">
-              {content.footer.contact.title}
-            </h3>
-            <p>Email: {content.footer.contact.email}</p>
-            <p>Phone: {content.footer.contact.phone}</p>
-          </div>
-          <div>
-            <h3 className="text-xl font-bold mb-4">
-              {content.footer.social.title}
-            </h3>
-            <div className="flex space-x-4">
-              {content.footer.social.links.map((link: any, index: any) => (
-                <a key={index} href={link.url} className="hover:text-gray-300">
+          <div className="flex gap-24 justify-end col-span-2">
+            <div className="grid gap-2">
+              {content.footer.footerPages.links.map((link: any, index: any) => (
+                <Link key={link.url} href={`/${link.url}`} className="">
                   {link.name}
-                </a>
+                </Link>
               ))}
             </div>
+            <div>
+              <div className="flex space-x-6">
+                {content.footer.social.links.map((link: any, index: number) => (
+                  <Link
+                    key={link.url}
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-gray-600 hover:text-gray-800 transition-colors duration-200"
+                  >
+                    {getIconForSocialMedia(link.name)}
+                    <span className="sr-only">{link.name}</span>
+                  </Link>
+                ))}
+              </div>
+            </div>
           </div>
+        </div>
+        <div className="container px-20">
+          <p className="text-md mt-10">(C) All rights reserved, 2024</p>
         </div>
       </footer>
     </>

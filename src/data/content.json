@@ -36,20 +36,24 @@
   "footer": {
     "about": {
       "title": "Connect",
-      "subtitle": "Become part of a thriving community! Email: info@jointcco.com",
+      "subtitle": "Become part of a thriving community! \nEmail: info@jointcco.com",
       "buttonText": "Join now"
     },
-    "contact": {
-      "title": "Contact",
-      "email": "info@example.com",
-      "phone": "(123) 456-7890"
+    "footerPages": {
+      "title": "",
+      "links": [
+        { "name": "Engage", "url": "engage" },
+        { "name": "Contact Us", "url": "contact-us" },
+        { "name": "Privacy Policy", "url": "privacy-policy" }
+      ]
     },
     "social": {
       "title": "Follow Us",
       "links": [
-        { "name": "Facebook", "url": "#" },
-        { "name": "Twitter", "url": "#" },
-        { "name": "LinkedIn", "url": "#" }
+        { "name": "LinkedIn", "url": "https://linkedin.com/company/tcco" },
+        { "name": "Instagram", "url": "https://instagram.com/tcco" },
+        { "name": "X", "url": "https://x.com/tcco" },
+        { "name": "YouTube", "url": "https://youtube.com/channel/tcco" }
       ]
     }
   }
