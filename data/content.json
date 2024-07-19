@@ -1,0 +1,55 @@
+{
+  "hero": {
+    "title": "Connecting African communities",
+    "subtitle": "Through integrated products, services, and experiences. Built on the belief that thriving communities inspire individual growth.",
+    "buttonText": "Join the community",
+    "background": ""
+  },
+  "video": {
+    "src": "/your-video.mp4"
+  },
+  "vision": {
+    "title": "Our Vision",
+    "content": "We envision a world where technology and innovation come together to create a better future for all."
+  },
+  "mission": {
+    "title": "Our Mission",
+    "content": "Our mission is to empower individuals and businesses with cutting-edge solutions that drive growth and positive change."
+  },
+  "grid": {
+    "image": "/grid-image.jpg",
+    "title": "Innovative Solutions",
+    "content": "We provide innovative solutions that help businesses thrive in the digital age. Our team of experts is dedicated to delivering high-quality results.",
+    "buttonText": "Learn More"
+  },
+  "collage": {
+    "title": "Our Work",
+    "images": [
+      "/collage-1.jpg",
+      "/collage-2.jpg",
+      "/collage-3.jpg",
+      "/collage-4.jpg",
+      "/collage-5.jpg",
+      "/collage-6.jpg"
+    ]
+  },
+  "footer": {
+    "about": {
+      "title": "About Us",
+      "content": "We are a company dedicated to innovation and excellence."
+    },
+    "contact": {
+      "title": "Contact",
+      "email": "info@example.com",
+      "phone": "(123) 456-7890"
+    },
+    "social": {
+      "title": "Follow Us",
+      "links": [
+        { "name": "Facebook", "url": "#" },
+        { "name": "Twitter", "url": "#" },
+        { "name": "LinkedIn", "url": "#" }
+      ]
+    }
+  }
+}
