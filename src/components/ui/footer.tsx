@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import content from "@/data/content.json";
+import content from "@/data/home.content.json";
 import { Button } from "./button";
 import Link from "next/link";
 import { nl2br } from "@/content";
