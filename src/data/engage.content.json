@@ -15,6 +15,26 @@
     "content": "We provide innovative solutions that help businesses thrive in the digital age. Our team of experts is dedicated to delivering high-quality results.",
     "buttonText": "Learn More"
   },
+  "impactNumbers": {
+    "items": [
+      {
+        "value": "2m",
+        "name": "Website Visitors"
+      },
+      {
+        "value": "32k",
+        "name": "communities reached"
+      },
+      {
+        "value": "22",
+        "name": "Partners"
+      },
+      {
+        "value": "3",
+        "name": "years running"
+      }
+    ]
+  },
   "collage": {
     "title": "Our Work",
     "images": [

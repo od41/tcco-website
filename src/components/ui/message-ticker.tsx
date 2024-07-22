@@ -3,12 +3,20 @@ import { cn } from "@/lib/utils";
 
 interface MessageTickerProps {
   message: string;
+  isReversed?: boolean;
 }
 
-export const MessageTicker: React.FC<MessageTickerProps> = ({ message }) => {
+export const MessageTicker: React.FC<MessageTickerProps> = ({
+  message,
+  isReversed = false,
+}) => {
   return (
     <div className="w-full overflow-hidden border-t border-b border-primary py-1.5">
-      <div className="flex animate-ticker">
+      <div
+        className={`flex ${
+          isReversed ? "animate-ticker-reverse" : "animate-ticker"
+        }`}
+      >
         {[...Array(10)].map((_, index) => (
           <div
             key={index}
