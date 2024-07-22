@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import content from "@/data/home.content.json";
@@ -12,6 +13,10 @@ import Link from "next/link";
 const heroPhoto = require("@/assets/hero-photo.jpg");
 const videoThumbnailPhoto = require("@/assets/video-thumb.jpg");
 const visionCollage = require("@/assets/vision-collage.png");
+const collagePhoto1 = require("@/assets/tcco-1.jpg");
+const collagePhoto2 = require("@/assets/tcco-2.jpg");
+const collagePhoto3 = require("@/assets/tcco-3.jpg");
+const collagePhoto4 = require("@/assets/tcco-4.jpg");
 
 export default async function Home() {
   return (
@@ -94,7 +99,7 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Collage Section */}
+      {/* Brands Section */}
       <section className="pb-20">
         <div className="container md:px-20">
           <div className="flex flex-wrap justify-center gap-8">
@@ -111,6 +116,80 @@ export default async function Home() {
           </div>
         </div>
       </section>
+
+      {/* Keywords */}
+      <section className="pt-20 pb-12 px-4">
+        <div className="container mx-auto">
+          <div className="flex flex-wrap items-center justify-center">
+            {content.keywords.words.map((word, index) => (
+              <Fragment key={index}>
+                {index > 0 && (
+                  <span className="mx-2 text-white text-2xl">—</span>
+                )}
+                <span
+                  className={`text-base md:text-2xl lg:text-3xl ${
+                    index % 2 === 0 ? "text-white" : "text-primary"
+                  }`}
+                >
+                  {word}
+                </span>
+              </Fragment>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Collage Section */}
+      <section className=" mx-auto lg:px-20 m mb-20">
+        <div className="container grid grid-cols-1 md:grid-cols-2 md:grid-rows-3 lg:grid-rows-2 lg:grid-cols-3 gap-4">
+          {/* Image 1: Full height on desktop, full width on mobile */}
+          <div className="relative h-[240px] md:h-full md:col-span-2 lg:col-span-1 md:row-span-1 lg:row-span-2">
+            <Image
+              src={collagePhoto1.default.src}
+              alt="Image 1"
+              layout="fill"
+              objectFit="cover"
+              className="lg:object-left"
+            />
+          </div>
+
+          {/* Image 2: Top right on desktop, second row left on mobile */}
+          <div className="relative h-[240px] md:col-span-1">
+            <Image
+              src={collagePhoto2.default.src}
+              alt="Image 2"
+              layout="fill"
+              objectFit="cover"
+            />
+          </div>
+
+          {/* Image 3: Top right on desktop, second row right on mobile */}
+          <div className="relative h-[240px] md:col-span-1">
+            <Image
+              src={collagePhoto3.default.src}
+              alt="Image 3"
+              layout="fill"
+              objectFit="cover"
+            />
+          </div>
+
+          {/* Image 4: Bottom right on desktop, bottom on mobile */}
+          <div className="relative h-[240px] md:col-span-2">
+            <Image
+              src={collagePhoto4.default.src}
+              alt="Image 4"
+              layout="fill"
+              objectFit="cover"
+              className="object-top"
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* Ticker 2 */}
+      <div className="hidden lg:block">
+        <MessageTicker message="Thriving Communities Inspire Growth" />
+      </div>
     </main>
   );
 }
