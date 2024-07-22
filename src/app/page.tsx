@@ -18,6 +18,20 @@ const collagePhoto2 = require("@/assets/tcco-2.jpg");
 const collagePhoto3 = require("@/assets/tcco-3.jpg");
 const collagePhoto4 = require("@/assets/tcco-4.jpg");
 
+const brandPhoto1 = require("@/assets/brand-1.jpg");
+const brandPhoto2 = require("@/assets/brand-2.jpg");
+const brandPhoto3 = require("@/assets/brand-3.jpg");
+const brandPhoto4 = require("@/assets/brand-4.jpg");
+const brandPhoto5 = require("@/assets/brand-5.jpg");
+
+const brandPhotosList = [
+  brandPhoto1.default.src,
+  brandPhoto2.default.src,
+  brandPhoto3.default.src,
+  brandPhoto4.default.src,
+  brandPhoto5.default.src,
+];
+
 export default async function Home() {
   return (
     <main className="min-h-screen">
@@ -29,8 +43,20 @@ export default async function Home() {
           layout="fill"
           objectFit="cover"
           className="z-0 object-top"
+          priority
         />
-        <div className="z-10 text-white container lg:px-20">
+        <div className="absolute top-0 left-0 w-full h-full bg-black opacity-60 z-20"></div>
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute top-0 left-0 w-full h-full object-cover z-10"
+        >
+          <source src="/vids/hero-vid.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+        <div className="z-30 text-white container lg:px-20">
           <h1 className="text-4xl md:text-7xl lg:text-7xl font-display uppercase mb-4">
             {nl2br(content.hero.title)}
           </h1>
@@ -103,10 +129,10 @@ export default async function Home() {
       <section className="pb-20">
         <div className="container md:px-20">
           <div className="flex flex-wrap justify-center gap-8">
-            {content.brands.items.map((item: any, index: any) => (
+            {content.brands.items.map((item: any, index: number) => (
               <BrandCard
                 key={`${index}-brand-card`}
-                imageUrl={item.imageUrl}
+                imageUrl={brandPhotosList[index]}
                 heading={item.heading}
                 subHeading={item.subHeading}
                 bodyText={item.bodyText}
@@ -118,8 +144,8 @@ export default async function Home() {
       </section>
 
       {/* Keywords */}
-      <section className="pt-20 pb-12 px-4">
-        <div className="container mx-auto">
+      <section className="pt-20 pb-12 lg:px-20">
+        <div className="container">
           <div className="flex flex-wrap items-center justify-center">
             {content.keywords.words.map((word, index) => (
               <Fragment key={index}>
@@ -127,7 +153,7 @@ export default async function Home() {
                   <span className="mx-2 text-white text-2xl">—</span>
                 )}
                 <span
-                  className={`text-base md:text-2xl lg:text-3xl ${
+                  className={`text-lg md:text-2xl lg:text-3xl ${
                     index % 2 === 0 ? "text-white" : "text-primary"
                   }`}
                 >
