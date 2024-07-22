@@ -23,15 +23,44 @@
     "content": "We provide innovative solutions that help businesses thrive in the digital age. Our team of experts is dedicated to delivering high-quality results.",
     "buttonText": "Learn More"
   },
-  "collage": {
-    "title": "Our Work",
-    "images": [
-      "/collage-1.jpg",
-      "/collage-2.jpg",
-      "/collage-3.jpg",
-      "/collage-4.jpg",
-      "/collage-5.jpg",
-      "/collage-6.jpg"
+  "brands": {
+    "title": "",
+    "items": [
+      {
+        "imageUrl": "https://images.unsplash.com/photo-1518791841217-8f162f1e1131",
+        "heading": "The Wonders of Space Exploration",
+        "subHeading": "Space Exploration",
+        "bodyText": "Discover the latest advancements in space technology and the ongoing missions to explore our solar system and beyond. From Mars rovers to exoplanet discoveries, the field of space exploration continues to push the boundaries of human knowledge.",
+        "learnMoreLink": "https://example.com/space-exploration"
+      },
+      {
+        "imageUrl": "https://images.unsplash.com/photo-1507146426996-ef05306b995a",
+        "heading": "Artificial Intelligence in Healthcare",
+        "subHeading": "Space Exploration",
+        "bodyText": "Explore how AI is revolutionizing the healthcare industry, from early disease detection to personalized treatment plans. Learn about the ethical considerations and potential future applications of this rapidly evolving technology.",
+        "learnMoreLink": "https://example.com/ai-healthcare"
+      },
+      {
+        "imageUrl": "https://images.unsplash.com/photo-1473691955023-da1c49c95c78",
+        "heading": "Sustainable Urban Agriculture",
+        "subHeading": "Space Exploration",
+        "bodyText": "Urban farming is transforming cities into green oases. Discover innovative techniques like vertical gardens, rooftop farms, and hydroponic systems that are making food production more sustainable and accessible in urban environments.",
+        "learnMoreLink": "https://example.com/urban-agriculture"
+      },
+      {
+        "imageUrl": "https://images.unsplash.com/photo-1526666923127-b2970f64b422",
+        "heading": "The Future of Quantum Computing",
+        "subHeading": "Space Exploration",
+        "bodyText": "Delve into the world of quantum computing and its potential to revolutionize fields such as cryptography, drug discovery, and financial modeling. Learn about recent breakthroughs and the challenges that lie ahead in this cutting-edge technology.",
+        "learnMoreLink": "https://example.com/quantum-computing"
+      },
+      {
+        "imageUrl": "https://images.unsplash.com/photo-1532094349884-543bc11b234d",
+        "heading": "Ocean Conservation Efforts",
+        "subHeading": "Space Exploration",
+        "bodyText": "Explore the various initiatives aimed at protecting our oceans, from plastic pollution reduction to coral reef restoration. Learn about the importance of marine biodiversity and how you can contribute to preserving our planet's blue heart.",
+        "learnMoreLink": "https://example.com/ocean-conservation"
+      }
     ]
   },
   "footer": {
