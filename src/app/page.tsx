@@ -9,6 +9,7 @@ import { VideoPlayer } from "@/components/ui/video-player";
 import { MessageTicker } from "@/components/ui/message-ticker";
 import { BrandCard } from "@/components/ui/brand-card";
 import Link from "next/link";
+import StyledContent from "@/components/ui/styled-text";
 
 const heroPhoto = require("@/assets/hero-photo.jpg");
 const videoThumbnailPhoto = require("@/assets/video-thumb.jpg");
@@ -58,7 +59,9 @@ export default async function Home() {
         </video>
         <div className="z-30 text-white container lg:px-20">
           <h1 className="text-4xl md:text-7xl lg:text-7xl font-display uppercase mb-4">
-            {nl2br(content.hero.title)}
+            Connecting <br />
+            <span className="text-primary">African</span> <br />
+            communities
           </h1>
           <p className="text-[13px] md:text-2xl lg:text-2xl mb-4">
             {nl2br(content.hero.subtitle)}
