@@ -28,7 +28,7 @@ const ContactForm = () => {
   };
 
   return (
-    <div className="p-6 pt-0 w-full ml-20 mt-[135px]">
+    <div className="lg:p-6 pt-0 w-full lg:ml-20">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
         <div>
           <label htmlFor="name" className="block mb-1 text-white">

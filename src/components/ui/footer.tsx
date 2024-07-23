@@ -15,7 +15,7 @@ import {
 const logo = require("@/assets/logo-white.png");
 const footerPhoto = require("@/assets/footer-photo.jpg");
 
-const Footer = () => {
+const Footer = ({ isMini = false }: { isMini?: boolean }) => {
   const getIconForSocialMedia = (name: string) => {
     switch (name.toLowerCase()) {
       case "instagram":
@@ -32,27 +32,29 @@ const Footer = () => {
   return (
     <>
       {/* Footer Section */}
-      <section className="relative h-[480px] flex items-start justify-center">
-        <Image
-          src={footerPhoto.default.src}
-          alt="TC Co. - connecting with us photo"
-          layout="fill"
-          objectFit="cover"
-          className="z-0 object-top"
-        />
-        <div className="z-10 text-white container lg:px-20 mt-[90px]">
-          <h1 className="text-2xl md:text-3xl lg:text-5xl font-display uppercase text-primary mb-3">
-            {content.footer.about.title}
-          </h1>
-          <div className="text-xl md:text-xl mb-4 leading-7">
-            {nl2br(content.footer.about.subtitle)}
+      {!isMini && (
+        <section className="relative h-[480px] flex items-start justify-center">
+          <Image
+            src={footerPhoto.default.src}
+            alt="TC Co. - connecting with us photo"
+            layout="fill"
+            objectFit="cover"
+            className="z-0 object-top"
+          />
+          <div className="z-10 text-white container lg:px-20 mt-[90px]">
+            <h1 className="text-2xl md:text-3xl lg:text-5xl font-display uppercase text-primary mb-3">
+              {content.footer.about.title}
+            </h1>
+            <div className="text-xl md:text-xl mb-4 leading-7">
+              {nl2br(content.footer.about.subtitle)}
+            </div>
+            <Button size="lg">
+              {content.footer.about.buttonText}{" "}
+              <ArrowRightIcon className="ml-3" />
+            </Button>
           </div>
-          <Button size="lg">
-            {content.footer.about.buttonText}{" "}
-            <ArrowRightIcon className="ml-3" />
-          </Button>
-        </div>
-      </section>
+        </section>
+      )}
       <footer className="relative py-16 text-white">
         <div className="relative z-10 container lg:px-20 grid md:grid-cols-3 gap-8">
           <div className="">
