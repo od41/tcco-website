@@ -6,13 +6,10 @@ import { MessageTicker } from "@/components/ui/message-ticker";
 import { BrandCard } from "@/components/ui/brand-card";
 
 const heroPhoto = require("@/assets/engage-photo.jpg");
-const videoThumbnailPhoto = require("@/assets/video-thumb.jpg");
-const visionCollage = require("@/assets/vision-collage.png");
 
-const collagePhoto1 = require("@/assets/tcco-1.jpg");
-const collagePhoto2 = require("@/assets/tcco-2.jpg");
-const collagePhoto3 = require("@/assets/tcco-3.jpg");
-const collagePhoto4 = require("@/assets/tcco-4.jpg");
+const collagePhoto1 = require("@/assets/engage-10.jpg");
+const collagePhoto2 = require("@/assets/engage-2.jpg");
+const collagePhoto3 = require("@/assets/engage-3.jpg");
 
 const brandPhoto1 = require("@/assets/brand-1.jpg");
 const brandPhoto2 = require("@/assets/brand-2.jpg");
@@ -55,10 +52,10 @@ export default async function Engage() {
       </section>
 
       {/* Collage Section */}
-      <section className=" mx-auto lg:px-20 m mb-20">
-        <div className="container grid grid-cols-1 md:grid-cols-2 md:grid-rows-3 lg:grid-rows-2 lg:grid-cols-3 gap-4">
+      <section className="px-0 ">
+        <div className=" grid grid-cols-1 md:grid-cols-2 md:grid-rows-2 lg:grid-cols-3 gap-4">
           {/* Image 1: Full height on desktop, full width on mobile */}
-          <div className="relative h-[240px] md:h-full md:col-span-2 lg:col-span-1 md:row-span-1 lg:row-span-2">
+          <div className="relative h-[240px] md:h-full md:col-span-2 lg:col-span-2 md:row-span-1 lg:row-span-2">
             <Image
               src={collagePhoto1.default.src}
               alt="Image 1"
@@ -87,17 +84,6 @@ export default async function Engage() {
               objectFit="cover"
             />
           </div>
-
-          {/* Image 4: Bottom right on desktop, bottom on mobile */}
-          <div className="relative h-[240px] md:col-span-2">
-            <Image
-              src={collagePhoto4.default.src}
-              alt="Image 4"
-              layout="fill"
-              objectFit="cover"
-              className="object-top"
-            />
-          </div>
         </div>
       </section>
 
@@ -105,13 +91,13 @@ export default async function Engage() {
       <MessageTicker message="Thriving Communities Inspire Growth" />
 
       {/* Impact numbers */}
-      <section className="py-20 lg:px-20">
+      <section className="py-12 lg:px-20">
         <div className="container mx-auto">
           {/* <h2 className="text-3xl font-bold text-center mb-12">Our Impact</h2> */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {content.impactNumbers.items.map((item, index) => (
               <div key={`${index}-impact`} className="text-center p-4">
-                <div className="text-[90px] font-display text-white mb-1 leading-none">
+                <div className="text-4xl md:text-5xl lg:text-[90px] font-display text-white mb-1 leading-none">
                   {item.value}
                 </div>
                 <div className="text-lg text-primary capitalize">
@@ -124,7 +110,10 @@ export default async function Engage() {
       </section>
 
       {/* Ticker */}
-      <MessageTicker message="Thriving Communities Inspire Growth" isReversed={true} />
+      <MessageTicker
+        message="Thriving Communities Inspire Growth"
+        isReversed={true}
+      />
 
       {/* Mission Section */}
       <section className="py-20 lg:px-20 text-center">

@@ -17,6 +17,9 @@ const displaySans = localFont({
 export const metadata: Metadata = {
   title: "TC Co.",
   description: "Connecting African Communities",
+  icons: {
+    icon: '/favicon.png', // /public/favicon.ico
+  },
 };
 
 export default function RootLayout({

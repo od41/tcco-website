@@ -92,7 +92,7 @@ export default async function Home() {
       </section>
 
       {/* Ticker */}
-      <MessageTicker message="Thriving Communities Inspire Growth" />
+      <MessageTicker message="Thriving Communities Inspire Growth" isReversed/>
 
       {/* 2-Column Grid Section */}
       <section className="lg:pl-8 pr-0 grid grid-rows-1 lg:grid-cols-2 relative lg:h-[48vw]">
