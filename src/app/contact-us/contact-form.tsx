@@ -3,6 +3,8 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
+import { Button } from "@/components/ui/button";
+import { ArrowRightIcon } from "@radix-ui/react-icons";
 
 const schema = Yup.object().shape({
   name: Yup.string().required("Name is required"),
@@ -26,21 +28,18 @@ const ContactForm = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto my-10 p-6 bg-white rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold mb-6 text-center">Contact Us</h2>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+    <div className="p-6 pt-0 w-full ml-20 mt-[135px]">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
         <div>
-          <label
-            htmlFor="name"
-            className="block mb-1 font-medium text-gray-700"
-          >
+          <label htmlFor="name" className="block mb-1 text-white">
             Name
           </label>
           <input
             type="text"
             id="name"
+            placeholder="Enter your name"
             {...register("name")}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-[#F8F9F5] rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           {errors.name && (
             <p className="mt-1 text-sm text-red-600">{errors.name.message}</p>
@@ -48,17 +47,15 @@ const ContactForm = () => {
         </div>
 
         <div>
-          <label
-            htmlFor="email"
-            className="block mb-1 font-medium text-gray-700"
-          >
+          <label htmlFor="email" className="block mb-1 font-medium text-white">
             Email
           </label>
           <input
             type="email"
             id="email"
+            placeholder="Enter your email address"
             {...register("email")}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-[#F8F9F5] rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           {errors.email && (
             <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
@@ -67,36 +64,17 @@ const ContactForm = () => {
 
         <div>
           <label
-            htmlFor="subject"
-            className="block mb-1 font-medium text-gray-700"
-          >
-            Subject
-          </label>
-          <input
-            type="text"
-            id="subject"
-            {...register("subject")}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          {errors.subject && (
-            <p className="mt-1 text-sm text-red-600">
-              {errors.subject.message}
-            </p>
-          )}
-        </div>
-
-        <div>
-          <label
             htmlFor="message"
-            className="block mb-1 font-medium text-gray-700"
+            className="block mb-1 font-medium text-white"
           >
             Message
           </label>
           <textarea
             id="message"
             {...register("message")}
+            placeholder="Enter your message"
             rows={4}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-[#F8F9F5] rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           ></textarea>
           {errors.message && (
             <p className="mt-1 text-sm text-red-600">
@@ -105,12 +83,9 @@ const ContactForm = () => {
           )}
         </div>
 
-        <button
-          type="submit"
-          className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-300"
-        >
-          Send Message
-        </button>
+        <Button size="lg" type="submit">
+          Send Message <ArrowRightIcon className="ml-3" />
+        </Button>
       </form>
     </div>
   );
