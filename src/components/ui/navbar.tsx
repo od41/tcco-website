@@ -5,7 +5,18 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { Button } from "./button";
 import { Popover, PopoverTrigger, PopoverContent } from "./popover";
-import { HamburgerMenuIcon } from "@radix-ui/react-icons";
+import { Cross1Icon, HamburgerMenuIcon } from "@radix-ui/react-icons";
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+
+import content from "@/data/home.content";
+import { getIconForSocialMedia } from "@/content/footer";
 
 const logo = require("@/assets/logo-white.png");
 
@@ -30,71 +41,115 @@ export const links: { title: string; href: string; description: string }[] = [
 export function Navbar() {
   const currentPath = usePathname();
 
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
   return (
-    <header className="sticky top-0 bg-background flex w-full justify-between h-20 items-center gap-4 px-4 md:px-6 z-50">
-      <nav className="flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
-        <Link
-          href="/"
-          className="flex items-center gap-2 text-lg font-semibold md:text-base"
-        >
+    <header className="fixed top-0 w-full z-50">
+      <div className="flex justify-between items-center h-20 px-4 md:px-6">
+        <Link href="/" className="flex items-center gap-2">
           <Image
             src={logo.default.src}
-            // className="h-6 w-6"
             alt="TC Co. logo"
             width={120}
             height={22.7}
           />
         </Link>
-      </nav>
-
-      <div className="md:flex hidden w-fit px-4 py-2 rounded-md items-center justify-end gap-4 md:ml-auto md:gap-6 bg-background">
-        {links.map(({ title, href }) => (
-          <Link
-            key={href}
-            href={href}
-            className={`transition-colors text-sm hover:text-primary 
-                  ${
-                    currentPath === href
-                      ? "text-primary"
-                      : "text-muted-foreground"
-                  }
-                `}
-          >
-            {title}
-          </Link>
-        ))}
-      </div>
-      <Popover>
-        <PopoverTrigger asChild>
-          <Button variant="outline" size="icon" className="shrink-0 md:hidden">
-            <HamburgerMenuIcon className="h-5 w-5" />
-            <span className="sr-only">Toggle navigation menu</span>
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent
-          className="w-[calc(100vw-2em)] ml-4 bg-background"
-          align="center"
-          sideOffset={20}
+        <Button
+          variant="outline"
+          className="border-none items-center text-primary"
+          onClick={toggleMenu}
         >
-          <nav className="grid gap-6 text-lg font-medium">
-            {links.map(({ title, href }) => (
-              <Link
-                key={`main-nav-link-${href}`}
-                href={href}
-                className={`transition-colors hover:text-primary 
-                  ${
-                    currentPath === href
-                      ? "text-primary "
-                      : "text-muted-foreground"
-                  }
-                `}
-              >
-                {title}
+          <HamburgerMenuIcon className="h-5 w-5" />
+          <span className="capitalize ml-3">Menu</span>
+          <span className="sr-only">Toggle navigation menu</span>
+        </Button>
+      </div>
+
+      {isMenuOpen && (
+        <div className="fixed inset-0 bg-background z-50 flex flex-col px-4 md:px-6">
+          <div className="flex-1 flex flex-col">
+            {/* Row 1: Logo, social media links, close menu button */}
+            <div className="flex justify-between items-center mb-8 h-20">
+              <Link href="/" className="flex items-center gap-2">
+                <Image
+                  src={logo.default.src}
+                  alt="TC Co. logo"
+                  width={120}
+                  height={22.7}
+                />
               </Link>
-            ))}
-          </nav>
-        </PopoverContent>
-      </Popover>
+              {/* <div className="hidden md:flex space-x-4">
+                {content.footer.social.links.map((link: any, index: number) => (
+                  <Link
+                    key={link.url}
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-gray-600 hover:text-gray-800 transition-colors duration-200"
+                  >
+                    {getIconForSocialMedia(link.name)}
+                    <span className="sr-only">{link.name}</span>
+                  </Link>
+                ))}
+              </div> */}
+              <Button
+                variant="outline"
+                className="border-none items-center"
+                onClick={toggleMenu}
+              >
+                <Cross1Icon className=" w-5 h-5" />
+                <span className="capitalize ml-3">Close</span>
+
+                <span className="sr-only">Close menu</span>
+              </Button>
+            </div>
+
+            {/* Row 2: Navigation menu items */}
+            <nav className="flex-1 py-6">
+              <div className="grid md:grid-cols-3 md:w-2/3 mx-auto h-full items-center text-3xl md:text-5xl justify-center">
+                {links.map(({ title, href }) => (
+                  <Link
+                    key={`main-nav-link-${href}`}
+                    href={href}
+                    className={`transition-colors text-center hover:text-primary duration-300
+                      ${
+                        currentPath === href
+                          ? "text-primary"
+                          : "text-muted-foreground"
+                      }
+                    `}
+                  >
+                    {title}
+                  </Link>
+                ))}
+              </div>
+            </nav>
+
+            {/* Row 3: Copyright information */}
+            <div className="mt-auto text-center text-sm text-muted-foreground py-10">
+              <div className="flex flex-row space-x-4 mb-10 w-full justify-center">
+                {content.footer.social.links.map((link: any, index: number) => (
+                  <Link
+                    key={link.url}
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-gray-600 hover:text-gray-800 transition-colors duration-200"
+                  >
+                    {getIconForSocialMedia(link.name)}
+                    <span className="sr-only">{link.name}</span>
+                  </Link>
+                ))}
+              </div>
+              © {new Date().getFullYear()} TC Co. All rights reserved.
+            </div>
+          </div>
+        </div>
+      )}
     </header>
   );
 }

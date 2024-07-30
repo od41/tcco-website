@@ -4,31 +4,13 @@ import content from "@/data/home.content.json";
 import { Button } from "./button";
 import Link from "next/link";
 import { nl2br } from "@/content";
-import {
-  ArrowRightIcon,
-  InstagramLogoIcon,
-  TwitterLogoIcon,
-  LinkedInLogoIcon,
-  Link2Icon,
-} from "@radix-ui/react-icons";
+import { ArrowRightIcon } from "@radix-ui/react-icons";
+import { getIconForSocialMedia } from "@/content/footer";
 
 const logo = require("@/assets/logo-white.png");
 const footerPhoto = require("@/assets/footer-photo.jpg");
 
 const Footer = ({ isMini = false }: { isMini?: boolean }) => {
-  const getIconForSocialMedia = (name: string) => {
-    switch (name.toLowerCase()) {
-      case "instagram":
-        return <InstagramLogoIcon className="w-6 h-6 text-white" />;
-      case "x":
-        return <TwitterLogoIcon className="w-6 h-6 text-white" />;
-      case "linkedin":
-        return <LinkedInLogoIcon className="w-6 h-6 text-white" />;
-      // Add more cases as needed
-      default:
-        return <Link2Icon className="w-6 h-6 text-white" />;
-    }
-  };
   return (
     <>
       {/* Footer Section */}
