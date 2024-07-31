@@ -1,19 +1,10 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { Button } from "./button";
-import { Popover, PopoverTrigger, PopoverContent } from "./popover";
 import { Cross1Icon, HamburgerMenuIcon } from "@radix-ui/react-icons";
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
 
 import content from "@/data/home.content";
 import { getIconForSocialMedia } from "@/content/footer";
@@ -42,6 +33,10 @@ export function Navbar() {
   const currentPath = usePathname();
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  useEffect(() => {
+    setIsMenuOpen(false);
+  }, [currentPath]);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);

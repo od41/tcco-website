@@ -4,6 +4,7 @@ import { Navbar } from "@/components/ui/navbar";
 import { ThemeProvider } from "@/components/theme-provider";
 import localFont from "next/font/local";
 import Footer from "@/components/ui/footer";
+import ClientSideWrapper from "@/components/ui/client-side-wrapper";
 
 const fontSans = localFont({
   src: "../assets/recoleta-regular.ttf",
@@ -18,7 +19,7 @@ export const metadata: Metadata = {
   title: "TC Co.",
   description: "Connecting African Communities",
   icons: {
-    icon: '/favicon.png', // /public/favicon.ico
+    icon: "/favicon.png", // /public/favicon.ico
   },
 };
 
