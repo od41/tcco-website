@@ -1,7 +1,6 @@
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
-import content from "@/data/engage.content.json";
-import homeContent from "@/data/home.content.json";
+import content from "@/data/engage.content";
+import homeContent from "@/data/home.content";
 import { MessageTicker } from "@/components/ui/message-ticker";
 import { BrandCard } from "@/components/ui/brand-card";
 import Footer from "@/components/ui/footer";
@@ -21,8 +20,8 @@ const brandPhoto5 = require("@/assets/brand-5.jpg");
 const brandPhotosList = [
   brandPhoto1.default.src,
   brandPhoto2.default.src,
-  brandPhoto3.default.src,
-  brandPhoto4.default.src,
+  // brandPhoto3.default.src,
+  // brandPhoto4.default.src,
   brandPhoto5.default.src,
 ];
 

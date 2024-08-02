@@ -1,7 +1,7 @@
 import { Fragment } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import content from "@/data/home.content.json";
+import content from "@/data/home.content";
 import { nl2br } from "@/content";
 import { ArrowRightIcon } from "@radix-ui/react-icons";
 import { VideoPlayer } from "@/components/ui/video-player";
@@ -29,8 +29,8 @@ const brandPhoto5 = require("@/assets/brand-5.jpg");
 const brandPhotosList = [
   brandPhoto1.default.src,
   brandPhoto2.default.src,
-  brandPhoto3.default.src,
-  brandPhoto4.default.src,
+  // brandPhoto3.default.src,
+  // brandPhoto4.default.src,
   brandPhoto5.default.src,
 ];
 
