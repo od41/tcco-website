@@ -37,7 +37,7 @@ const Footer = ({ isMini = false }: { isMini?: boolean }) => {
           </div>
         </section>
       )}
-      <footer className="relative py-16 text-white">
+      <footer className="relative py-16 text-white border-t border-">
         <div className="relative z-10 container lg:px-20 grid md:grid-cols-3 gap-8">
           <div className="">
             <Link href="/" className="">

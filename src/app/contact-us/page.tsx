@@ -9,7 +9,7 @@ export default async function ContactUs() {
     <>
       <main className="min-h-screen">
         {/* Hero Section */}
-        <section className="container lg:px-40 lg:h-[90vh] flex flex-col lg:flex-row items-start justify-center pt-12 pb-16">
+        <section className="container lg:px-40 flex flex-col lg:flex-row items-start justify-center mt-32 pb-20">
           <div className="">
             <div className="lg:p-5 mb-10">
               <h1 className="text-3xl font-display mb-8">Connect</h1>
