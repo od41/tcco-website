@@ -1,4 +1,5 @@
-import { Fragment } from "react";
+"use client";
+import { Fragment, useEffect, useRef } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import content from "@/data/home.content";
@@ -9,8 +10,8 @@ import { VideoPlayer } from "@/components/ui/video-player";
 import { MessageTicker } from "@/components/ui/message-ticker";
 import { BrandCard } from "@/components/ui/brand-card";
 import Link from "next/link";
-import StyledContent from "@/components/ui/styled-text";
 import Footer from "@/components/ui/footer";
+import Head from "next/head";
 
 const heroPhoto = require("@/assets/hero-photo.jpg");
 const videoThumbnailPhoto = require("@/assets/video-thumb.jpg");
@@ -34,12 +35,21 @@ const brandPhotosList = [
   brandPhoto5.default.src,
 ];
 
-export default async function Home() {
+export default function Home() {
+  const videoRef = useRef(null);
+
+  useEffect(() => {
+    // @ts-expect-error
+    videoRef.current!.playbackRate = 0.5;
+  }, []);
   return (
     <>
+      <Head>
+        <title>TC Co. - Connecting African Communities</title>
+      </Head>
       <main className="min-h-screen">
         {/* Hero Section */}
-        <section className="relative h-[90vh] flex items-center justify-center py-12">
+        <section className="relative h-[100vh] flex items-center justify-center py-12">
           <Image
             src={heroPhoto.default.src}
             alt="TC Co. - connecting african communities photo"
@@ -54,6 +64,7 @@ export default async function Home() {
             loop
             muted
             playsInline
+            ref={videoRef}
             className="absolute top-0 left-0 w-full h-full object-cover z-10"
           >
             <source src="/vids/hero-vid.mp4" type="video/mp4" />

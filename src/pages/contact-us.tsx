@@ -1,12 +1,16 @@
 import Image from "next/image";
-import ContactForm from "./contact-form";
+import ContactForm from "../components/containers/contact-form";
 import Footer from "@/components/ui/footer";
+import Head from "next/head";
 
 const visionCollage = require("@/assets/contact-us-photo.png");
 
-export default async function ContactUs() {
+export default function ContactUs() {
   return (
     <>
+      <Head>
+        <title>Contact Us | TC Co. - Connecting African Communities</title>
+      </Head>
       <main className="min-h-screen">
         {/* Hero Section */}
         <section className="container lg:px-40 flex flex-col lg:flex-row items-start justify-center mt-32 pb-20">

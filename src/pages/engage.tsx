@@ -4,6 +4,7 @@ import homeContent from "@/data/home.content";
 import { MessageTicker } from "@/components/ui/message-ticker";
 import { BrandCard } from "@/components/ui/brand-card";
 import Footer from "@/components/ui/footer";
+import Head from "next/head";
 
 const heroPhoto = require("@/assets/engage-photo.jpg");
 
@@ -25,9 +26,12 @@ const brandPhotosList = [
   brandPhoto5.default.src,
 ];
 
-export default async function Engage() {
+export default function Engage() {
   return (
     <>
+      <Head>
+        <title>Engage | TC Co. - Connecting African Communities</title>
+      </Head>
       <main className="min-h-screen">
         {/* Hero Section */}
         <section className="relative h-[50vh] flex items-center justify-center py-12">
