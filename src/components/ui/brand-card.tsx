@@ -25,7 +25,7 @@ export const BrandCard: React.FC<BrandCardProps> = ({
   return (
     <Card
       className={cn(
-        "flex flex-col md:flex-row w-full lg:w-[48%] overflow-hidden border-primary bg-background shadow-custom p-6 rounded-sm",
+        "flex flex-col md:flex-row h-full w-full overflow-hidden border-primary bg-background shadow-custom p-6 rounded-sm",
         className
       )}
     >

@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAnimation, motion, useInView, Variant } from "framer-motion";
 import styled from "styled-components";
 import { cn } from "@/lib/utils";
@@ -10,6 +10,7 @@ type AnimatedTextProps = {
   className?: string;
   once?: boolean;
   repeatDelay?: number;
+  initialDelay?: number;
   animation?: {
     hidden: Variant;
     visible: Variant;
@@ -19,13 +20,14 @@ type AnimatedTextProps = {
 const defaultAnimations = {
   hidden: {
     opacity: 0,
-    y: 20,
+    y: 10,
   },
   visible: {
     opacity: 1,
     y: 0,
     transition: {
       duration: 0.1,
+      ease: [0.25, 0.1, 0.25, 1],
     },
   },
 };
@@ -36,17 +38,27 @@ export const AnimatedText = ({
   className,
   once,
   repeatDelay,
+  initialDelay = 0,
   animation = defaultAnimations,
 }: AnimatedTextProps) => {
   const controls = useAnimation();
   const textArray = Array.isArray(text) ? text : [text];
   const ref = useRef(null);
   const isInView = useInView(ref, { amount: 0.5, once });
+  const [isFirstAnimation, setIsFirstAnimation] = useState(true);
 
   useEffect(() => {
     let timeout: NodeJS.Timeout;
     const show = () => {
-      controls.start("visible");
+      if (isFirstAnimation && initialDelay > 0) {
+        timeout = setTimeout(() => {
+          controls.start("visible");
+          setIsFirstAnimation(false);
+        }, initialDelay * 1000);
+      } else {
+        controls.start("visible");
+      }
+
       if (repeatDelay) {
         timeout = setTimeout(async () => {
           await controls.start("hidden");
@@ -62,7 +74,7 @@ export const AnimatedText = ({
     }
 
     return () => clearTimeout(timeout);
-  }, [isInView]);
+  }, [isInView, isFirstAnimation, initialDelay, repeatDelay, controls]);
 
   return (
     <Wrapper className={className}>
@@ -72,10 +84,9 @@ export const AnimatedText = ({
         initial="hidden"
         animate={controls}
         variants={{
-          visible: { transition: { staggerChildren: 0.1 } },
+          visible: { transition: { staggerChildren: 0.05 } },
           hidden: {},
         }}
-        transition={{ delay: 2 }}
         aria-hidden
       >
         {textArray.map((line, lineIndex) => (
