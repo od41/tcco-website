@@ -12,6 +12,7 @@ import { BrandCard } from "@/components/ui/brand-card";
 import Link from "next/link";
 import Footer from "@/components/ui/footer";
 import Head from "next/head";
+import { AnimatedText } from "@/components/ui/animated-text";
 
 const heroPhoto = require("@/assets/hero-photo.jpg");
 const videoThumbnailPhoto = require("@/assets/video-thumb.jpg");
@@ -35,6 +36,26 @@ const brandPhotosList = [
   brandPhoto5.default.src,
 ];
 
+const containerAnimation = {
+  hidden: {},
+  visible: {},
+};
+
+const childAnimation = {
+  hidden: {
+    opacity: 0,
+    y: `0.25em`,
+  },
+  visible: {
+    opacity: 1,
+    y: `0em`,
+    transition: {
+      duration: 1,
+      ease: [0.2, 0.65, 0.3, 0.9],
+    },
+  },
+};
+
 export default function Home() {
   const videoRef = useRef(null);
 
@@ -42,6 +63,7 @@ export default function Home() {
     // @ts-expect-error
     videoRef.current!.playbackRate = 0.5;
   }, []);
+
   return (
     <>
       <Head>
@@ -71,11 +93,11 @@ export default function Home() {
             Your browser does not support the video tag.
           </video>
           <div className="z-30 text-white container lg:px-20">
-            <h1 className="text-4xl md:text-7xl lg:text-7xl font-display uppercase mb-4">
-              Connecting <br />
-              <span className="text-primary">African</span> <br />
-              communities
-            </h1>
+            <div className="text-4xl md:text-7xl lg:text-7xl font-display uppercase mb-4">
+              <AnimatedText text="Connecting" repeatDelay={760} />
+              <AnimatedText text="African" className="text-primary" repeatDelay={900} />
+              <AnimatedText text="communities" repeatDelay={1100} />
+            </div>
             <p className="text-[13px] md:text-2xl lg:text-2xl mb-4">
               {nl2br(content.hero.subtitle)}
             </p>
