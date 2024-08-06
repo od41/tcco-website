@@ -1,8 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { useAnimation, motion, useInView, Variant } from "framer-motion";
-import styled from "styled-components";
-import { cn } from "@/lib/utils";
 
 type AnimatedTextProps = {
   text: string | string[];
