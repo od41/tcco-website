@@ -36,15 +36,17 @@ export default function Engage() {
       </Head>
       <main className="min-h-screen">
         {/* Hero Section */}
-        <section className="relative h-[50vh] flex items-center justify-center py-12">
-          <Image
-            src={heroPhoto.default.src}
-            alt="TC Co. - connecting african communities photo"
-            layout="fill"
-            objectFit="cover"
-            className="z-0 object-center"
-          />
-        </section>
+        <FadeIn direction="down" initialDelay={0.7} once>
+          <section className="relative h-[50vh] flex items-center justify-center py-12">
+            <Image
+              src={heroPhoto.default.src}
+              alt="TC Co. - connecting african communities photo"
+              layout="fill"
+              objectFit="cover"
+              className="z-0 object-center"
+            />
+          </section>
+        </FadeIn>
 
         {/* Mission Section */}
         <section className="py-16 px-4 md:px-8 text-center">

@@ -63,7 +63,7 @@ export function Navbar() {
         {/* <MenuButton isOpen={isMenuOpen} onClick={toggleMenu} /> // TODO */}
         <Button
           variant="outline"
-          className="border border-primary items-center text-primary"
+          className="border border-primary hover:bg-primary hover:text-background items-center text-primary"
           onClick={async () => await toggleMenu()}
         >
           <HamburgerMenuIcon className="h-5 w-5" />
@@ -113,7 +113,7 @@ export function Navbar() {
               </div> */}
               <Button
                 variant="outline"
-                className="border-none items-center"
+                className="border-transparent items-center hover:border hover:border-primary hover:text-primary"
                 onClick={toggleMenu}
               >
                 <Cross1Icon className=" w-5 h-5" />
@@ -125,7 +125,7 @@ export function Navbar() {
 
             {/* Row 2: Navigation menu items */}
             <nav className="flex-1 py-6">
-              <div className="grid md:grid-cols-3 md:w-2/3 mx-auto h-full items-center text-3xl md:text-5xl justify-center">
+              <div className="grid md:grid-cols-3 w-full lg:w-2/3 mx-auto h-auto md:h-full gap-10 mt-[10rem] md:mt-0 md:gap-0 items-center text-4xl md:text-5xl justify-center">
                 {links.map(({ title, href }, index) => (
                   <FadeIn
                     key={`main-nav-link-${href}`}

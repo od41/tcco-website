@@ -37,26 +37,6 @@ const brandPhotosList = [
   brandPhoto5.default.src,
 ];
 
-const containerAnimation = {
-  hidden: {},
-  visible: {},
-};
-
-const childAnimation = {
-  hidden: {
-    opacity: 0,
-    y: `0.25em`,
-  },
-  visible: {
-    opacity: 1,
-    y: `0em`,
-    transition: {
-      duration: 1,
-      ease: [0.2, 0.65, 0.3, 0.9],
-    },
-  },
-};
-
 export default function Home() {
   const videoRef = useRef(null);
 
@@ -72,7 +52,7 @@ export default function Home() {
       </Head>
       <main className="min-h-screen">
         {/* Hero Section */}
-        <section className="relative h-[100vh] flex items-center justify-center py-12">
+        <section className="relative h-[85vh] md:h-[100vh] flex items-center justify-center py-12">
           <Image
             src={heroPhoto.default.src}
             alt="TC Co. - connecting african communities photo"
