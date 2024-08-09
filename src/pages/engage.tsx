@@ -5,6 +5,8 @@ import { MessageTicker } from "@/components/ui/message-ticker";
 import { BrandCard } from "@/components/ui/brand-card";
 import Footer from "@/components/ui/footer";
 import Head from "next/head";
+import { FadeIn } from "@/components/ui/fade-in";
+import AnimatedCounter from "@/components/ui/animated-counter";
 
 const heroPhoto = require("@/assets/engage-photo.jpg");
 
@@ -47,12 +49,11 @@ export default function Engage() {
         {/* Mission Section */}
         <section className="py-16 px-4 md:px-8 text-center">
           <div className="max-w-4xl mx-auto">
-            {/* <h2 className="text-base md:text-3xl font-display uppercase mb-4">
-            {content.mission.title}
-          </h2> */}
-            <p className="text-2xl md:text-3xl lg:text-4xl">
-              {content.mission.content}
-            </p>
+            <FadeIn initialDelay={0.6} once>
+              <p className="text-2xl md:text-3xl lg:text-4xl">
+                {content.mission.content}
+              </p>
+            </FadeIn>
           </div>
         </section>
 
@@ -60,35 +61,51 @@ export default function Engage() {
         <section className="px-0 ">
           <div className=" grid grid-cols-1 md:grid-cols-2 md:grid-rows-2 lg:grid-cols-3 gap-4">
             {/* Image 1: Full height on desktop, full width on mobile */}
-            <div className="relative h-[240px] md:h-full md:col-span-2 lg:col-span-2 md:row-span-1 lg:row-span-2">
-              <Image
-                src={collagePhoto1.default.src}
-                alt="Image 1"
-                layout="fill"
-                objectFit="cover"
-                className="lg:object-left"
-              />
-            </div>
+            <FadeIn
+              initialDelay={0.2}
+              direction="down"
+              className="h-[240px] md:h-full md:col-span-2 lg:col-span-2 md:row-span-1 lg:row-span-2"
+              once
+            >
+              <div className="relative h-[240px] md:h-full md:col-span-2 lg:col-span-2 md:row-span-1 lg:row-span-2">
+                <Image
+                  src={collagePhoto1.default.src}
+                  alt="Image 1"
+                  layout="fill"
+                  objectFit="cover"
+                  className="lg:object-left"
+                />
+              </div>
+            </FadeIn>
 
             {/* Image 2: Top right on desktop, second row left on mobile */}
-            <div className="relative h-[240px] md:col-span-1">
-              <Image
-                src={collagePhoto2.default.src}
-                alt="Image 2"
-                layout="fill"
-                objectFit="cover"
-              />
-            </div>
+            <FadeIn
+              initialDelay={0.2}
+              direction="down"
+              className="relative h-[240px] md:col-span-1"
+              once
+            >
+              <div className="relative h-[240px] md:col-span-1">
+                <Image
+                  src={collagePhoto2.default.src}
+                  alt="Image 2"
+                  layout="fill"
+                  objectFit="cover"
+                />
+              </div>
+            </FadeIn>
 
             {/* Image 3: Top right on desktop, second row right on mobile */}
-            <div className="relative h-[240px] md:col-span-1">
-              <Image
-                src={collagePhoto3.default.src}
-                alt="Image 3"
-                layout="fill"
-                objectFit="cover"
-              />
-            </div>
+            <FadeIn initialDelay={0.4} className="h-[240px] md:col-span-1" once>
+              <div className="relative h-[240px] md:col-span-1">
+                <Image
+                  src={collagePhoto3.default.src}
+                  alt="Image 3"
+                  layout="fill"
+                  objectFit="cover"
+                />
+              </div>
+            </FadeIn>
           </div>
         </section>
 
@@ -103,7 +120,12 @@ export default function Engage() {
               {content.impactNumbers.items.map((item, index) => (
                 <div key={`${index}-impact`} className="text-center p-4">
                   <div className="text-4xl md:text-5xl lg:text-[90px] font-display text-white mb-1 leading-none">
-                    {item.value}
+                    <AnimatedCounter
+                      from={0}
+                      to={Number(item.value)}
+                      duration={3}
+                    />
+                    {item.suffix}
                   </div>
                   <div className="text-lg text-primary capitalize">
                     {item.name}
@@ -123,12 +145,16 @@ export default function Engage() {
         {/* Mission Section */}
         <section className="py-20 lg:px-20 text-center">
           <div className="container md:px-20">
-            <h2 className="text-base md:text-2xl font-display uppercase mb-4">
-              {content.mission.title}
-            </h2>
-            <p className="text-2xl md:text-3xl lg:text-4xl">
-              {content.mission.content}
-            </p>
+            {/* <FadeIn initialDelay={0.2} once>
+              <h2 className="text-base md:text-2xl font-display uppercase mb-4">
+                {content.mission.title}
+              </h2>
+            </FadeIn> */}
+            <FadeIn initialDelay={0.4} once>
+              <p className="text-2xl md:text-3xl lg:text-4xl">
+                {content.mission.content}
+              </p>
+            </FadeIn>
           </div>
         </section>
 
@@ -137,14 +163,21 @@ export default function Engage() {
           <div className="container md:px-20">
             <div className="flex flex-wrap justify-center gap-8">
               {homeContent.brands.items.map((item: any, index: number) => (
-                <BrandCard
+                <FadeIn
                   key={`${index}-brand-card`}
-                  imageUrl={brandPhotosList[index]}
-                  heading={item.heading}
-                  subHeading={item.subHeading}
-                  bodyText={item.bodyText}
-                  learnMoreLink={item.learnMoreLink}
-                />
+                  direction="left"
+                  initialDelay={(index + 1) * 0.1}
+                  className=" w-full lg:w-[48%]"
+                  once
+                >
+                  <BrandCard
+                    imageUrl={brandPhotosList[index]}
+                    heading={item.heading}
+                    subHeading={item.subHeading}
+                    bodyText={item.bodyText}
+                    learnMoreLink={item.learnMoreLink}
+                  />
+                </FadeIn>
               ))}
             </div>
           </div>

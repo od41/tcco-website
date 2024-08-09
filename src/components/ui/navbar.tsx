@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { Button } from "./button";
 import { Cross1Icon, HamburgerMenuIcon } from "@radix-ui/react-icons";
@@ -63,7 +63,7 @@ export function Navbar() {
         {/* <MenuButton isOpen={isMenuOpen} onClick={toggleMenu} /> // TODO */}
         <Button
           variant="outline"
-          className="border-none items-center text-primary"
+          className="border border-primary items-center text-primary"
           onClick={async () => await toggleMenu()}
         >
           <HamburgerMenuIcon className="h-5 w-5" />
@@ -73,12 +73,15 @@ export function Navbar() {
       </div>
 
       {isMenuOpen && (
-        <motion.div
+        <motion.nav
           initial="hidden"
           animate="visible"
           exit="hidden"
           variants={{
-            visible: { opacity: 1, transition: { ease: easeInOut } },
+            visible: {
+              opacity: 1,
+              transition: { duration: 0.1, ease: easeInOut },
+            },
             hidden: { opacity: 0 },
           }}
           className="fixed inset-0 bg-background z-50 flex flex-col px-4 md:px-6"
@@ -126,7 +129,7 @@ export function Navbar() {
                 {links.map(({ title, href }, index) => (
                   <FadeIn
                     key={`main-nav-link-${href}`}
-                    initialDelay={(index + 1) * 0.1}
+                    initialDelay={(index + 1) * 0.2}
                     once
                   >
                     <Link
@@ -147,7 +150,7 @@ export function Navbar() {
             </nav>
 
             {/* Row 3: Copyright information */}
-            <FadeIn initialDelay={0.3} once>
+            <FadeIn initialDelay={0.1} once>
               <div className="mt-auto text-center text-sm text-muted-foreground py-10">
                 <div className="flex flex-row space-x-4 mb-10 w-full justify-center">
                   {content.footer.social.links.map(
@@ -169,7 +172,7 @@ export function Navbar() {
               </div>
             </FadeIn>
           </div>
-        </motion.div>
+        </motion.nav>
       )}
     </header>
   );

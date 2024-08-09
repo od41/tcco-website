@@ -43,69 +43,71 @@ const Footer = ({ isMini = false }: { isMini?: boolean }) => {
           </div>
         </section>
       )}
-      <FadeIn initialDelay={0.8} once>
-        <footer className="relative py-16 text-white border-t border-">
-          <div className="relative z-10 container lg:px-20 grid md:grid-cols-3 gap-8">
-            <div className="">
-              <Link href="/" className="">
-                <Image
-                  src={logo.default.src}
-                  // className="h-6 w-6"
-                  alt="TC Co. logo"
-                  width={120}
-                  height={22.7}
-                />
-              </Link>
-            </div>
-            <div className="flex gap-24 md:justify-end md:col-span-2">
-              <div className="grid gap-2">
-                {content.footer.footerPages.links.map(
-                  (link: any, index: any) => (
-                    <Link key={link.url} href={`/${link.url}`} className="">
-                      {link.name}
-                    </Link>
-                  )
-                )}
+      <footer className="relative py-16 text-white border-t border-">
+        <FadeIn initialDelay={0.1} direction="down" once>
+          <>
+            <div className="relative z-10 container lg:px-20 grid md:grid-cols-3 gap-8">
+              <div className="">
+                <Link href="/" className="">
+                  <Image
+                    src={logo.default.src}
+                    // className="h-6 w-6"
+                    alt="TC Co. logo"
+                    width={120}
+                    height={22.7}
+                  />
+                </Link>
               </div>
-              <div>
-                <div className="hidden md:flex space-x-6 ">
-                  {content.footer.social.links.map(
-                    (link: any, index: number) => (
-                      <Link
-                        key={link.url}
-                        href={link.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-gray-600 hover:text-gray-800 transition-colors duration-200"
-                      >
-                        {getIconForSocialMedia(link.name)}
-                        <span className="sr-only">{link.name}</span>
+              <div className="flex gap-24 md:justify-end md:col-span-2">
+                <div className="grid gap-2">
+                  {content.footer.footerPages.links.map(
+                    (link: any, index: any) => (
+                      <Link key={link.url} href={`/${link.url}`} className="">
+                        {link.name}
                       </Link>
                     )
                   )}
                 </div>
+                <div>
+                  <div className="hidden md:flex space-x-6 ">
+                    {content.footer.social.links.map(
+                      (link: any, index: number) => (
+                        <Link
+                          key={link.url}
+                          href={link.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-gray-600 hover:text-gray-800 transition-colors duration-200"
+                        >
+                          {getIconForSocialMedia(link.name)}
+                          <span className="sr-only">{link.name}</span>
+                        </Link>
+                      )
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-          <div className="container lg:px-20">
-            <p className="text-md mt-10">(C) All rights reserved, 2024</p>
-            <div className="flex space-x-6 md:hidden mt-5">
-              {content.footer.social.links.map((link: any, index: number) => (
-                <Link
-                  key={link.url}
-                  href={link.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-gray-600 hover:text-gray-800 transition-colors duration-200"
-                >
-                  {getIconForSocialMedia(link.name)}
-                  <span className="sr-only">{link.name}</span>
-                </Link>
-              ))}
+            <div className="container lg:px-20">
+              <p className="text-md mt-10">(C) All rights reserved, 2024</p>
+              <div className="flex space-x-6 md:hidden mt-5">
+                {content.footer.social.links.map((link: any, index: number) => (
+                  <Link
+                    key={link.url}
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-gray-600 hover:text-gray-800 transition-colors duration-200"
+                  >
+                    {getIconForSocialMedia(link.name)}
+                    <span className="sr-only">{link.name}</span>
+                  </Link>
+                ))}
+              </div>
             </div>
-          </div>
-        </footer>
-      </FadeIn>
+          </>
+        </FadeIn>
+      </footer>
     </>
   );
 };

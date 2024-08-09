@@ -150,10 +150,12 @@ export default function Home() {
         <section className="lg:pl-8 pr-0 grid grid-rows-1 lg:grid-cols-2 relative lg:h-[48vw]">
           <div className="container md:px-20 flex items-center my-20 lg:my-0">
             <div>
-              <h2 className="text-base md:text-2xl font-display uppercase mb-4">
-                <AnimatedText text={content.vision.title} once />
-              </h2>
-              <FadeIn once>
+              <FadeIn initialDelay={0.1} once>
+                <h2 className="text-base md:text-2xl font-display uppercase mb-4">
+                  {content.vision.title}
+                </h2>
+              </FadeIn>
+              <FadeIn initialDelay={0.3} once>
                 <p className="text-2xl md:text-3xl lg:text-4xl">
                   {content.vision.content}
                 </p>
@@ -175,10 +177,12 @@ export default function Home() {
         {/* Mission Section */}
         <section className="py-20 lg:px-20 text-center">
           <div className="container md:px-20">
-            <h2 className="text-base md:text-2xl font-display uppercase mb-4">
-              <AnimatedText text={content.mission.title} once />
-            </h2>
-            <FadeIn once>
+            <FadeIn initialDelay={0.1} once>
+              <h2 className="text-base md:text-2xl font-display uppercase mb-4">
+                {content.mission.title}
+              </h2>
+            </FadeIn>
+            <FadeIn initialDelay={0.3} once>
               <p className="text-2xl md:text-3xl lg:text-4xl">
                 {content.mission.content}
               </p>
@@ -210,7 +214,7 @@ export default function Home() {
                   </FadeIn>
                 );
               })}
-              <FadeIn initialDelay={0.6} once>
+              <FadeIn initialDelay={0.3} once>
                 <Button size="lg" asChild>
                   <Link href={"/engage"}>
                     View All <ArrowRightIcon className="ml-3" />
@@ -283,7 +287,7 @@ export default function Home() {
 
             {/* Image 3: Top right on desktop, second row right on mobile */}
             <FadeIn
-              initialDelay={0.8}
+              initialDelay={0.6}
               direction="down"
               className="h-[240px] md:col-span-1"
               once
@@ -299,7 +303,7 @@ export default function Home() {
             </FadeIn>
 
             {/* Image 4: Bottom right on desktop, bottom on mobile */}
-            <FadeIn initialDelay={0.8} className="h-[240px] md:col-span-2" once>
+            <FadeIn initialDelay={0.6} className="h-[240px] md:col-span-2" once>
               <div className="relative h-[240px] md:col-span-2">
                 <Image
                   src={collagePhoto4.default.src}
