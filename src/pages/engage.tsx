@@ -168,7 +168,7 @@ export default function Engage() {
                 <FadeIn
                   key={`${index}-brand-card`}
                   direction="left"
-                  initialDelay={(index + 1) * 0.1}
+                  initialDelay={(index + 1) * 0.05}
                   className=" w-full lg:w-[48%]"
                   once
                 >

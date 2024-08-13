@@ -18,7 +18,7 @@ const data = {
   mission: {
     title: "Mission",
     content:
-      "Build and scale community-focused Products and brands using ecosystem networks and partnerships. Grow community impact to over 3 million user community within 3 years.",
+      "Build and scale community-focused products and brands using ecosystem networks and partnerships. Grow community impact to over 3 million connections within 3 years",
   },
   grid: {
     image: "/grid-image.jpg",

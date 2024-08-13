@@ -74,7 +74,7 @@ export default function Home() {
             Your browser does not support the video tag.
           </video>
           <div className="z-30 text-white container lg:px-20">
-            <div className="text-4xl md:text-7xl lg:text-7xl font-display uppercase mb-4">
+            <div className="text-2xl sm:text-4xl md:text-7xl lg:text-7xl font-display uppercase mb-4">
               <AnimatedText text="Connecting" initialDelay={0.8} once />
               <AnimatedText
                 text="African"
@@ -180,7 +180,7 @@ export default function Home() {
                   <FadeIn
                     key={`${index}-brand-card`}
                     direction="left"
-                    initialDelay={(index + 1) * 0.3}
+                    initialDelay={(index + 1) * 0.05}
                     className=" w-full lg:w-[48%]"
                     once
                   >

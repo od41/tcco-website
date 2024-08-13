@@ -16,6 +16,7 @@ type FadeInProps = {
   };
 };
 
+const DEFAULT_DURATION = 0.6;
 const defaultAnimations: Record<
   Direction,
   { hidden: Variant; visible: Variant }
@@ -25,7 +26,7 @@ const defaultAnimations: Record<
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 1, ease: [0.25, 0.1, 0.25, 1] },
+      transition: { duration: DEFAULT_DURATION, ease: [0.25, 0.1, 0.25, 1] },
     },
   },
   down: {
@@ -33,7 +34,7 @@ const defaultAnimations: Record<
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 1, ease: [0.25, 0.1, 0.25, 1] },
+      transition: { duration: DEFAULT_DURATION, ease: [0.25, 0.1, 0.25, 1] },
     },
   },
   left: {
@@ -41,7 +42,7 @@ const defaultAnimations: Record<
     visible: {
       opacity: 1,
       x: 0,
-      transition: { duration: 1, ease: [0.25, 0.1, 0.25, 1] },
+      transition: { duration: DEFAULT_DURATION, ease: [0.25, 0.1, 0.25, 1] },
     },
   },
   right: {
@@ -49,7 +50,7 @@ const defaultAnimations: Record<
     visible: {
       opacity: 1,
       x: 0,
-      transition: { duration: 1, ease: [0.25, 0.1, 0.25, 1] },
+      transition: { duration: DEFAULT_DURATION, ease: [0.25, 0.1, 0.25, 1] },
     },
   },
 };
