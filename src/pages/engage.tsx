@@ -8,13 +8,13 @@ import Head from "next/head";
 import { FadeIn } from "@/components/ui/fade-in";
 import AnimatedCounter from "@/components/ui/animated-counter";
 
-const heroPhoto = require("@/assets/engage-photo.jpg");
+const heroPhoto = require("@/assets/engage-hero-4.jpg");
 
-const collagePhoto1 = require("@/assets/engage-10.jpg");
+const collagePhoto1 = require("@/assets/tcco-1-old2.jpg");
 const collagePhoto2 = require("@/assets/engage-2.jpg");
-const collagePhoto3 = require("@/assets/engage-3.jpg");
+const collagePhoto3 = require("@/assets/engage-hero-2.jpg");
 
-const brandPhoto1 = require("@/assets/brand-1.jpg");
+const brandPhoto1 = require("@/assets/brand-1-new.jpg");
 const brandPhoto2 = require("@/assets/brand-2.jpg");
 const brandPhoto3 = require("@/assets/brand-3.jpg");
 const brandPhoto4 = require("@/assets/brand-4.jpg");

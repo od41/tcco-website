@@ -29,15 +29,17 @@ const Footer = ({ isMini = false }: { isMini?: boolean }) => {
             <h1 className="text-2xl md:text-3xl lg:text-5xl font-display uppercase text-primary mb-3">
               <AnimatedText text={content.footer.about.title} once />
             </h1>
-            <FadeIn initialDelay={0.5} once>
+            <FadeIn initialDelay={0.4} once>
               <div className="text-xl md:text-xl mb-4 leading-7">
                 {nl2br(content.footer.about.subtitle)}
               </div>
             </FadeIn>
-            <FadeIn initialDelay={0.8} once>
-              <Button size="lg">
-                {content.footer.about.buttonText}{" "}
-                <ArrowRightIcon className="ml-3" />
+            <FadeIn initialDelay={0.6} once>
+              <Button size="lg" asChild>
+                <Link href={"/contact-us"}>
+                  {content.footer.about.buttonText}{" "}
+                  <ArrowRightIcon className="ml-3" />
+                </Link>
               </Button>
             </FadeIn>
           </div>

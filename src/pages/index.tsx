@@ -18,12 +18,12 @@ import { FadeIn } from "@/components/ui/fade-in";
 const heroPhoto = require("@/assets/hero-photo.jpg");
 const videoThumbnailPhoto = require("@/assets/video-thumb.jpg");
 const visionCollage = require("@/assets/vision-collage.png");
-const collagePhoto1 = require("@/assets/tcco-1.jpg");
+const collagePhoto1 = require("@/assets/image00145.jpeg");
 const collagePhoto2 = require("@/assets/tcco-2.jpg");
 const collagePhoto3 = require("@/assets/tcco-3.jpg");
 const collagePhoto4 = require("@/assets/tcco-4.jpg");
 
-const brandPhoto1 = require("@/assets/brand-1.jpg");
+const brandPhoto1 = require("@/assets/brand-1-new.jpg");
 const brandPhoto2 = require("@/assets/brand-2.jpg");
 const brandPhoto3 = require("@/assets/brand-3.jpg");
 const brandPhoto4 = require("@/assets/brand-4.jpg");

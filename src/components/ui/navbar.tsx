@@ -125,7 +125,7 @@ export function Navbar() {
 
             {/* Row 2: Navigation menu items */}
             <nav className="flex-1 py-6">
-              <div className="grid md:grid-cols-3 w-full lg:w-2/3 mx-auto h-auto md:h-full gap-10 mt-[10rem] md:mt-0 md:gap-0 items-center text-4xl md:text-5xl justify-center">
+              <div className="grid md:grid-cols-3 w-full lg:w-2/3 mx-auto h-auto md:h-full gap-10 mt-[8rem] md:mt-0 md:gap-0 items-center text-4xl md:text-5xl justify-center">
                 {links.map(({ title, href }, index) => (
                   <FadeIn
                     key={`main-nav-link-${href}`}

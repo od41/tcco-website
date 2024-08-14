@@ -32,7 +32,7 @@ const data = {
     items: [
       {
         imageUrl:
-          "https://images.unsplash.com/photo-1518791841217-8f162f1e1131",
+          "",
         heading: "CaFFa House",
         subHeading: "Community Hub",
         bodyText:
@@ -41,7 +41,7 @@ const data = {
       },
       {
         imageUrl:
-          "https://images.unsplash.com/photo-1507146426996-ef05306b995a",
+          "",
         heading: "Culture Night Pop-Up & Fireside",
         subHeading: "An Activation Event",
         bodyText:
@@ -68,7 +68,7 @@ const data = {
       // },
       {
         imageUrl:
-          "https://images.unsplash.com/photo-1532094349884-543bc11b234d",
+          "",
         heading: "The Culture Mail",
         subHeading: "Digital Newsletter",
         bodyText:
