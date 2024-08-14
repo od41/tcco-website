@@ -7,8 +7,8 @@ import { ArrowRightIcon } from "@radix-ui/react-icons";
 
 const schema = Yup.object().shape({
   name: Yup.string().required("Name is required"),
-  email: Yup.string().email("Invalid email").required("Email is required"),
-  subject: Yup.string().required("Subject is required"),
+  sender: Yup.string().email("Invalid email").required("Email is required"),
+  // subject: Yup.string().required("Subject is required"),
   message: Yup.string().required("Message is required"),
 });
 
@@ -16,14 +16,25 @@ const ContactForm = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting, isValid },
   } = useForm({
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = (data: any) => {
+  const onSubmit = async (data: any) => {
     console.log(data);
-    // Handle form submission here (e.g., send data to an API)
+    const response = await fetch("/api/send-email", {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+    if (response.ok) {
+      alert("Email sent");
+    } else {
+      alert("Failed to send email");
+    }
   };
 
   return (
@@ -53,11 +64,11 @@ const ContactForm = () => {
             type="email"
             id="email"
             placeholder="Enter your email address"
-            {...register("email")}
+            {...register("sender")}
             className="w-full px-3 py-2 border border-[#F8F9F5] rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
-          {errors.email && (
-            <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
+          {errors.sender && (
+            <p className="mt-1 text-sm text-red-600">{errors.sender.message}</p>
           )}
         </div>
 
@@ -82,8 +93,14 @@ const ContactForm = () => {
           )}
         </div>
 
-        <Button size="lg" type="submit">
-          Send Message <ArrowRightIcon className="ml-3" />
+        <Button size="lg" type="submit" disabled={!isValid || isSubmitting}>
+          {isSubmitting ? (
+            <>Sending...</>
+          ) : (
+            <>
+              Send Message <ArrowRightIcon className="ml-3" />
+            </>
+          )}
         </Button>
       </form>
     </div>
