@@ -31,17 +31,15 @@ const data = {
     title: "",
     items: [
       {
-        imageUrl:
-          "",
+        imageUrl: "",
         heading: "CaFFa House",
         subHeading: "Community Hub",
         bodyText:
           "CaFFa House is more than just a café; it's a vibrant community hub where ideas brew alongside our signature coffee. Our space is designed to foster connections, inspire creativity, and provide a welcoming atmosphere for everyone. Join us for events, workshops, or simply to enjoy good company in a cozy environment.",
-        learnMoreLink: "#",
+        learnMoreLink: "https://www.instagram.com/caffahouseng/",
       },
       {
-        imageUrl:
-          "",
+        imageUrl: "",
         heading: "Culture Night Pop-Up & Fireside",
         subHeading: "An Activation Event",
         bodyText:
@@ -64,16 +62,15 @@ const data = {
       //   subHeading: "Clothing Brand",
       //   bodyText:
       //     "Vudoh is not just a clothing brand; it's a statement of individuality and sustainability. Our designs blend urban street style with eco-conscious materials, creating fashion that looks good and feels right. Each piece tells a story of craftsmanship, creativity, and commitment to a better planet.",
-      //   learnMoreLink: "#",
+      //   learnMoreLink: "https://www.instagram.com/moweventz/",
       // },
       {
-        imageUrl:
-          "",
+        imageUrl: "",
         heading: "The Culture Mail",
         subHeading: "Digital Newsletter",
         bodyText:
           "Stay in the loop with The Culture Mail, your curated digest of all things culture, arts, and community. Our digital newsletter brings you the latest local events, artist spotlights, and thought-provoking articles right to your inbox. Subscribe to become part of a growing community of culture enthusiasts and never miss a beat in your city's vibrant scene.",
-        learnMoreLink: "#",
+        learnMoreLink: "https://caffa-house.ck.page/posts",
       },
     ],
   },
