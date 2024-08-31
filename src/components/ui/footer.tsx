@@ -91,7 +91,9 @@ const Footer = ({ isMini = false }: { isMini?: boolean }) => {
               </div>
             </div>
             <div className="container lg:px-20">
-              <p className="text-md mt-10">(C) All rights reserved, 2024</p>
+              <p className="text-md mt-10">
+                (C) All rights reserved, {new Date().getFullYear()}
+              </p>
               <div className="flex space-x-6 md:hidden mt-5">
                 {content.footer.social.links.map((link: any, index: number) => (
                   <Link
