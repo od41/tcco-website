@@ -20,7 +20,7 @@ export default function ContactUs() {
               <div className="lg:p-5 mb-10">
                 <h1 className="text-3xl font-display mb-8">Connect</h1>
                 <p className="text-lg mb-8">Be part of a thriving community</p>
-                <div className="flex items-center gap-4 mb-4">
+                {/* <div className="flex items-center gap-4 mb-4">
                   <div className="bg-primary text-background rounded-full p-2">
                     <svg
                       width="13"
@@ -36,7 +36,7 @@ export default function ContactUs() {
                     </svg>
                   </div>
                   080 000 000
-                </div>
+                </div> */}
                 <div className="flex items-center gap-4">
                   <div className="bg-primary text-background rounded-full p-2">
                     <svg

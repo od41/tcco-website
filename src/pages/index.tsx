@@ -42,7 +42,7 @@ export default function Home() {
 
   useEffect(() => {
     // @ts-expect-error
-    videoRef.current!.playbackRate = 0.5;
+    videoRef.current!.playbackRate = 0.3;
   }, []);
 
   return (

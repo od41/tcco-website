@@ -115,13 +115,13 @@ export default function Engage() {
         <MessageTicker message="Thriving Communities Inspire Growth" />
 
         {/* Impact numbers */}
-        <section className="py-12 lg:px-20">
+        <section className="py-12">
           <div className="container mx-auto">
             {/* <h2 className="text-3xl font-bold text-center mb-12">Our Impact</h2> */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
               {content.impactNumbers.items.map((item, index) => (
                 <div key={`${index}-impact`} className="text-center p-4">
-                  <div className="text-4xl md:text-5xl lg:text-[90px] font-display text-white mb-1 leading-none">
+                  <div className="text-4xl lg:text-5xl lg:text-[90px] font-display text-white mb-1 leading-none">
                     <AnimatedCounter
                       from={0}
                       to={Number(item.value)}

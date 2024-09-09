@@ -2,7 +2,7 @@ const data = {
   hero: {
     title: "Connecting \nAfrican \ncommunities",
     subtitle:
-      "Through integrated products, services, and experiences. \nBuilt on the belief that thriving communities inspire individual growth.",
+      "Connecting SMB Communities through integrated products, services, and experiences. Built on the belief that thriving communities inspire individual growth.",
     buttonText: "Join the community",
     background: "",
   },
@@ -41,29 +41,29 @@ const data = {
       {
         imageUrl: "",
         heading: "Culture Night Pop-Up & Fireside",
-        subHeading: "An Activation Event",
+        subHeading: "Activation Event",
         bodyText:
-          "Experience the magic of our Culture Night Pop-Up & Fireside event. This unique activation brings together local artists, musicians, and storytellers for an unforgettable evening of cultural celebration. Gather around our fireside for intimate performances, engaging discussions, and a true sense of community spirit.",
+          "Experience the energy at Culture Night Pop-Up & Fireside, both events bringing together creators, entrepreneurs, storytellers, and mentors for moments of fun and engaging conversations, connecting with a true sense of community.",
         learnMoreLink: "#",
       },
-      // {
-      //   imageUrl:
-      //     "https://images.unsplash.com/photo-1473691955023-da1c49c95c78",
-      //   heading: "MOWEVENTS",
-      //   subHeading: "Event Tech",
-      //   bodyText:
-      //     "MOWEVENTS is revolutionizing the way we experience gatherings. Our cutting-edge event technology provides seamless planning, ticketing, and attendee engagement solutions. From virtual reality integrations to AI-powered networking tools, we're making events more interactive, accessible, and memorable than ever before.",
-      //   learnMoreLink: "#",
-      // },
-      // {
-      //   imageUrl:
-      //     "https://images.unsplash.com/photo-1526666923127-b2970f64b422",
-      //   heading: "Vudoh",
-      //   subHeading: "Clothing Brand",
-      //   bodyText:
-      //     "Vudoh is not just a clothing brand; it's a statement of individuality and sustainability. Our designs blend urban street style with eco-conscious materials, creating fashion that looks good and feels right. Each piece tells a story of craftsmanship, creativity, and commitment to a better planet.",
-      //   learnMoreLink: "https://www.instagram.com/moweventz/",
-      // },
+      {
+        imageUrl:
+          "https://images.unsplash.com/photo-1473691955023-da1c49c95c78",
+        heading: "KIVU by CaFFa House",
+        subHeading: "Apartment Spaces",
+        bodyText:
+          "Experience the serenity and ambience at our fully furnished apartments within the bustling city Lagos; perfectly suited flexible alternatives for get-aways, tourists and business travelers.",
+        learnMoreLink: "#",
+      },
+      {
+        imageUrl:
+          "https://images.unsplash.com/photo-1526666923127-b2970f64b422",
+        heading: "Traydah",
+        subHeading: "Digital Lending",
+        bodyText:
+          "Contributing to the informal economy and empowering small businesses with access to flexible microcredit options, enabling them to grow and thrive.",
+        learnMoreLink: "#",
+      },
       {
         imageUrl: "",
         heading: "The Culture Mail",

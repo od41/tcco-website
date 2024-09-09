@@ -21,23 +21,23 @@ const data = {
   impactNumbers: {
     items: [
       {
-        value: "2",
-        suffix: "m",
+        value: "1",
+        suffix: "m+",
         name: "Website Visitors",
       },
       {
-        value: "32",
-        suffix: "k",
-        name: "communities reached",
+        value: "10",
+        suffix: "k+",
+        name: "connections",
       },
       {
-        value: "22",
-        suffix: "",
+        value: "100",
+        suffix: "+",
         name: "Partners",
       },
       {
         value: "3",
-        suffix: "",
+        suffix: "+",
         name: "years running",
       },
     ],
@@ -56,4 +56,3 @@ const data = {
 };
 
 export default data;
-  
