@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build && tsc --project tsconfig.server.json",
-    "start": "next start",
+    "serve": "npx serve@latest out",
+    "start": "NODE_ENV=production node server.js",
     "lint": "next lint"
   },
   "dependencies": {
@@ -16,6 +17,7 @@
     "@radix-ui/react-slot": "^1.1.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "cross-env": "^7.0.3",
     "framer-motion": "^11.3.19",
     "lucide-react": "^0.408.0",
     "next": "14.2.5",
