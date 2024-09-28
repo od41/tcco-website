@@ -1,8 +1,8 @@
 const data = {
   hero: {
-    title: "Connecting \nAfrican \ncommunities",
+    title: "Connecting \nSMB \ncommunities",
     subtitle:
-      "Connecting SMB Communities through integrated products, services, and experiences. Built on the belief that thriving communities inspire individual growth.",
+      "Through integrated products, services, and experiences. Built on the belief that thriving communities inspire individual growth.",
     buttonText: "Join the community",
     background: "",
   },
@@ -18,7 +18,7 @@ const data = {
   mission: {
     title: "Mission",
     content:
-      "Build and scale community-focused products and brands using ecosystem networks and partnerships. Grow community impact to over 3 million connections within 3 years",
+      "Invest and scale community-focused products and brands using ecosystem networks and partnerships to impact over 3 million connections within 3 years.",
   },
   grid: {
     image: "/grid-image.jpg",
@@ -86,8 +86,7 @@ const data = {
   footer: {
     about: {
       title: "Connect",
-      subtitle:
-        "Become part of a thriving community! \nEmail: info@jointcco.com",
+      subtitle: "Become part of a thriving community! \nEmail: info@tcco.co",
       buttonText: "Join now",
     },
     footerPages: {

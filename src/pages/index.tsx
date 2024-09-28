@@ -42,20 +42,20 @@ export default function Home() {
 
   useEffect(() => {
     // @ts-expect-error
-    videoRef.current!.playbackRate = 0.3;
+    videoRef.current!.playbackRate = 0.2;
   }, []);
 
   return (
     <>
       <Head>
-        <title>TC Co. - Connecting African Communities</title>
+        <title>TCCo. - Connecting African Communities</title>
       </Head>
       <main className="min-h-screen">
         {/* Hero Section */}
         <section className="relative h-[85vh] md:h-[100vh] flex items-center justify-center py-12">
           <Image
             src={heroPhoto.default.src}
-            alt="TC Co. - connecting african communities photo"
+            alt="TCCo. - connecting african communities photo"
             layout="fill"
             objectFit="cover"
             className="z-0 object-top"
@@ -85,7 +85,7 @@ export default function Home() {
               <AnimatedText text="communities" initialDelay={1} once />
             </div>
             <FadeIn initialDelay={0.9} once>
-              <p className="text-[13px] md:text-2xl lg:text-2xl mb-4">
+              <p className="text-[13px] md:text-2xl lg:text-2xl mb-4 w-full lg:w-2/3">
                 {nl2br(content.hero.subtitle)}
               </p>
             </FadeIn>
@@ -99,13 +99,13 @@ export default function Home() {
           </div>
         </section>
 
-        <div className="w-full flex justify-center items-center py-12 md:py-19">
+        {/* <div className="w-full flex justify-center items-center py-12 md:py-19">
           <FadeIn once>
             <p className="font-display uppercase text-base md:text-3xl">
               {content.video.title}
             </p>
           </FadeIn>
-        </div>
+        </div> */}
 
         {/* Video Section */}
         <section className="w-full aspect-video">
@@ -121,41 +121,41 @@ export default function Home() {
         </section>
 
         {/* Ticker */}
-        <MessageTicker
+        {/* <MessageTicker
           message="Thriving Communities Inspire Growth"
           isReversed
-        />
+        /> */}
 
         {/* 2-Column Grid Section */}
-        <section className="lg:pl-8 pr-0 grid grid-rows-1 lg:grid-cols-2 relative lg:h-[48vw]">
+        <section className="lg:pl-8 pr-0 grid grid-rows-1 lg:grid-cols-2 relative lg:h-[35.5vw]">
           <div className="container md:px-20 flex items-center my-20 lg:my-0">
             <div>
               <FadeIn initialDelay={0.1} once>
-                <h2 className="text-base md:text-2xl font-display uppercase mb-4">
-                  {content.vision.title}
+                <h2 className="text-base md:text-xl font-display uppercase mb-4">
+                  {content.mission.title}
                 </h2>
               </FadeIn>
               <FadeIn initialDelay={0.3} once>
-                <p className="text-2xl md:text-3xl lg:text-4xl">
-                  {content.vision.content}
+                <p className="text-2xl md:text-3xl lg:text-3xl">
+                  {content.mission.content}
                 </p>
               </FadeIn>
             </div>
           </div>
           <FadeIn direction="down" once>
-            <div className="w-full h-[100vw] lg:h-full relative lg:col-start-2 lg:col-span-1">
+            <div className="w-full lg:h-full relative lg:col-start-2 lg:col-span-1">
               <Image
                 src={visionCollage.default.src}
-                alt="TC Co. - connecting people photo"
+                alt="TCCo. - connecting people photo"
                 layout="fill"
-                objectFit="cover"
+                objectFit="contain"
               />
             </div>
           </FadeIn>
         </section>
 
         {/* Mission Section */}
-        <section className="py-20 lg:px-20 text-center">
+        {/* <section className="py-20 lg:px-20 text-center">
           <div className="container md:px-20">
             <FadeIn initialDelay={0.1} once>
               <h2 className="text-base md:text-2xl font-display uppercase mb-4">
@@ -168,10 +168,10 @@ export default function Home() {
               </p>
             </FadeIn>
           </div>
-        </section>
+        </section> */}
 
         {/* Brands Section */}
-        <section className="pb-20">
+        <section className="pt-28 pb-20">
           <div className="container md:px-20">
             <div className="flex flex-wrap justify-center gap-8">
               {content.brands.items.map((item: any, index: number) => {

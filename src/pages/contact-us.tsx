@@ -10,7 +10,7 @@ export default function ContactUs() {
   return (
     <>
       <Head>
-        <title>Contact Us | TC Co. - Connecting African Communities</title>
+        <title>Contact Us | TCCo. - Connecting African Communities</title>
       </Head>
       <main className="min-h-screen">
         {/* Hero Section */}
@@ -52,7 +52,7 @@ export default function ContactUs() {
                       />
                     </svg>
                   </div>
-                  info@jointcco.com
+                  info@tcco.co
                 </div>
               </div>
             </FadeIn>
@@ -60,7 +60,7 @@ export default function ContactUs() {
               <div className="w-full h-[350px] aspect-square relative hidden lg:block">
                 <Image
                   src={visionCollage.default.src}
-                  alt="TC Co. - connecting people photo"
+                  alt="TCCo. - connecting people photo"
                   layout="fill"
                   objectFit="cover"
                 />
@@ -74,7 +74,7 @@ export default function ContactUs() {
         <div className="w-full h-[100vw] lg:h-[350px] aspect-square relative block lg:hidden">
           <Image
             src={visionCollage.default.src}
-            alt="TC Co. - connecting people photo"
+            alt="TCCo. - connecting people photo"
             layout="fill"
             objectFit="cover"
           />

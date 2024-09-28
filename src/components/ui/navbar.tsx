@@ -26,7 +26,7 @@ export const links: { title: string; href: string; description: string }[] = [
   {
     title: "Contact Us",
     href: "/contact-us",
-    description: "Contact TC Co.",
+    description: "Contact TCCo.",
   },
 ];
 
@@ -55,7 +55,7 @@ export function Navbar() {
         <Link href="/" className="flex items-center gap-2">
           <Image
             src={logo.default.src}
-            alt="TC Co. logo"
+            alt="TCCo. logo"
             width={120}
             height={22.7}
           />
@@ -92,7 +92,7 @@ export function Navbar() {
               <Link href="/" className="flex items-center gap-2">
                 <Image
                   src={logo.default.src}
-                  alt="TC Co. logo"
+                  alt="TCCo. logo"
                   width={120}
                   height={22.7}
                 />
@@ -168,7 +168,7 @@ export function Navbar() {
                     )
                   )}
                 </div>
-                © {new Date().getFullYear()} TC Co. All rights reserved.
+                © {new Date().getFullYear()} TCCo. All rights reserved.
               </div>
             </FadeIn>
           </div>

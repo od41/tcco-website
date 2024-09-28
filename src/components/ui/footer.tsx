@@ -20,7 +20,7 @@ const Footer = ({ isMini = false }: { isMini?: boolean }) => {
         <section className="relative h-[480px] flex items-start justify-center">
           <Image
             src={footerPhoto.default.src}
-            alt="TC Co. - connecting with us photo"
+            alt="TCCo. - connecting with us photo"
             layout="fill"
             objectFit="cover"
             className="z-0 object-top"
@@ -54,7 +54,7 @@ const Footer = ({ isMini = false }: { isMini?: boolean }) => {
                   <Image
                     src={logo.default.src}
                     // className="h-6 w-6"
-                    alt="TC Co. logo"
+                    alt="TCCo. logo"
                     width={120}
                     height={22.7}
                   />

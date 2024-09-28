@@ -32,7 +32,7 @@ export default function Engage() {
   return (
     <>
       <Head>
-        <title>Engage | TC Co. - Connecting African Communities</title>
+        <title>Engage | TCCo. - Connecting African Communities</title>
       </Head>
       <main className="min-h-screen">
         {/* Hero Section */}
@@ -40,7 +40,7 @@ export default function Engage() {
           <section className="relative h-[50vh] flex items-center justify-center py-12">
             <Image
               src={heroPhoto.default.src}
-              alt="TC Co. - connecting african communities photo"
+              alt="TCCo. - connecting african communities photo"
               layout="fill"
               objectFit="cover"
               className="z-0 object-center"
