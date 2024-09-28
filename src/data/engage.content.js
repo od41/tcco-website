@@ -1,6 +1,6 @@
 const data = {
   hero: {
-    title: "Connecting \nAfrican \ncommunities",
+    title: "Connecting \nSMB \ncommunities",
     subtitle:
       "Through integrated products, services, and experiences. \nBuilt on the belief that thriving communities inspire individual growth.",
     buttonText: "Join the community",

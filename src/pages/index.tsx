@@ -77,7 +77,7 @@ export default function Home() {
             <div className="text-2xl sm:text-4xl md:text-7xl lg:text-7xl font-display uppercase mb-4">
               <AnimatedText text="Connecting" initialDelay={0.8} once />
               <AnimatedText
-                text="African"
+                text="SMB"
                 className="text-primary"
                 initialDelay={1.2}
                 once
@@ -298,9 +298,9 @@ export default function Home() {
         </section>
 
         {/* Ticker 2 */}
-        <div className="hidden lg:block">
+        {/* <div className="hidden lg:block">
           <MessageTicker message="Thriving Communities Inspire Growth" />
-        </div>
+        </div> */}
       </main>
       <Footer />
     </>
