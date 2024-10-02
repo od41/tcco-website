@@ -154,7 +154,7 @@ export default function Engage() {
             </FadeIn> */}
             <FadeIn initialDelay={0.4} once>
               <p className="text-2xl md:text-3xl lg:text-4xl">
-                {content.mission.content}
+                {content.grid.content}
               </p>
             </FadeIn>
           </div>

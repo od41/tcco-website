@@ -15,7 +15,7 @@ const data = {
     image: "/grid-image.jpg",
     title: "Innovative Solutions",
     content:
-      "We provide innovative solutions that help businesses thrive in the digital age. Our team of experts is dedicated to delivering high-quality results.",
+      "Explore our vibrant spaces and enjoy unique services, all designed to foster a sense of belonging and empower your personal growth.",
     buttonText: "Learn More",
   },
   impactNumbers: {
