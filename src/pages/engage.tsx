@@ -16,15 +16,16 @@ const collagePhoto3 = require("@/assets/engage-hero-2.jpg");
 
 const brandPhoto1 = require("@/assets/brand-1-new.jpg");
 const brandPhoto2 = require("@/assets/brand-2.jpg");
-const brandPhoto3 = require("@/assets/brand-3.jpg");
-const brandPhoto4 = require("@/assets/brand-4.jpg");
+const brandPhoto3 = require("@/assets/brand-apartments.jpg");
+const brandPhoto4 = require("@/assets/brand-traydah.png");
 const brandPhoto5 = require("@/assets/brand-5.jpg");
 
 const brandPhotosList = [
   brandPhoto1.default.src,
   brandPhoto2.default.src,
-  // brandPhoto3.default.src,
-  // brandPhoto4.default.src,
+  // "",
+  brandPhoto3.default.src,
+  brandPhoto4.default.src,
   brandPhoto5.default.src,
 ];
 
@@ -32,7 +33,7 @@ export default function Engage() {
   return (
     <>
       <Head>
-        <title>Engage | TCCo. - Connecting African Communities</title>
+        <title>Engage | TCCo. - Connecting SMB Communities</title>
       </Head>
       <main className="min-h-screen">
         {/* Hero Section */}
@@ -40,7 +41,7 @@ export default function Engage() {
           <section className="relative h-[50vh] flex items-center justify-center py-12">
             <Image
               src={heroPhoto.default.src}
-              alt="TCCo. - connecting african communities photo"
+              alt="TCCo. - connecting smb communities photo"
               layout="fill"
               objectFit="cover"
               className="z-0 object-center"
@@ -178,6 +179,7 @@ export default function Engage() {
                     subHeading={item.subHeading}
                     bodyText={item.bodyText}
                     learnMoreLink={item.learnMoreLink}
+                    alignImageRight={index == 3}
                   />
                 </FadeIn>
               ))}

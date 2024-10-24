@@ -32,8 +32,8 @@ const data = {
       },
       {
         value: "10",
-        suffix: "",
-        name: "Partners",
+        suffix: "+",
+        name: "SMBs",
       },
       {
         value: "1",

@@ -12,6 +12,7 @@ interface BrandCardProps {
   learnMoreLink: string;
   subHeading: string;
   className?: string;
+  alignImageRight?: boolean;
 }
 
 export const BrandCard: React.FC<BrandCardProps> = ({
@@ -21,6 +22,7 @@ export const BrandCard: React.FC<BrandCardProps> = ({
   learnMoreLink,
   className,
   subHeading,
+  alignImageRight = false,
 }) => {
   return (
     <Card
@@ -33,6 +35,7 @@ export const BrandCard: React.FC<BrandCardProps> = ({
         <Image
           layout="fill"
           objectFit="cover"
+          objectPosition={alignImageRight ? "right" : ""}
           src={imageUrl}
           alt={heading}
           className="w-full"

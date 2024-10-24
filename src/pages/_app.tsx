@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import localFont from "next/font/local";
 import { AppProps } from "next/app";
 import { AnimatePresence, motion } from "framer-motion";
+import Head from "next/head";
 
 const fontSans = localFont({
   src: "../assets/recoleta-regular.ttf",
@@ -17,7 +18,7 @@ const displaySans = localFont({
 
 export const metadata: Metadata = {
   title: "TCCo.",
-  description: "Connecting African Communities",
+  description: "Connecting SMB Communities",
   icons: {
     icon: "/favicon.png", // /public/favicon.ico
   },
@@ -25,46 +26,48 @@ export const metadata: Metadata = {
 
 export default function MyApp({ Component, pageProps, router }: AppProps) {
   return (
-    <AnimatePresence mode="wait">
-      <motion.div key={router.pathname}>
-        <div
-          className={`${fontSans.variable} font-sans ${displaySans.variable}`}
-        >
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="dark"
-            enableSystem
-            disableTransitionOnChange
+    <>
+      <AnimatePresence mode="wait">
+        <motion.div key={router.pathname}>
+          <div
+            className={`${fontSans.variable} font-sans ${displaySans.variable}`}
           >
-            <Navbar />
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{
-                delay: 0.75,
-                duration: 0.5,
-                ease: [0.22, 1, 0.36, 1],
-              }}
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="dark"
+              enableSystem
+              disableTransitionOnChange
             >
-              <Component {...pageProps} />
-            </motion.div>
-          </ThemeProvider>
-        </div>
-        <motion.div
-          className="slide-in"
-          initial={{ scaleY: 0 }}
-          animate={{ scaleY: 0 }}
-          exit={{ scaleY: 1 }}
-          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-        ></motion.div>
-        <motion.div
-          className="slide-out"
-          initial={{ scaleY: 1 }}
-          animate={{ scaleY: 0 }}
-          exit={{ scaleY: 0 }}
-          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-        ></motion.div>
-      </motion.div>
-    </AnimatePresence>
+              <Navbar />
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{
+                  delay: 0.75,
+                  duration: 0.5,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+              >
+                <Component {...pageProps} />
+              </motion.div>
+            </ThemeProvider>
+          </div>
+          <motion.div
+            className="slide-in"
+            initial={{ scaleY: 0 }}
+            animate={{ scaleY: 0 }}
+            exit={{ scaleY: 1 }}
+            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+          ></motion.div>
+          <motion.div
+            className="slide-out"
+            initial={{ scaleY: 1 }}
+            animate={{ scaleY: 0 }}
+            exit={{ scaleY: 0 }}
+            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+          ></motion.div>
+        </motion.div>
+      </AnimatePresence>
+    </>
   );
 }

@@ -20,12 +20,12 @@ export const links: { title: string; href: string; description: string }[] = [
   },
   {
     title: "Engage",
-    href: "/engage",
+    href: "/engage/",
     description: "Engage with our brands and communitites",
   },
   {
     title: "Contact Us",
-    href: "/contact-us",
+    href: "/contact-us/",
     description: "Contact TCCo.",
   },
 ];
@@ -48,6 +48,7 @@ export function Navbar() {
       await controls.start("visible");
     }
   };
+  console.log("currentPath", currentPath);
 
   return (
     <header className="fixed top-0 w-full z-50">

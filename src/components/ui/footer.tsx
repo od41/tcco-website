@@ -64,7 +64,11 @@ const Footer = ({ isMini = false }: { isMini?: boolean }) => {
                 <div className="grid gap-2">
                   {content.footer.footerPages.links.map(
                     (link: any, index: any) => (
-                      <Link key={link.url} href={`/${link.url}`} className="">
+                      <Link
+                        key={link.url}
+                        href={`/${link.url}`}
+                        className="hover:text-primary"
+                      >
                         {link.name}
                       </Link>
                     )

@@ -86,7 +86,7 @@ const data = {
   footer: {
     about: {
       title: "Connect",
-      subtitle: "Become part of a thriving community! \nEmail: info@tcco.co",
+      subtitle: "Become part of a thriving community! ",
       buttonText: "Join now",
     },
     footerPages: {

@@ -17,6 +17,7 @@ import { FadeIn } from "@/components/ui/fade-in";
 
 const heroPhoto = require("@/assets/hero-photo.jpg");
 const videoThumbnailPhoto = require("@/assets/video-thumb.jpg");
+const VIDEO_SOURCE = process.env.NEXT_PUBLIC_VIDEO_SOURCE ? process.env.NEXT_PUBLIC_VIDEO_SOURCE : ""
 const visionCollage = require("@/assets/vision-collage.png");
 const collagePhoto1 = require("@/assets/image00145.jpeg");
 const collagePhoto2 = require("@/assets/tcco-2.jpg");
@@ -48,14 +49,14 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>TCCo. - Connecting African Communities</title>
+        <title>TCCo. - Connecting SMB Communities</title>
       </Head>
       <main className="min-h-screen">
         {/* Hero Section */}
         <section className="relative h-[85vh] md:h-[100vh] flex items-center justify-center py-12">
           <Image
             src={heroPhoto.default.src}
-            alt="TCCo. - connecting african communities photo"
+            alt="TCCo. - connecting smb communities photo"
             layout="fill"
             objectFit="cover"
             className="z-0 object-top"
@@ -113,7 +114,7 @@ export default function Home() {
             <div className="">
               <VideoPlayer
                 thumbnailSrc={videoThumbnailPhoto.default.src}
-                videoSrc="/path/to/your/video.mp4"
+                videoSrc={VIDEO_SOURCE}
                 aspectRatio="16/9"
               />
             </div>

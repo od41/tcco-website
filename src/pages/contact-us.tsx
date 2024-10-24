@@ -10,7 +10,7 @@ export default function ContactUs() {
   return (
     <>
       <Head>
-        <title>Contact Us | TCCo. - Connecting African Communities</title>
+        <title>Contact Us | TCCo. - Connecting SMB Communities</title>
       </Head>
       <main className="min-h-screen">
         {/* Hero Section */}
