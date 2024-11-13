@@ -235,7 +235,7 @@ export default function Home() {
         </section>
 
         {/* Collage Section */}
-        <section className=" mx-auto lg:px-20 m mb-20">
+        <section className=" mx-auto lg:px-20 mb-20">
           <div className="container grid grid-cols-1 md:grid-cols-2 md:grid-rows-3 lg:grid-rows-2 lg:grid-cols-3 gap-4">
             {/* Image 1: Full height on desktop, full width on mobile */}
             <FadeIn

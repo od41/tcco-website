@@ -24,6 +24,11 @@ export const links: { title: string; href: string; description: string }[] = [
     description: "Engage with our brands and communitites",
   },
   {
+    title: "Directory",
+    href: "/directory/",
+    description: "Directory",
+  },
+  {
     title: "Contact Us",
     href: "/contact-us/",
     description: "Contact TCCo.",
