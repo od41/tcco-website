@@ -137,7 +137,7 @@ export default function DirectoryDetailsPage() {
               </div>
 
               {/* Location */}
-              <div className="flex items-center gap-2 text-gray-600 mb-2">
+              <div className="flex items-center gap-2 text-gray-300 mb-2">
                 {business.location}
               </div>
 
