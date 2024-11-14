@@ -26,6 +26,7 @@ import {
 import { ContactModal } from "@/components/contact-modal";
 import { Business } from "@/api/directory";
 import { Biz } from "@/components/contact-modal";
+import Head from "next/head";
 
 const schema = Yup.object().shape({
   location: Yup.string(),
@@ -108,6 +109,9 @@ const DirectoryPage = () => {
 
   return (
     <div className="min-h-screen">
+      <Head>
+        <title>Business Directory | TCCo. - Connecting SMB Communities</title>
+      </Head>
       {/* Hero Section */}
       <div className="relative h-[650px] md:h-[500px] bg-black/50 pt-[240px]">
         <Image

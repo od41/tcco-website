@@ -2,9 +2,17 @@ import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { Business } from "@/api/directory";
+import { Business, Social } from "@/api/directory";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { collection, addDoc, updateDoc, doc } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  updateDoc,
+  doc,
+  query,
+  where,
+  getDocs,
+} from "firebase/firestore";
 import {
   storage,
   firestore,
@@ -12,34 +20,10 @@ import {
   BUSINESS_COLLECTION,
 } from "@/lib/firebase";
 import { Button } from "../ui/button";
+import Image from "next/image";
 
 const MAX_FILE_SIZE = 500000; // 500KB in bytes
 const ALLOWED_FILE_TYPES = ["image/jpeg", "image/png", "image/webp"];
-
-const businessSchema = yup.object({
-  name: yup.string().required("Name is required"),
-  category: yup.string().required("Category is required"),
-  description: yup.string().required("Description is required"),
-  location: yup.string().required("Location is required"),
-  email: yup.string().email("Invalid email").required("Email is required"),
-  phone: yup.string().required("Phone is required"),
-  website: yup
-    .string()
-    .url("Invalid website URL")
-    .required("Website is required"),
-  imageFile: yup
-    .mixed<FileList>()
-    .test("required", "Image is required", (value) => value != null)
-    .test("fileSize", "File size must be less than 500KB", (value) => {
-      if (!value || value.length == 0) return true;
-      console.log("validate", value, value[0].size);
-      return value[0].size <= MAX_FILE_SIZE;
-    })
-    .test("fileType", "Unsupported file type", (value) => {
-      if (!value || value.length == 0) return true;
-      return ALLOWED_FILE_TYPES.includes(value[0].type);
-    }),
-});
 
 interface CreateBusinessModalProps {
   open: boolean;
@@ -58,8 +42,44 @@ export function CreateBusinessModal({
   editBusiness,
   mode = "create",
 }: CreateBusinessModalProps) {
+  // define schema
+  const businessSchema = yup.object({
+    name: yup.string().required("Name is required"),
+    category: yup.string().required("Category is required"),
+    description: yup.string().required("Description is required"),
+    location: yup.string().required("Location is required"),
+    email: yup.string().email("Invalid email").required("Email is required"),
+    phone: yup.string().required("Phone is required"),
+    website: yup
+      .string()
+      .url("Invalid website URL")
+      .required("Website is required"),
+    imageFile:
+      mode === "edit"
+        ? yup.mixed<FileList>().nullable()
+        : yup
+            .mixed<FileList>()
+            .required("Image is required")
+            .test("fileSize", "File size must be less than 500KB", (value) => {
+              if (!value || value.length === 0) return true;
+              return value[0].size <= MAX_FILE_SIZE;
+            })
+            .test("fileType", "Unsupported file type", (value) => {
+              if (!value || value.length === 0) return true;
+              return ALLOWED_FILE_TYPES.includes(value[0].type);
+            }),
+    socials: yup.array().of(
+      yup.object({
+        name: yup.string().required("Social media name is required"),
+        url: yup.string().url("Invalid URL").required("URL is required"),
+      })
+    ),
+    verified: yup.boolean().default(false),
+  });
+
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [socials, setSocials] = useState<Social[]>(editBusiness?.socials || []);
 
   const {
     register,
@@ -80,8 +100,27 @@ export function CreateBusinessModal({
       setValue("email", editBusiness.email);
       setValue("phone", editBusiness.phone);
       setValue("website", editBusiness.website);
+      setValue("verified", editBusiness.verified);
     }
   }, [mode, editBusiness, setValue]);
+
+  const addSocialField = () => {
+    setSocials([...socials, { name: "", url: "" }]);
+  };
+
+  const removeSocialField = (index: number) => {
+    setSocials(socials.filter((_, i) => i !== index));
+  };
+
+  const updateSocialField = (
+    index: number,
+    field: keyof Social,
+    value: string
+  ) => {
+    const updatedSocials = [...socials];
+    updatedSocials[index] = { ...updatedSocials[index], [field]: value };
+    setSocials(updatedSocials);
+  };
 
   async function onSubmit(values: yup.InferType<typeof businessSchema>) {
     setIsLoading(true);
@@ -89,6 +128,7 @@ export function CreateBusinessModal({
 
     try {
       let imageUrl = editBusiness?.image;
+      let slug = editBusiness?.slug;
 
       if (values.imageFile?.[0]) {
         const imageFile = values.imageFile[0];
@@ -100,6 +140,20 @@ export function CreateBusinessModal({
         imageUrl = await getDownloadURL(uploadResult.ref);
       }
 
+      if (mode === "create") {
+        slug = values.name.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+
+        const slugQuery = query(
+          collection(firestore, BUSINESS_COLLECTION),
+          where("slug", "==", slug)
+        );
+        const slugSnapshot = await getDocs(slugQuery);
+
+        if (!slugSnapshot.empty) {
+          slug = `${slug}-${Date.now()}`;
+        }
+      }
+
       const businessData = {
         name: values.name,
         category: values.category,
@@ -109,9 +163,10 @@ export function CreateBusinessModal({
         phone: values.phone,
         website: values.website,
         image: imageUrl!,
-        verified: editBusiness?.verified ?? false,
+        verified: values.verified,
         views: editBusiness?.views ?? 0,
-        slug: values.name.toLowerCase().replace(/\s+/g, "-"),
+        socials,
+        ...(mode === "create" && { slug }),
         updatedAt: new Date().toISOString(),
         ...(mode === "create" && { createdAt: new Date().toISOString() }),
       };
@@ -123,6 +178,7 @@ export function CreateBusinessModal({
         );
         onBusinessUpdated?.({
           id: editBusiness.id,
+          slug: editBusiness.slug,
           ...businessData,
         });
       } else {
@@ -132,6 +188,7 @@ export function CreateBusinessModal({
         );
         onBusinessCreated!({
           id: docRef.id,
+          slug: slug!,
           ...businessData,
         });
       }
@@ -267,12 +324,14 @@ export function CreateBusinessModal({
             <div className="flex flex-col gap-1">
               <label className="text-sm font-medium">Business Image</label>
               {mode === "edit" && editBusiness?.image && (
-                <div className="mb-2">
-                  {/* // @ts-ignore */}
-                  <img
+                <div className="mb-2 relative h-20 w-20">
+                  <Image
                     src={editBusiness.image}
-                    alt="Current"
-                    className="h-20 w-20 object-cover rounded-md"
+                    alt={`${editBusiness.name} image`}
+                    fill
+                    sizes="80px"
+                    className="object-cover rounded-md"
+                    priority
                   />
                 </div>
               )}
@@ -311,6 +370,73 @@ export function CreateBusinessModal({
                 {errors.description.message}
               </span>
             )}
+          </div>
+
+          {/* Social Media Section */}
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <label className="text-sm font-medium">Social Media</label>
+              <button
+                type="button"
+                onClick={addSocialField}
+                className="text-sm text-blue-500 hover:text-blue-600"
+              >
+                + Add Social Media
+              </button>
+            </div>
+
+            {socials.map((social, index) => (
+              <div key={index} className="flex gap-2">
+                <select
+                  value={social.name}
+                  onChange={(e) =>
+                    updateSocialField(index, "name", e.target.value)
+                  }
+                  className="rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
+                >
+                  <option value="">Select Platform</option>
+                  <option value="facebook">Facebook</option>
+                  <option value="twitter">Twitter</option>
+                  <option value="instagram">Instagram</option>
+                  <option value="linkedin">LinkedIn</option>
+                  <option value="youtube">YouTube</option>
+                </select>
+
+                <input
+                  type="url"
+                  value={social.url}
+                  onChange={(e) =>
+                    updateSocialField(index, "url", e.target.value)
+                  }
+                  placeholder="Enter URL"
+                  className="flex-1 rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
+                />
+
+                <button
+                  type="button"
+                  onClick={() => removeSocialField(index)}
+                  className="text-red-500 hover:text-red-600"
+                >
+                  Remove
+                </button>
+              </div>
+            ))}
+          </div>
+
+          {/* Add Verified Checkbox */}
+          <div className="flex items-center space-x-2">
+            <input
+              type="checkbox"
+              {...register("verified")}
+              id="verified"
+              className="h-4 w-4 rounded border-gray-300 text-blue-500 focus:ring-blue-500"
+            />
+            <label 
+              htmlFor="verified" 
+              className="text-sm font-medium text-gray-700 cursor-pointer"
+            >
+              Verified Business
+            </label>
           </div>
 
           {/* Buttons */}

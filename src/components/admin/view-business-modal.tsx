@@ -4,12 +4,18 @@ import { X, Mail, Phone, Globe, MapPin } from "lucide-react";
 import { useState, useEffect } from "react";
 import { CreateBusinessModal } from "./create-business-modal";
 import { Button } from "../ui/button";
+import { doc, deleteDoc } from "firebase/firestore";
+import { ref, deleteObject } from "firebase/storage";
+import { firestore, storage, BUSINESS_COLLECTION } from "@/lib/firebase";
+import Link from "next/link";
+import { ViewBusinessIcon } from "../ui/icons";
 
 interface ViewBusinessModalProps {
   business: Business | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onBusinessUpdated: (business: Business) => void;
+  onBusinessDeleted?: (businessId: string) => void;
 }
 
 export function ViewBusinessModal({
@@ -17,8 +23,11 @@ export function ViewBusinessModal({
   open,
   onOpenChange,
   onBusinessUpdated,
+  onBusinessDeleted,
 }: ViewBusinessModalProps) {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
 
   // Reset edit modal state when view modal is closed
   useEffect(() => {
@@ -26,6 +35,51 @@ export function ViewBusinessModal({
       setIsEditModalOpen(false);
     }
   }, [open]);
+
+  const handleDelete = async () => {
+    if (!business) return;
+
+    if (
+      !confirm(
+        "Are you sure you want to delete this business? This action cannot be undone."
+      )
+    ) {
+      return;
+    }
+
+    setIsDeleting(true);
+    setDeleteError(null);
+
+    try {
+      // Delete the image from storage if it exists
+      if (business.image) {
+        try {
+          // Extract the image path from the URL
+          const imageUrl = new URL(business.image);
+          const imagePath = decodeURIComponent(
+            imageUrl.pathname.split("/o/")[1].split("?")[0]
+          );
+          const imageRef = ref(storage, imagePath);
+          await deleteObject(imageRef);
+        } catch (error) {
+          console.error("Error deleting image:", error);
+          // Continue with business deletion even if image deletion fails
+        }
+      }
+
+      // Delete the business document from Firestore
+      await deleteDoc(doc(firestore, BUSINESS_COLLECTION, business.id));
+
+      // Close the modal and notify parent
+      onOpenChange(false);
+      onBusinessDeleted?.(business.id);
+    } catch (error: any) {
+      console.error("Error deleting business:", error);
+      setDeleteError("Failed to delete business. Please try again.");
+    } finally {
+      setIsDeleting(false);
+    }
+  };
 
   if (!open || !business) return null;
 
@@ -42,7 +96,7 @@ export function ViewBusinessModal({
 
         {/* Only show view modal content if edit modal is not open */}
         {!isEditModalOpen && (
-          <div className="relative z-50 w-full max-w-3xl rounded-lg border border-gray-300 bg-background p-6 shadow-xl">
+          <div className="relative z-50 w-full max-w-3xl rounded-lg border border-gray-600 bg-background p-6 shadow-xl">
             {/* Close Button */}
             <button
               onClick={() => onOpenChange(false)}
@@ -53,17 +107,29 @@ export function ViewBusinessModal({
 
             <div className="grid gap-6 md:grid-cols-2">
               {/* Image Section */}
-              <div className="relative aspect-square w-full overflow-hidden rounded-lg">
-                <Image
-                  src={business.image}
-                  alt={business.name}
-                  fill
-                  className="object-cover"
-                />
+              <div className="flex flex-col gap-2">
+                <div className="relative aspect-square w-full overflow-hidden rounded-lg">
+                  <Image
+                    src={business.image}
+                    alt={business.name}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+                <Button
+                  variant="link"
+                  //   className="aspect-square bg-black border border-black hover:border-primary hover:bg-black"
+                  asChild
+                >
+                  <Link href={`/directory/${business.slug}`} target="_blank">
+                    Preview
+                    <ViewBusinessIcon />
+                  </Link>
+                </Button>
               </div>
 
               {/* Details Section */}
-              <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-4 max-h-full overflow-y-auto">
                 {/* Header */}
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
@@ -74,7 +140,7 @@ export function ViewBusinessModal({
                       </span>
                     )}
                   </div>
-                  <p className="text-gray-500">{business.category}</p>
+                  <p className="text-gray-200">{business.category}</p>
                 </div>
 
                 {/* Stats */}
@@ -128,14 +194,16 @@ export function ViewBusinessModal({
                 {/* Description */}
                 <div className="space-y-2">
                   <h3 className="font-semibold">About</h3>
-                  <p className="text-sm text-gray-300">{business.description}</p>
+                  <p className="text-sm text-gray-300">
+                    {business.description}
+                  </p>
                 </div>
 
                 {/* Social Links */}
                 {business.socials && business.socials.length > 0 && (
                   <div className="space-y-2">
                     <h3 className="font-semibold">Social Media</h3>
-                    <div className="flex gap-2">
+                    <div className="flex gap-2 flex-wrap">
                       {business.socials.map((social) => (
                         <a
                           key={social.name}
@@ -153,22 +221,25 @@ export function ViewBusinessModal({
 
                 {/* Action Buttons */}
                 <div className="flex gap-2 pt-4">
-                  <button
+                  <Button
                     onClick={() => setIsEditModalOpen(true)}
-                    className="rounded-md border border-gray-300 px-4 py-2 text-sm font-medium hover:bg-gray-50"
+                    variant="outline"
+                    disabled={isDeleting}
                   >
                     Edit
-                  </button>
-                  <button
-                    onClick={() => {
-                      // Add delete functionality
-                      console.log("Delete", business.id);
-                    }}
-                    className="rounded-md border border-red-200 bg-red-50 px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-100"
+                  </Button>
+                  <Button
+                    variant="destructive"
+                    onClick={handleDelete}
+                    disabled={isDeleting}
                   >
-                    Delete
-                  </button>
+                    {isDeleting ? "Deleting..." : "Delete"}
+                  </Button>
                 </div>
+
+                {deleteError && (
+                  <div className="mt-2 text-sm text-red-600">{deleteError}</div>
+                )}
               </div>
             </div>
           </div>

@@ -16,6 +16,7 @@ import { CreateBusinessModal } from "@/components/admin/create-business-modal";
 import { ViewBusinessModal } from "@/components/admin/view-business-modal";
 import { collection, getDocs } from "firebase/firestore";
 import { firestore, BUSINESS_COLLECTION } from "@/lib/firebase";
+import Head from "next/head";
 
 export default function AdminDashboard() {
   const [businesses, setBusinesses] = useState<Business[]>([]);
@@ -56,6 +57,13 @@ export default function AdminDashboard() {
     );
   };
 
+  const handleBusinessDeleted = (businessId: string) => {
+    setBusinesses((prev) =>
+      prev.filter((business) => business.id !== businessId)
+    );
+    setSelectedBusiness(null); // Close the modal
+  };
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -63,6 +71,11 @@ export default function AdminDashboard() {
   if (!loading && businesses.length === 0) {
     return (
       <div className="container mx-auto py-8 mt-20">
+        <Head>
+          <title>
+            Business Management | TCCo. - Connecting SMB Communities
+          </title>
+        </Head>
         <div className="mb-8 flex items-center justify-between">
           <h1 className="text-2xl font-display">Business Management</h1>
           <Button
@@ -114,6 +127,9 @@ export default function AdminDashboard() {
 
   return (
     <div className="container mx-auto py-8 mt-20">
+      <Head>
+        <title>Business Management | TCCo. - Connecting SMB Communities</title>
+      </Head>
       <div className="mb-8 flex items-center justify-between">
         <h1 className="text-2xl font-display">Business Management</h1>
         <Button
@@ -179,6 +195,7 @@ export default function AdminDashboard() {
         open={!!selectedBusiness}
         onOpenChange={() => setSelectedBusiness(null)}
         onBusinessUpdated={handleBusinessUpdated}
+        onBusinessDeleted={handleBusinessDeleted}
       />
     </div>
   );

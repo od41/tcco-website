@@ -1,8 +1,3 @@
-export interface BusinessHour {
-  day: string;
-  hours: string;
-}
-
 export interface Business {
   id: string;
   slug: string;
@@ -23,20 +18,4 @@ export interface Business {
 export interface Social {
   name: string;
   url: string;
-}
-
-export async function fetchDirectoryDetails(
-  slug: string
-): Promise<Business | null> {
-  const response = await fetch(`/api/directory/${slug}`);
-
-  if (!response.ok) {
-    if (response.status === 404) {
-      return null;
-    }
-    throw new Error("Failed to fetch directory details");
-  }
-
-  const data = await response.json();
-  return data;
 }
