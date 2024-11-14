@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
-import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import { Business, fetchDirectoryDetails } from "@/api/directory"; // Assuming this exists
 import { Spinner } from "@/components/ui/spinner"; // Assuming you have a spinner component
@@ -16,16 +15,6 @@ const DirectoryDetailsPage = () => {
   const router = useRouter();
   const { slug } = router.query;
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
-
-  const {
-    data: directory_,
-    isLoading,
-    isError,
-  } = useQuery({
-    queryKey: ["directory", slug],
-    queryFn: () => fetchDirectoryDetails(slug as string),
-    enabled: !!slug,
-  });
 
   // create some dummy so that i can test the u
   const directory: Business = {
