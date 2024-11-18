@@ -15,9 +15,11 @@ import Head from "next/head";
 import { AnimatedText } from "@/components/ui/animated-text";
 import { FadeIn } from "@/components/ui/fade-in";
 
-const heroPhoto = require("@/assets/hero-photo.jpg");
-const videoThumbnailPhoto = require("@/assets/video-thumb.jpg");
-const VIDEO_SOURCE = process.env.NEXT_PUBLIC_VIDEO_SOURCE ? process.env.NEXT_PUBLIC_VIDEO_SOURCE : ""
+const heroPhoto = require("@/assets/hero-background-static.png");
+const videoThumbnailPhoto = require("@/assets/video-thumb.png");
+const VIDEO_SOURCE = process.env.NEXT_PUBLIC_VIDEO_SOURCE
+  ? process.env.NEXT_PUBLIC_VIDEO_SOURCE
+  : "";
 const visionCollage = require("@/assets/vision-collage.png");
 const collagePhoto1 = require("@/assets/image00145.jpeg");
 const collagePhoto2 = require("@/assets/tcco-2.jpg");
@@ -39,12 +41,12 @@ const brandPhotosList = [
 ];
 
 export default function Home() {
-  const videoRef = useRef(null);
+  // const videoRef = useRef(null);
 
-  useEffect(() => {
-    // @ts-expect-error
-    videoRef.current!.playbackRate = 0.2;
-  }, []);
+  // useEffect(() => {
+  //   // @ts-expect-error
+  //   videoRef.current!.playbackRate = 0.2;
+  // }, []);
 
   return (
     <>
@@ -62,8 +64,8 @@ export default function Home() {
             className="z-0 object-top"
             priority
           />
-          <div className="absolute top-0 left-0 w-full h-full bg-black opacity-60 z-20"></div>
-          <video
+          <div className="absolute top-0 left-0 w-full h-full bg-black opacity-70 z-20"></div>
+          {/* <video
             autoPlay
             loop
             muted
@@ -73,7 +75,7 @@ export default function Home() {
           >
             <source src="/vids/hero-vid.mp4" type="video/mp4" />
             Your browser does not support the video tag.
-          </video>
+          </video> */}
           <div className="z-30 text-white container lg:px-20">
             <div className="text-2xl sm:text-4xl md:text-7xl lg:text-7xl font-display uppercase mb-4">
               <AnimatedText text="Connecting" initialDelay={0.8} once />
@@ -109,9 +111,9 @@ export default function Home() {
         </div> */}
 
         {/* Video Section */}
-        <section className="w-full aspect-video">
+        {/* <section className=" aspect-videoqa w-[600px] my-16 container mx-auto">
           <FadeIn initialDelay={0.3} once>
-            <div className="">
+            <div className="h-[50%]">
               <VideoPlayer
                 thumbnailSrc={videoThumbnailPhoto.default.src}
                 videoSrc={VIDEO_SOURCE}
@@ -119,7 +121,7 @@ export default function Home() {
               />
             </div>
           </FadeIn>
-        </section>
+        </section> */}
 
         {/* Ticker */}
         {/* <MessageTicker
@@ -128,7 +130,7 @@ export default function Home() {
         /> */}
 
         {/* 2-Column Grid Section */}
-        <section className="lg:pl-8 pr-0 grid grid-rows-1 lg:grid-cols-2 relative lg:h-[35.5vw]">
+        <section className="lg:pl-8 pr-0 grid grid-rows-1 lg:grid-cols-2 relative llg:h-[35.5vw]">
           <div className="container md:px-20 flex items-center my-20 lg:my-0">
             <div>
               <FadeIn initialDelay={0.1} once>
@@ -137,7 +139,7 @@ export default function Home() {
                 </h2>
               </FadeIn>
               <FadeIn initialDelay={0.3} once>
-                <p className="text-2xl md:text-3xl lg:text-3xl">
+                <p className="text-2xl md:text-3xl lg:text-[27px]">
                   {content.mission.content}
                 </p>
               </FadeIn>
@@ -145,11 +147,16 @@ export default function Home() {
           </div>
           <FadeIn direction="down" once>
             <div className="w-full lg:h-full relative lg:col-start-2 lg:col-span-1">
-              <Image
+              {/* <Image
                 src={visionCollage.default.src}
                 alt="TCCo. - connecting people photo"
                 layout="fill"
                 objectFit="contain"
+              /> */}
+              <VideoPlayer
+                thumbnailSrc={visionCollage.default.src}
+                videoSrc={VIDEO_SOURCE}
+                aspectRatio="1/1"
               />
             </div>
           </FadeIn>

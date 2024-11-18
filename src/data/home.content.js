@@ -94,6 +94,7 @@ const data = {
       links: [
         { name: "Engage", url: "engage" },
         { name: "Contact Us", url: "contact-us" },
+        { name: "Directory", url: "directory" },
         { name: "Privacy Policy", url: "privacy-policy" },
       ],
     },

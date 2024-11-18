@@ -9,7 +9,7 @@ import { getIconForSocialMedia } from "@/content/footer";
 import { AnimatedText } from "./animated-text";
 import { FadeIn } from "./fade-in";
 
-const logo = require("@/assets/logo-white.png");
+const logo = require("@/assets/logo_full_white_1.png");
 const footerPhoto = require("@/assets/footer-photo.jpg");
 
 const Footer = ({ isMini = false }: { isMini?: boolean }) => {

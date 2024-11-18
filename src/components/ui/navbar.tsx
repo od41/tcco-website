@@ -10,7 +10,7 @@ import { getIconForSocialMedia } from "@/content/footer";
 import { useAnimation, motion, easeInOut } from "framer-motion";
 import { FadeIn } from "./fade-in";
 
-const logo = require("@/assets/logo-white.png");
+const logo = require("@/assets/logo_full_white_1.png");
 
 export const links: { title: string; href: string; description: string }[] = [
   {
@@ -53,7 +53,6 @@ export function Navbar() {
       await controls.start("visible");
     }
   };
-  console.log("currentPath", currentPath);
 
   return (
     <header className="fixed top-0 w-full z-50">
@@ -131,7 +130,7 @@ export function Navbar() {
 
             {/* Row 2: Navigation menu items */}
             <nav className="flex-1 py-6">
-              <div className="grid md:grid-cols-3 w-full lg:w-2/3 mx-auto h-auto md:h-full gap-10 mt-[8rem] md:mt-0 md:gap-0 items-center text-4xl md:text-5xl justify-center">
+              <div className="grid md:grid-cols-4 w-full lg:w-2/3 mx-auto h-auto md:h-full gap-10 mt-[8rem] md:mt-0 md:gap-0 items-center text-4xl md:text-3xl justify-center">
                 {links.map(({ title, href }, index) => (
                   <FadeIn
                     key={`main-nav-link-${href}`}
