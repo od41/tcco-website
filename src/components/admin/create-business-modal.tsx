@@ -154,6 +154,28 @@ export function CreateBusinessModal({
         }
       }
 
+      // Generate keywords arrays for searching
+      const generateKeywords = (text: string) => {
+        const words = text.toLowerCase().split(/\s+/);
+        const keywords = new Set<string>();
+
+        // Add individual words
+        words.forEach((word) => {
+          if (word.length > 0) {
+            keywords.add(word);
+          }
+        });
+
+        // Add progressive substrings for partial matching
+        words.forEach((word) => {
+          for (let i = 1; i <= word.length; i++) {
+            keywords.add(word.substring(0, i));
+          }
+        });
+
+        return Array.from(keywords);
+      };
+
       const businessData = {
         name: values.name,
         category: values.category,
@@ -163,11 +185,14 @@ export function CreateBusinessModal({
         phone: values.phone,
         website: values.website,
         image: imageUrl!,
-        verified: values.verified,
+        verified: values.verified ?? false,
         views: editBusiness?.views ?? 0,
         socials,
         ...(mode === "create" && { slug }),
         updatedAt: new Date().toISOString(),
+        nameKeywords: generateKeywords(values.name),
+        locationKeywords: generateKeywords(values.location),
+        categoryKeywords: generateKeywords(values.category),
         ...(mode === "create" && { createdAt: new Date().toISOString() }),
       };
 
@@ -431,8 +456,8 @@ export function CreateBusinessModal({
               id="verified"
               className="h-4 w-4 rounded border-gray-300 text-blue-500 focus:ring-blue-500"
             />
-            <label 
-              htmlFor="verified" 
+            <label
+              htmlFor="verified"
               className="text-sm font-medium text-gray-700 cursor-pointer"
             >
               Verified Business

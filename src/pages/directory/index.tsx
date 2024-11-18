@@ -103,48 +103,68 @@ const DirectoryPage = () => {
     location?: string;
     businessName?: string;
   }) => {
+    if (!data.location && !data.businessName) {
+      setError("Please enter a location or business name");
+      return;
+    }
     setIsLoading(true);
     setError(null);
+
     try {
       const collectionRef = collection(firestore, BUSINESS_COLLECTION);
       let searchQuery;
 
-      if (data.location && data.businessName) {
-        // Search by both location and business name
+      console.log("Search input:", {
+        location: data.location,
+        businessName: data.businessName,
+      });
+
+      // If searching by business name
+      if (data.businessName && !data.location) {
         searchQuery = query(
           collectionRef,
-          where("location", ">=", data.location),
-          where("location", "<=", data.location + "\uf8ff"),
-          where("name", ">=", data.businessName),
-          where("name", "<=", data.businessName + "\uf8ff"),
-          orderBy("views", "desc"),
-          limit(20)
+          where(
+            "nameKeywords",
+            "array-contains",
+            data.businessName.toLowerCase()
+          )
         );
-      } else if (data.location) {
-        // Search by location only
+      }
+      // If searching by location
+      else if (data.location && !data.businessName) {
         searchQuery = query(
           collectionRef,
-          where("location", ">=", data.location),
-          where("location", "<=", data.location + "\uf8ff"),
-          orderBy("views", "desc"),
-          limit(20)
+          where(
+            "locationKeywords",
+            "array-contains",
+            data.location.toLowerCase()
+          )
         );
-      } else if (data.businessName) {
-        // Search by business name only
+      }
+      // If searching by both
+      else if (data.location && data.businessName) {
         searchQuery = query(
           collectionRef,
-          where("name", ">=", data.businessName),
-          where("name", "<=", data.businessName + "\uf8ff"),
-          orderBy("views", "desc"),
+          where(
+            "nameKeywords",
+            "array-contains",
+            data.businessName.toLowerCase()
+          )
+        );
+      }
+      // Default query
+      else {
+        searchQuery = query(
+          collectionRef,
+          orderBy("createdAt", "desc"),
           limit(20)
         );
-      } else {
-        // No search criteria, just return most viewed
-        searchQuery = query(collectionRef, orderBy("views", "desc"), limit(20));
       }
 
       const querySnapshot = await getDocs(searchQuery);
-      const businesses = querySnapshot.docs.map(
+      console.log("Query snapshot size:", querySnapshot.size);
+
+      let businesses = querySnapshot.docs.map(
         (doc) =>
           ({
             id: doc.id,
@@ -152,6 +172,14 @@ const DirectoryPage = () => {
           } as Business)
       );
 
+      // If searching by both, filter location in memory
+      if (data.location && data.businessName) {
+        businesses = businesses.filter((business) =>
+          business.locationKeywords!.includes(data.location!.toLowerCase())
+        );
+      }
+
+      console.log("Found businesses:", businesses);
       setSearchResults(businesses);
       setSelectedCategory(null);
     } catch (err) {
@@ -163,15 +191,15 @@ const DirectoryPage = () => {
   };
 
   // Effect to handle search when form values change
-  useEffect(() => {
-    const delayDebounceFn = setTimeout(() => {
-      if (location || businessName) {
-        searchBusinesses({ location, businessName });
-      }
-    }, 500);
+  // useEffect(() => {
+  //   const delayDebounceFn = setTimeout(() => {
+  //     if (location || businessName) {
+  //       searchBusinesses({ location, businessName });
+  //     }
+  //   }, 500);
 
-    return () => clearTimeout(delayDebounceFn);
-  }, [location, businessName]);
+  //   return () => clearTimeout(delayDebounceFn);
+  // }, [location, businessName]);
 
   const categories = [
     { title: "Art & Design", listings: 3, icon: <ArtIcon /> },
@@ -206,7 +234,10 @@ const DirectoryPage = () => {
             TRUST SIMPLIFIED
           </h1>
 
-          <div className="flex w-full max-w-4xl flex-col items-end gap-4 px-4 md:flex-row">
+          <form
+            onSubmit={handleSubmit(searchBusinesses)}
+            className="flex w-full max-w-4xl flex-col items-end gap-4 px-4 md:flex-row"
+          >
             <div className="flex-1 w-full">
               <label
                 htmlFor="location"
@@ -217,6 +248,7 @@ const DirectoryPage = () => {
               <input
                 type="text"
                 id="location"
+                disabled={isLoading}
                 placeholder="Location e.g Lagos"
                 {...register("location")}
                 className="w-full px-3 py-2 bg-background/40 border border-[#F8F9F5] rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -238,6 +270,7 @@ const DirectoryPage = () => {
               <input
                 type="text"
                 id="businessName"
+                disabled={isLoading}
                 placeholder="Business name e.g TC Co."
                 {...register("businessName")}
                 className="w-full px-3 bg-background/40 py-2 border border-[#F8F9F5] rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -248,10 +281,15 @@ const DirectoryPage = () => {
                 </p>
               )}
             </div>
-            <Button className=" w-full md:w-auto h-[42px]">
-              Explore Now →
+            <Button
+              type="submit"
+              className=" w-full md:w-auto min-w-[141px] h-[42px]"
+              disabled={isLoading}
+            >
+              {isLoading ? "Searching" : "Explore Now →"}
             </Button>
-          </div>
+          </form>
+          {error && <p className="mt-1 text-sm text-red-600">{error}</p>}
         </div>
       </div>
 
@@ -295,7 +333,7 @@ const DirectoryPage = () => {
           </>
         ) : (
           // Show search results or category results
-          <div className="mt-12 md:mt-28">
+          <div className="">
             <div className="mb-8 flex flex-col md:flex-row md:items-center justify-between">
               <div>
                 <h2 className="text-2xl font-bold">
@@ -411,7 +449,10 @@ const DirectoryPage = () => {
                           className="aspect-square bg-black border border-black hover:border-primary hover:bg-black"
                           asChild
                         >
-                          <Link href={`/directory/${result.id}`}>
+                          <Link
+                            href={`/directory/${result.slug}`}
+                            target="_blank"
+                          >
                             <ViewBusinessIcon />
                           </Link>
                         </Button>
@@ -488,7 +529,10 @@ const DirectoryPage = () => {
                         className="aspect-square bg-black border border-black hover:border-primary hover:bg-black"
                         asChild
                       >
-                        <Link href={`/directory/${result.id}`}>
+                        <Link
+                          href={`/directory/${result.slug}`}
+                          target="_blank"
+                        >
                           <ViewBusinessIcon />
                         </Link>
                       </Button>

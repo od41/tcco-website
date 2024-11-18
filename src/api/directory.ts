@@ -13,6 +13,8 @@ export interface Business {
   website: string;
   verified: boolean;
   socials?: Social[];
+  locationKeywords?: string[];
+  nameKeywords?: string[];
 }
 
 export interface Social {
