@@ -9,6 +9,8 @@ export interface Business {
   image: string;
   address?: string;
   location: string;
+  name_lower: string; // lowercase version of the name for searching
+  locationId: string;
   phone: string;
   website: string;
   verified: boolean;

@@ -34,14 +34,60 @@ import {
   getDocs,
   orderBy,
   limit,
+  doc,
 } from "firebase/firestore";
 import { firestore, BUSINESS_COLLECTION } from "@/lib/firebase";
 import { Spinner } from "@/components/ui/spinner";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const schema = Yup.object().shape({
-  location: Yup.string(),
+  location: Yup.string().required("Location is required"),
   businessName: Yup.string(),
 });
+
+interface Category {
+  id: string;
+  name: string;
+  listings: number;
+  isActive: boolean;
+}
+
+interface Location {
+  id: string;
+  name: string;
+  isActive: boolean;
+}
+
+const getCategoryIcon = (categoryName: string) => {
+  switch (categoryName) {
+    case "Art & Design":
+      return <ArtIcon />;
+    case "Auto Services":
+      return <AutoIcon />;
+    case "Food & Beverages":
+      return <FoodIcon />;
+    case "Lifestyle Products":
+      return <LifestyleIcon />;
+    case "Travel & Logistics":
+      return <TravelIcon />;
+    case "Beauty & Fashion":
+      return <BeautyIcon />;
+    case "Media & Tech":
+      return <TechIcon />;
+    case "Health & Environment":
+      return <HealthIcon />;
+    case "Events & Entertainment":
+      return <EventsIcon />;
+    default:
+      return null;
+  }
+};
 
 const DirectoryPage = () => {
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
@@ -53,14 +99,28 @@ const DirectoryPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [categories, setCategories] = useState<
+    Array<{
+      id: string;
+      title: string;
+      listings: number;
+      icon: JSX.Element | null;
+    }>
+  >([]);
+  const [locations, setLocations] = useState<Location[]>([]);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
     watch,
+    setValue,
   } = useForm({
     resolver: yupResolver(schema),
+    defaultValues: {
+      location: "Lagos",
+      businessName: "",
+    },
   });
 
   // Watch form fields for real-time search
@@ -119,65 +179,57 @@ const DirectoryPage = () => {
         businessName: data.businessName,
       });
 
-      // If searching by business name
+      // If searching by business name only
       if (data.businessName && !data.location) {
+        // Search for businesses where name starts with the search term
+        console.log("search by business name", data.businessName);
+        const searchTerm = data.businessName.toLowerCase();
         searchQuery = query(
           collectionRef,
-          where(
-            "nameKeywords",
-            "array-contains",
-            data.businessName.toLowerCase()
-          )
+          orderBy("nameLower"), // You'll need to add this field to your business documents
+          where("nameLower", ">=", searchTerm),
+          where("nameLower", "<=", searchTerm + "\uf8ff"),
+          limit(20)
         );
       }
-      // If searching by location
+      // If searching by location only
       else if (data.location && !data.businessName) {
+        console.log("search by location", data.location);
+        const locationRef = doc(firestore, 'locations', data.location);
         searchQuery = query(
           collectionRef,
-          where(
-            "locationKeywords",
-            "array-contains",
-            data.location.toLowerCase()
-          )
+          where("locationId", "==", locationRef), // Pass the DocumentReference
+          orderBy("views", "desc"),
+          limit(20)
         );
       }
       // If searching by both
       else if (data.location && data.businessName) {
+        const searchTerm = data.businessName.toLowerCase();
+        const locationRef = doc(firestore, 'locations', data.location);
+        console.log("search by both", data.location, data.businessName);
         searchQuery = query(
           collectionRef,
-          where(
-            "nameKeywords",
-            "array-contains",
-            data.businessName.toLowerCase()
-          )
+          where("locationId", "==", locationRef),
+          orderBy("nameLower"),
+          where("nameLower", ">=", searchTerm),
+          where("nameLower", "<=", searchTerm + "\uf8ff"),
+          limit(20)
         );
       }
       // Default query
       else {
-        searchQuery = query(
-          collectionRef,
-          orderBy("createdAt", "desc"),
-          limit(20)
-        );
+        searchQuery = query(collectionRef, orderBy("views", "desc"), limit(20));
       }
 
       const querySnapshot = await getDocs(searchQuery);
-      console.log("Query snapshot size:", querySnapshot.size);
-
-      let businesses = querySnapshot.docs.map(
+      const businesses = querySnapshot.docs.map(
         (doc) =>
           ({
             id: doc.id,
             ...doc.data(),
           } as Business)
       );
-
-      // If searching by both, filter location in memory
-      if (data.location && data.businessName) {
-        businesses = businesses.filter((business) =>
-          business.locationKeywords!.includes(data.location!.toLowerCase())
-        );
-      }
 
       console.log("Found businesses:", businesses);
       setSearchResults(businesses);
@@ -201,17 +253,62 @@ const DirectoryPage = () => {
   //   return () => clearTimeout(delayDebounceFn);
   // }, [location, businessName]);
 
-  const categories = [
-    { title: "Art & Design", listings: 3, icon: <ArtIcon /> },
-    { title: "Auto Services", listings: 8, icon: <AutoIcon /> },
-    { title: "Food & Beverages", listings: 11, icon: <FoodIcon /> },
-    { title: "Lifestyle Products", listings: 4, icon: <LifestyleIcon /> },
-    { title: "Travel Logistics", listings: 10, icon: <TravelIcon /> },
-    { title: "Beauty & Fashion", listings: 9, icon: <BeautyIcon /> },
-    { title: "Media & Tech", listings: 35, icon: <TechIcon /> },
-    { title: "Health & Environment", listings: 28, icon: <HealthIcon /> },
-    { title: "Events & Entertainment", listings: 401, icon: <EventsIcon /> },
-  ];
+  const fetchCategories = async () => {
+    try {
+      const categoriesRef = collection(firestore, "categories");
+      const snapshot = await getDocs(categoriesRef);
+
+      const fetchedCategories = snapshot.docs
+        .map(
+          (doc) =>
+            ({
+              id: doc.id,
+              ...doc.data(),
+            } as Category)
+        )
+        .filter((category) => category.isActive)
+        .map((category) => ({
+          id: category.id,
+          title: category.name,
+          listings: category.listings || 0,
+          icon: getCategoryIcon(category.name),
+        }));
+
+      console.log("fetchedCategories", fetchedCategories);
+
+      setCategories(fetchedCategories);
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+      // Optionally set an error state here
+    }
+  };
+
+  const fetchLocations = async () => {
+    try {
+      const locationsRef = collection(firestore, "locations");
+      const snapshot = await getDocs(locationsRef);
+
+      const fetchedLocations = snapshot.docs
+        .map(
+          (doc) =>
+            ({
+              id: doc.id,
+              ...doc.data(),
+            } as Location)
+        )
+        .filter((location) => location.isActive)
+        .sort((a, b) => a.name.localeCompare(b.name));
+
+      setLocations(fetchedLocations);
+    } catch (error) {
+      console.error("Error fetching locations:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCategories();
+    fetchLocations();
+  }, []);
 
   return (
     <div className="min-h-screen">
@@ -240,28 +337,6 @@ const DirectoryPage = () => {
           >
             <div className="flex-1 w-full">
               <label
-                htmlFor="location"
-                className="block mb-1 text-sm text-white"
-              >
-                Search a Location near you
-              </label>
-              <input
-                type="text"
-                id="location"
-                disabled={isLoading}
-                placeholder="Location e.g Lagos"
-                {...register("location")}
-                className="w-full px-3 py-2 bg-background/40 border border-[#F8F9F5] rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-              {errors.location && (
-                <p className="mt-1 text-sm text-red-600">
-                  {errors.location.message}
-                </p>
-              )}
-            </div>
-
-            <div className="flex-1 w-full">
-              <label
                 htmlFor="businessName"
                 className="block mb-1 text-sm text-white"
               >
@@ -278,6 +353,40 @@ const DirectoryPage = () => {
               {errors.businessName && (
                 <p className="mt-1 text-sm text-red-600">
                   {errors.businessName.message}
+                </p>
+              )}
+            </div>
+
+            <div className="flex-1 w-full">
+              <label
+                htmlFor="location"
+                className="block mb-1 text-sm text-white"
+              >
+                Search a Location near you
+              </label>
+              <Select
+                defaultValue="Lagos"
+                disabled={isLoading}
+                onValueChange={(value: string) => {
+                  setValue("location", value);
+                  // Optionally trigger immediate search
+                  handleSubmit(searchBusinesses)();
+                }}
+              >
+                <SelectTrigger className="w-full px-3 py-5 bg-background/40 border border-[#F8F9F5] rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                  <SelectValue placeholder="Select a location" />
+                </SelectTrigger>
+                <SelectContent>
+                  {locations.map((location) => (
+                    <SelectItem key={location.id} value={location.id}>
+                      {location.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {errors.location && (
+                <p className="mt-1 text-sm text-red-600">
+                  {errors.location.message}
                 </p>
               )}
             </div>
@@ -312,7 +421,7 @@ const DirectoryPage = () => {
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
               {categories.map((category) => (
                 <button
-                  key={category.title}
+                  key={category.id}
                   onClick={() => fetchBusinessesByCategory(category.title)}
                   className="flex items-center border border-primary gap-4 rounded-lg bg-black text-white hover:bg-black/90"
                 >
