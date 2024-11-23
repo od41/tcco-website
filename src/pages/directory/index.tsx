@@ -108,6 +108,7 @@ const DirectoryPage = () => {
     }>
   >([]);
   const [locations, setLocations] = useState<Location[]>([]);
+  const [isLoadingLocations, setIsLoadingLocations] = useState(true);
 
   const {
     register,
@@ -195,7 +196,7 @@ const DirectoryPage = () => {
       // If searching by location only
       else if (data.location && !data.businessName) {
         console.log("search by location", data.location);
-        const locationRef = doc(firestore, 'locations', data.location);
+        const locationRef = doc(firestore, "locations", data.location);
         searchQuery = query(
           collectionRef,
           where("locationId", "==", locationRef), // Pass the DocumentReference
@@ -206,12 +207,11 @@ const DirectoryPage = () => {
       // If searching by both
       else if (data.location && data.businessName) {
         const searchTerm = data.businessName.toLowerCase();
-        const locationRef = doc(firestore, 'locations', data.location);
+        const locationRef = doc(firestore, "locations", data.location);
         console.log("search by both", data.location, data.businessName);
         searchQuery = query(
           collectionRef,
           where("locationId", "==", locationRef),
-          orderBy("nameLower"),
           where("nameLower", ">=", searchTerm),
           where("nameLower", "<=", searchTerm + "\uf8ff"),
           limit(20)
@@ -284,31 +284,37 @@ const DirectoryPage = () => {
   };
 
   const fetchLocations = async () => {
+    setIsLoadingLocations(true);
     try {
-      const locationsRef = collection(firestore, "locations");
+      const locationsRef = collection(firestore, 'locations');
       const snapshot = await getDocs(locationsRef);
-
+      
       const fetchedLocations = snapshot.docs
-        .map(
-          (doc) =>
-            ({
-              id: doc.id,
-              ...doc.data(),
-            } as Location)
-        )
-        .filter((location) => location.isActive)
+        .map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        } as Location))
+        .filter(location => location.isActive)
         .sort((a, b) => a.name.localeCompare(b.name));
 
       setLocations(fetchedLocations);
+      
+      // Set default location (Lagos)
+      const lagos = fetchedLocations.find(loc => loc.name === "Lagos");
+      if (lagos) {
+        setValue("location", lagos.id);
+      }
     } catch (error) {
-      console.error("Error fetching locations:", error);
+      console.error('Error fetching locations:', error);
+    } finally {
+      setIsLoadingLocations(false);
     }
   };
 
   useEffect(() => {
     fetchCategories();
     fetchLocations();
-  }, []);
+  }, [setValue]);
 
   return (
     <div className="min-h-screen">
@@ -365,21 +371,25 @@ const DirectoryPage = () => {
                 Search a Location near you
               </label>
               <Select
-                defaultValue="Lagos"
-                disabled={isLoading}
+                value={location}
+                disabled={isLoading || isLoadingLocations}
                 onValueChange={(value: string) => {
                   setValue("location", value);
                   // Optionally trigger immediate search
-                  handleSubmit(searchBusinesses)();
+                  // handleSubmit(searchBusinesses)();
                 }}
               >
-                <SelectTrigger className="w-full px-3 py-5 bg-background/40 border border-[#F8F9F5] rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-                  <SelectValue placeholder="Select a location" />
+                <SelectTrigger 
+                  className="w-full px-3 py-5 bg-background/40 border border-[#F8F9F5] rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <SelectValue placeholder={isLoadingLocations ? "Loading locations..." : "Select a location"}>
+                    {locations.find((loc) => loc.id === location)?.name}
+                  </SelectValue>
                 </SelectTrigger>
                 <SelectContent>
-                  {locations.map((location) => (
-                    <SelectItem key={location.id} value={location.id}>
-                      {location.name}
+                  {locations.map((loc) => (
+                    <SelectItem key={loc.id} value={loc.id}>
+                      {loc.name}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -392,10 +402,14 @@ const DirectoryPage = () => {
             </div>
             <Button
               type="submit"
-              className=" w-full md:w-auto min-w-[141px] h-[42px]"
-              disabled={isLoading}
+              disabled={isLoading || isLoadingLocations}
+              className="w-full md:w-auto"
             >
-              {isLoading ? "Searching" : "Explore Now →"}
+              {isLoading ? (
+                <Spinner className="h-4 w-4" />
+              ) : (
+                "Search"
+              )}
             </Button>
           </form>
           {error && <p className="mt-1 text-sm text-red-600">{error}</p>}
