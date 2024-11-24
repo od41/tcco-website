@@ -36,7 +36,11 @@ import {
   limit,
   doc,
 } from "firebase/firestore";
-import { firestore, BUSINESS_COLLECTION } from "@/lib/firebase";
+import {
+  firestore,
+  BUSINESS_COLLECTION,
+  CATEGORIES_COLLECTION,
+} from "@/lib/firebase";
 import { Spinner } from "@/components/ui/spinner";
 import {
   Select,
@@ -98,7 +102,10 @@ const DirectoryPage = () => {
   const [searchResults, setSearchResults] = useState<Business[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<{
+    id: string;
+    name: string;
+  } | null>(null);
   const [categories, setCategories] = useState<
     Array<{
       id: string;
@@ -126,32 +133,50 @@ const DirectoryPage = () => {
 
   // Watch form fields for real-time search
   const location = watch("location");
-  console.log("location", location);
-  const businessName = watch("businessName");
 
   // Fetch businesses by category
-  const fetchBusinessesByCategory = async (category: string) => {
+  const fetchBusinessesByCategory = async (categoryId: string) => {
     setIsLoading(true);
     setError(null);
     try {
+      // Create a reference to the category document
+      const categoryRef = doc(firestore, CATEGORIES_COLLECTION, categoryId);
+
+      // Query businesses using the category reference
       const q = query(
         collection(firestore, BUSINESS_COLLECTION),
-        where("category", "==", category),
+        where("categoryId", "==", categoryRef),
         orderBy("views", "desc"),
         limit(20)
       );
 
       const querySnapshot = await getDocs(q);
-      const businesses = querySnapshot.docs.map(
-        (doc) =>
-          ({
-            id: doc.id,
-            ...doc.data(),
-          } as Business)
-      );
+
+      // Map the results and handle the category reference
+      const businesses = querySnapshot.docs.map((doc) => {
+        const data = doc.data();
+        return {
+          id: doc.id,
+          ...data,
+          // If you need to display the category name in the UI
+          category:
+            categories.find((cat) => cat.id === categoryId)?.title ||
+            "Unknown Category",
+        } as Business;
+      });
+      console.log("categoryId", categoryId);
+
+      console.log("querySnapshot", querySnapshot);
+
+      console.log("businesses", businesses);
 
       setSearchResults(businesses);
-      setSelectedCategory(category);
+      setSelectedCategory({
+        id: categoryId,
+        name:
+          categories.find((cat) => cat.id === categoryId)?.title ||
+          "Unknown Category",
+      });
     } catch (err) {
       console.error("Error fetching businesses:", err);
       setError("Failed to load businesses");
@@ -442,7 +467,7 @@ const DirectoryPage = () => {
               {categories.map((category) => (
                 <button
                   key={category.id}
-                  onClick={() => fetchBusinessesByCategory(category.title)}
+                  onClick={() => fetchBusinessesByCategory(category.id)}
                   className="flex items-center border border-primary gap-4 rounded-lg bg-black text-white hover:bg-black/90"
                 >
                   <div className="flex h-full w-[80px] items-center justify-center rounded-l-lg bg-primary text-2xl text-black">
@@ -467,7 +492,7 @@ const DirectoryPage = () => {
               <div>
                 <h2 className="text-2xl font-bold">
                   {selectedCategory
-                    ? `${selectedCategory} Businesses`
+                    ? `${selectedCategory.name} Businesses`
                     : "Search Results"}
                 </h2>
                 <p className="text-gray-600">
