@@ -119,13 +119,14 @@ const DirectoryPage = () => {
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
-      location: "Lagos",
+      location: "kc4EttZ6baf3eeWxq8oY", // uuid of Lagos
       businessName: "",
     },
   });
 
   // Watch form fields for real-time search
   const location = watch("location");
+  console.log("location", location);
   const businessName = watch("businessName");
 
   // Fetch businesses by category
@@ -286,26 +287,29 @@ const DirectoryPage = () => {
   const fetchLocations = async () => {
     setIsLoadingLocations(true);
     try {
-      const locationsRef = collection(firestore, 'locations');
+      const locationsRef = collection(firestore, "locations");
       const snapshot = await getDocs(locationsRef);
-      
+
       const fetchedLocations = snapshot.docs
-        .map(doc => ({
-          id: doc.id,
-          ...doc.data()
-        } as Location))
-        .filter(location => location.isActive)
+        .map(
+          (doc) =>
+            ({
+              id: doc.id,
+              ...doc.data(),
+            } as Location)
+        )
+        .filter((location) => location.isActive)
         .sort((a, b) => a.name.localeCompare(b.name));
 
       setLocations(fetchedLocations);
-      
+
       // Set default location (Lagos)
-      const lagos = fetchedLocations.find(loc => loc.name === "Lagos");
+      const lagos = fetchedLocations.find((loc) => loc.name === "Lagos");
       if (lagos) {
         setValue("location", lagos.id);
       }
     } catch (error) {
-      console.error('Error fetching locations:', error);
+      console.error("Error fetching locations:", error);
     } finally {
       setIsLoadingLocations(false);
     }
@@ -379,11 +383,17 @@ const DirectoryPage = () => {
                   // handleSubmit(searchBusinesses)();
                 }}
               >
-                <SelectTrigger 
-                  className="w-full px-3 py-5 bg-background/40 border border-[#F8F9F5] rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <SelectValue placeholder={isLoadingLocations ? "Loading locations..." : "Select a location"}>
-                    {locations.find((loc) => loc.id === location)?.name}
+                <SelectTrigger className="w-full px-3 py-5 bg-background/40 border border-[#F8F9F5] rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                  <SelectValue
+                    placeholder={
+                      isLoadingLocations
+                        ? "Loading locations..."
+                        : "Select a location"
+                    }
+                  >
+                    {locations &&
+                      location &&
+                      locations.find((loc) => loc.id === location)?.name}
                   </SelectValue>
                 </SelectTrigger>
                 <SelectContent>
@@ -405,11 +415,7 @@ const DirectoryPage = () => {
               disabled={isLoading || isLoadingLocations}
               className="w-full md:w-auto"
             >
-              {isLoading ? (
-                <Spinner className="h-4 w-4" />
-              ) : (
-                "Search"
-              )}
+              {isLoading ? <Spinner className="h-4 w-4" /> : "Search"}
             </Button>
           </form>
           {error && <p className="mt-1 text-sm text-red-600">{error}</p>}
