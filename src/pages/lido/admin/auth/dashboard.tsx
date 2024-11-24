@@ -14,8 +14,18 @@ import { Plus } from "lucide-react";
 import { Business } from "@/api/directory";
 import { CreateBusinessModal } from "@/components/admin/create-business-modal";
 import { ViewBusinessModal } from "@/components/admin/view-business-modal";
-import { collection, getDocs } from "firebase/firestore";
-import { firestore, BUSINESS_COLLECTION } from "@/lib/firebase";
+import {
+  collection,
+  getDocs,
+  query,
+  where,
+  documentId,
+} from "firebase/firestore";
+import {
+  firestore,
+  BUSINESS_COLLECTION,
+  CATEGORIES_COLLECTION,
+} from "@/lib/firebase";
 import Head from "next/head";
 
 export default function AdminDashboard() {
@@ -39,14 +49,50 @@ export default function AdminDashboard() {
     const fetchBusinesses = async () => {
       const businessesRef = collection(firestore, BUSINESS_COLLECTION);
       const snapshot = await getDocs(businessesRef);
-      const businessList = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      })) as Business[];
+
+      // Get unique category IDs
+      const categoryIds = Array.from(
+        new Set(
+          snapshot.docs.map((doc) => doc.data().categoryId).filter(Boolean)
+        )
+      );
+
+      // Fetch all categories in one batch
+      const categoriesRef = collection(firestore, CATEGORIES_COLLECTION);
+      const categoriesSnapshot = await getDocs(
+        query(
+          categoriesRef,
+          where(
+            documentId(),
+            "in",
+            categoryIds.length ? categoryIds : ["dummy-id"]
+          )
+        )
+      );
+
+      // Create categories lookup map
+      const categoriesMap = new Map(
+        categoriesSnapshot.docs.map((doc) => [doc.id, doc.data().name])
+      );
+
+      // Map businesses with category names
+      const businessList = snapshot.docs.map((doc) => {
+        const data = doc.data();
+        const category = data.categoryId
+          ? categoriesMap.get(data.categoryId["id"])
+          : "No Category";
+        return {
+          id: doc.id,
+          ...data,
+          category,
+        };
+      }) as Business[];
+
       setBusinesses(businessList);
     };
 
     fetchBusinesses();
+
   }, []);
 
   const handleBusinessUpdated = (updatedBusiness: Business) => {
