@@ -27,6 +27,7 @@ import {
   CATEGORIES_COLLECTION,
 } from "@/lib/firebase";
 import Head from "next/head";
+import { Spinner } from "@/components/ui/spinner";
 
 export default function AdminDashboard() {
   const [businesses, setBusinesses] = useState<Business[]>([]);
@@ -34,15 +35,16 @@ export default function AdminDashboard() {
   const [selectedBusiness, setSelectedBusiness] = useState<Business | null>(
     null
   );
-  const { user, loading } = useAuth();
+  const [isLoading, setIsLoading] = useState(true);
+  const { user, loading: authLoading } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
     // Redirect if not admin
-    if (!loading && !user) {
+    if (!authLoading && !user) {
       router.push("/");
     }
-  }, [user, loading, router]);
+  }, [user, authLoading, router]);
 
   useEffect(() => {
     // Fetch businesses from Firestore
@@ -84,15 +86,15 @@ export default function AdminDashboard() {
         return {
           id: doc.id,
           ...data,
-          category,
+          categoryId: category,
         };
       }) as Business[];
 
       setBusinesses(businessList);
+      setIsLoading(false);
     };
 
     fetchBusinesses();
-
   }, []);
 
   const handleBusinessUpdated = (updatedBusiness: Business) => {
@@ -110,11 +112,18 @@ export default function AdminDashboard() {
     setSelectedBusiness(null); // Close the modal
   };
 
-  if (loading) {
-    return <div>Loading...</div>;
+  if (isLoading || authLoading) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <Head>
+          <title>Loading... | TCCo. - Connecting SMB Communities</title>
+        </Head>
+        <Spinner className="h-8 w-8 text-primary" />
+      </div>
+    );
   }
 
-  if (!loading && businesses.length === 0) {
+  if (!authLoading && businesses.length === 0) {
     return (
       <div className="container mx-auto py-8 mt-20">
         <Head>
@@ -208,8 +217,8 @@ export default function AdminDashboard() {
                 onClick={() => setSelectedBusiness(business)}
               >
                 <TableCell className="font-medium">{business.name}</TableCell>
-                <TableCell>{business.category}</TableCell>
-                <TableCell>{business.location}</TableCell>
+                <TableCell>{String(business.categoryId)}</TableCell>
+                <TableCell>{String(business.location)}</TableCell>
                 <TableCell>{business.views}</TableCell>
                 <TableCell>
                   {business.verified ? (

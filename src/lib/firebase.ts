@@ -28,3 +28,4 @@ export const ADMIN_COLLECTION = "admin";
 export const BUSINESS_COLLECTION = "business";
 export const BUSINESS_MEDIA_COLLECTION = "media";
 export const CATEGORIES_COLLECTION = "categories";
+export const LOCATIONS_COLLECTION = "locations";

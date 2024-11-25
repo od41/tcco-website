@@ -18,9 +18,18 @@ import {
   firestore,
   BUSINESS_MEDIA_COLLECTION,
   BUSINESS_COLLECTION,
+  CATEGORIES_COLLECTION,
+  LOCATIONS_COLLECTION,
 } from "@/lib/firebase";
 import { Button } from "../ui/button";
 import Image from "next/image";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const MAX_FILE_SIZE = 500000; // 500KB in bytes
 const ALLOWED_FILE_TYPES = ["image/jpeg", "image/png", "image/webp"];
@@ -32,6 +41,18 @@ interface CreateBusinessModalProps {
   onBusinessUpdated?: (business: Business) => void;
   editBusiness?: Business | null;
   mode?: "create" | "edit";
+}
+
+interface Category {
+  id: string;
+  name: string;
+  isActive: boolean;
+}
+
+interface Location {
+  id: string;
+  name: string;
+  isActive: boolean;
 }
 
 export function CreateBusinessModal({
@@ -80,6 +101,10 @@ export function CreateBusinessModal({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [socials, setSocials] = useState<Social[]>(editBusiness?.socials || []);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [locations, setLocations] = useState<Location[]>([]);
+  const [isLoadingCategories, setIsLoadingCategories] = useState(true);
+  const [isLoadingLocations, setIsLoadingLocations] = useState(true);
 
   const {
     register,
@@ -87,6 +112,7 @@ export function CreateBusinessModal({
     formState: { errors },
     reset,
     setValue,
+    watch,
   } = useForm({
     resolver: yupResolver(businessSchema),
   });
@@ -94,15 +120,55 @@ export function CreateBusinessModal({
   useEffect(() => {
     if (mode === "edit" && editBusiness) {
       setValue("name", editBusiness.name);
-      setValue("category", editBusiness.category);
+      setValue(
+        "category",
+        typeof editBusiness.categoryId === "string"
+          ? editBusiness.categoryId
+          : editBusiness.categoryId.id
+      );
       setValue("description", editBusiness.description);
-      setValue("location", editBusiness.location);
+      setValue(
+        "location",
+        typeof editBusiness.locationId === "string"
+          ? editBusiness.locationId
+          : editBusiness.locationId.id
+      );
       setValue("email", editBusiness.email);
       setValue("phone", editBusiness.phone);
       setValue("website", editBusiness.website);
       setValue("verified", editBusiness.verified);
     }
   }, [mode, editBusiness, setValue]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Fetch categories
+        setIsLoadingCategories(true);
+        const categoriesRef = collection(firestore, CATEGORIES_COLLECTION);
+        const categoriesSnapshot = await getDocs(categoriesRef);
+        const fetchedCategories = categoriesSnapshot.docs
+          .map((doc) => ({ id: doc.id, ...doc.data() } as Category))
+          .filter((category) => category.isActive);
+        setCategories(fetchedCategories);
+        setIsLoadingCategories(false);
+
+        // Fetch locations
+        setIsLoadingLocations(true);
+        const locationsRef = collection(firestore, "locations");
+        const locationsSnapshot = await getDocs(locationsRef);
+        const fetchedLocations = locationsSnapshot.docs
+          .map((doc) => ({ id: doc.id, ...doc.data() } as Location))
+          .filter((location) => location.isActive);
+        setLocations(fetchedLocations);
+        setIsLoadingLocations(false);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const addSocialField = () => {
     setSocials([...socials, { name: "", url: "" }]);
@@ -154,33 +220,13 @@ export function CreateBusinessModal({
         }
       }
 
-      // Generate keywords arrays for searching
-      const generateKeywords = (text: string) => {
-        const words = text.toLowerCase().split(/\s+/);
-        const keywords = new Set<string>();
-
-        // Add individual words
-        words.forEach((word) => {
-          if (word.length > 0) {
-            keywords.add(word);
-          }
-        });
-
-        // Add progressive substrings for partial matching
-        words.forEach((word) => {
-          for (let i = 1; i <= word.length; i++) {
-            keywords.add(word.substring(0, i));
-          }
-        });
-
-        return Array.from(keywords);
-      };
-
       const businessData = {
         name: values.name,
-        category: values.category,
         description: values.description,
-        location: values.location,
+        categoryId: doc(firestore, CATEGORIES_COLLECTION, values.category),
+        category: "",
+        locationId: doc(firestore, "locations", values.location),
+        location: "",
         email: values.email,
         phone: values.phone,
         website: values.website,
@@ -190,9 +236,6 @@ export function CreateBusinessModal({
         socials,
         ...(mode === "create" && { slug }),
         updatedAt: new Date().toISOString(),
-        nameKeywords: generateKeywords(values.name),
-        locationKeywords: generateKeywords(values.location),
-        categoryKeywords: generateKeywords(values.category),
         ...(mode === "create" && { createdAt: new Date().toISOString() }),
       };
 
@@ -204,6 +247,9 @@ export function CreateBusinessModal({
         onBusinessUpdated?.({
           id: editBusiness.id,
           slug: editBusiness.slug,
+          name_lower: editBusiness.name.toLowerCase(),
+          // locationId: editBusiness.locationId.toString(),
+          // categoryId: editBusiness.categoryId.toString(),
           ...businessData,
         });
       } else {
@@ -214,6 +260,9 @@ export function CreateBusinessModal({
         onBusinessCreated!({
           id: docRef.id,
           slug: slug!,
+          name_lower: businessData.name.toLowerCase(),
+          // locationId: businessData.locationId,
+          // categoryId: businessData.categoryId,
           ...businessData,
         });
       }
@@ -272,11 +321,33 @@ export function CreateBusinessModal({
             {/* Location Field */}
             <div className="flex flex-col gap-1">
               <label className="text-sm font-medium">Location</label>
-              <input
-                {...register("location")}
-                className="rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
-                placeholder="Enter location"
-              />
+              <Select
+                value={watch("location")}
+                disabled={isLoading || isLoadingLocations}
+                onValueChange={(value: string) => setValue("location", value)}
+              >
+                <SelectTrigger className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none">
+                  <SelectValue
+                    placeholder={
+                      isLoadingLocations
+                        ? "Loading locations..."
+                        : "Select a location"
+                    }
+                  >
+                    {locations &&
+                      watch("location") &&
+                      locations.find((loc) => loc.id === watch("location"))
+                        ?.name}
+                  </SelectValue>
+                </SelectTrigger>
+                <SelectContent>
+                  {locations.map((location) => (
+                    <SelectItem key={location.id} value={location.id}>
+                      {location.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
               {errors.location && (
                 <span className="text-sm text-red-500">
                   {errors.location.message}
@@ -287,11 +358,33 @@ export function CreateBusinessModal({
             {/* Category Field */}
             <div className="flex flex-col gap-1">
               <label className="text-sm font-medium">Category</label>
-              <input
-                {...register("category")}
-                className="rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
-                placeholder="Enter category"
-              />
+              <Select
+                value={watch("category")}
+                disabled={isLoading || isLoadingCategories}
+                onValueChange={(value: string) => setValue("category", value)}
+              >
+                <SelectTrigger className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none">
+                  <SelectValue
+                    placeholder={
+                      isLoadingCategories
+                        ? "Loading categories..."
+                        : "Select a category"
+                    }
+                  >
+                    {categories &&
+                      watch("category") &&
+                      categories.find((cat) => cat.id === watch("category"))
+                        ?.name}
+                  </SelectValue>
+                </SelectTrigger>
+                <SelectContent>
+                  {categories.map((category) => (
+                    <SelectItem key={category.id} value={category.id}>
+                      {category.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
               {errors.category && (
                 <span className="text-sm text-red-500">
                   {errors.category.message}

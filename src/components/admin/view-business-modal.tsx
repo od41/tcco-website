@@ -140,7 +140,11 @@ export function ViewBusinessModal({
                       </span>
                     )}
                   </div>
-                  <p className="text-gray-200">{business.category}</p>
+                  <p className="text-gray-200">
+                    {business.categoryId
+                      ? String(business.categoryId)
+                      : "No Category"}
+                  </p>
                 </div>
 
                 {/* Stats */}

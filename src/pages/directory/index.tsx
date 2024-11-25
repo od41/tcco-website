@@ -159,7 +159,7 @@ const DirectoryPage = () => {
           id: doc.id,
           ...data,
           // If you need to display the category name in the UI
-          category:
+          categoryId:
             categories.find((cat) => cat.id === categoryId)?.title ||
             "Unknown Category",
         } as Business;
