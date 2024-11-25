@@ -43,13 +43,13 @@ interface CreateBusinessModalProps {
   mode?: "create" | "edit";
 }
 
-interface Category {
+export interface Category {
   id: string;
   name: string;
   isActive: boolean;
 }
 
-interface Location {
+export interface Location {
   id: string;
   name: string;
   isActive: boolean;
@@ -96,6 +96,7 @@ export function CreateBusinessModal({
       })
     ),
     verified: yup.boolean().default(false),
+    featured: yup.boolean().default(false),
   });
 
   const [isLoading, setIsLoading] = useState(false);
@@ -122,21 +123,26 @@ export function CreateBusinessModal({
       setValue("name", editBusiness.name);
       setValue(
         "category",
-        typeof editBusiness.categoryId === "string"
-          ? editBusiness.categoryId
-          : editBusiness.categoryId.id
+        editBusiness.categoryId
+          ? typeof editBusiness.categoryId === "string"
+            ? editBusiness.categoryId
+            : editBusiness.categoryId.id
+          : ""
       );
       setValue("description", editBusiness.description);
       setValue(
         "location",
-        typeof editBusiness.locationId === "string"
-          ? editBusiness.locationId
-          : editBusiness.locationId.id
+        editBusiness.locationId
+          ? typeof editBusiness.locationId === "string"
+            ? editBusiness.locationId
+            : editBusiness.locationId.id
+          : ""
       );
       setValue("email", editBusiness.email);
       setValue("phone", editBusiness.phone);
       setValue("website", editBusiness.website);
       setValue("verified", editBusiness.verified);
+      setValue("featured", editBusiness.featured);
     }
   }, [mode, editBusiness, setValue]);
 
@@ -225,13 +231,14 @@ export function CreateBusinessModal({
         description: values.description,
         categoryId: doc(firestore, CATEGORIES_COLLECTION, values.category),
         category: "",
-        locationId: doc(firestore, "locations", values.location),
+        locationId: doc(firestore, LOCATIONS_COLLECTION, values.location),
         location: "",
         email: values.email,
         phone: values.phone,
         website: values.website,
         image: imageUrl!,
         verified: values.verified ?? false,
+        featured: values.featured ?? false,
         views: editBusiness?.views ?? 0,
         socials,
         ...(mode === "create" && { slug }),
@@ -248,8 +255,6 @@ export function CreateBusinessModal({
           id: editBusiness.id,
           slug: editBusiness.slug,
           name_lower: editBusiness.name.toLowerCase(),
-          // locationId: editBusiness.locationId.toString(),
-          // categoryId: editBusiness.categoryId.toString(),
           ...businessData,
         });
       } else {
@@ -261,8 +266,6 @@ export function CreateBusinessModal({
           id: docRef.id,
           slug: slug!,
           name_lower: businessData.name.toLowerCase(),
-          // locationId: businessData.locationId,
-          // categoryId: businessData.categoryId,
           ...businessData,
         });
       }
@@ -276,8 +279,6 @@ export function CreateBusinessModal({
       setIsLoading(false);
     }
   }
-
-  console.log("errors", errors);
 
   if (!open) return null;
 
@@ -542,19 +543,36 @@ export function CreateBusinessModal({
           </div>
 
           {/* Add Verified Checkbox */}
-          <div className="flex items-center space-x-2">
-            <input
-              type="checkbox"
-              {...register("verified")}
-              id="verified"
-              className="h-4 w-4 rounded border-gray-300 text-blue-500 focus:ring-blue-500"
-            />
-            <label
-              htmlFor="verified"
-              className="text-sm font-medium text-gray-700 cursor-pointer"
-            >
-              Verified Business
-            </label>
+          <div className="flex items-center gap-4">
+            <div className="flex items-center space-x-2">
+              <input
+                type="checkbox"
+                {...register("verified")}
+                id="verified"
+                className="h-4 w-4 rounded border-gray-300 text-blue-500 focus:ring-blue-500"
+              />
+              <label
+                htmlFor="verified"
+                className="text-sm font-medium text-gray-700 cursor-pointer"
+              >
+                Verified Business
+              </label>
+            </div>
+
+            <div className="flex items-center space-x-2">
+              <input
+                type="checkbox"
+                {...register("featured")}
+                id="featured"
+                className="h-4 w-4 rounded border-gray-300 text-blue-500 focus:ring-blue-500"
+              />
+              <label
+                htmlFor="featured"
+                className="text-sm font-medium text-gray-700 cursor-pointer"
+              >
+                Featured Business
+              </label>
+            </div>
           </div>
 
           {/* Buttons */}

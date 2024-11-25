@@ -25,9 +25,11 @@ import {
   firestore,
   BUSINESS_COLLECTION,
   CATEGORIES_COLLECTION,
+  LOCATIONS_COLLECTION,
 } from "@/lib/firebase";
 import Head from "next/head";
 import { Spinner } from "@/components/ui/spinner";
+import { Location } from "@/components/admin/create-business-modal";
 
 export default function AdminDashboard() {
   const [businesses, setBusinesses] = useState<Business[]>([]);
@@ -59,6 +61,13 @@ export default function AdminDashboard() {
         )
       );
 
+      // Fetch locations
+      const locationsRef = collection(firestore, LOCATIONS_COLLECTION);
+      const locationsSnapshot = await getDocs(locationsRef);
+      const fetchedLocations = locationsSnapshot.docs
+        .map((doc) => ({ id: doc.id, ...doc.data() } as Location))
+        .filter((location) => location.isActive);
+
       // Fetch all categories in one batch
       const categoriesRef = collection(firestore, CATEGORIES_COLLECTION);
       const categoriesSnapshot = await getDocs(
@@ -83,10 +92,19 @@ export default function AdminDashboard() {
         const category = data.categoryId
           ? categoriesMap.get(data.categoryId["id"])
           : "No Category";
+
+        // Simplified location lookup
+        const locationId =
+          typeof data.locationId === "object"
+            ? data.locationId.id
+            : data.locationId;
+        const location = fetchedLocations.find((loc) => loc.id === locationId);
+
         return {
           id: doc.id,
           ...data,
           categoryId: category,
+          location: location?.name || "Unknown Location",
         };
       }) as Business[];
 
@@ -135,7 +153,6 @@ export default function AdminDashboard() {
           <h1 className="text-2xl font-display">Business Management</h1>
           <Button
             onClick={() => {
-              console.log("Opening modal...");
               setIsCreateModalOpen(true);
             }}
             className="mt-4"
@@ -156,7 +173,6 @@ export default function AdminDashboard() {
             </p>
             <Button
               onClick={() => {
-                console.log("Opening modal...");
                 setIsCreateModalOpen(true);
               }}
               className="mt-4"
@@ -168,7 +184,6 @@ export default function AdminDashboard() {
         <CreateBusinessModal
           open={isCreateModalOpen}
           onOpenChange={(open) => {
-            console.log("Modal state changing to:", open);
             setIsCreateModalOpen(open);
           }}
           onBusinessCreated={(newBusiness) => {
@@ -189,7 +204,6 @@ export default function AdminDashboard() {
         <h1 className="text-2xl font-display">Business Management</h1>
         <Button
           onClick={() => {
-            console.log("Opening modal...");
             setIsCreateModalOpen(true);
           }}
         >
@@ -207,6 +221,7 @@ export default function AdminDashboard() {
               <TableHead>Location</TableHead>
               <TableHead>Views</TableHead>
               <TableHead>Verified</TableHead>
+              <TableHead>Featured</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -218,10 +233,19 @@ export default function AdminDashboard() {
               >
                 <TableCell className="font-medium">{business.name}</TableCell>
                 <TableCell>{String(business.categoryId)}</TableCell>
-                <TableCell>{String(business.location)}</TableCell>
+                <TableCell>
+                  {business.location ? String(business.location) : "-"}
+                </TableCell>
                 <TableCell>{business.views}</TableCell>
                 <TableCell>
                   {business.verified ? (
+                    <span className="text-green-600">✓</span>
+                  ) : (
+                    <span className="text-gray-400">-</span>
+                  )}
+                </TableCell>
+                <TableCell>
+                  {business.featured ? (
                     <span className="text-green-600">✓</span>
                   ) : (
                     <span className="text-gray-400">-</span>
@@ -236,7 +260,6 @@ export default function AdminDashboard() {
       <CreateBusinessModal
         open={isCreateModalOpen}
         onOpenChange={(open) => {
-          console.log("Modal state changing to:", open);
           setIsCreateModalOpen(open);
         }}
         onBusinessCreated={(newBusiness) => {

@@ -16,6 +16,7 @@ export interface Business {
   phone: string;
   website: string;
   verified: boolean;
+  featured: boolean;
   socials?: Social[];
 }
 

@@ -139,10 +139,7 @@ const DirectoryPage = () => {
     setIsLoading(true);
     setError(null);
     try {
-      // Create a reference to the category document
       const categoryRef = doc(firestore, CATEGORIES_COLLECTION, categoryId);
-
-      // Query businesses using the category reference
       const q = query(
         collection(firestore, BUSINESS_COLLECTION),
         where("categoryId", "==", categoryRef),
@@ -152,23 +149,26 @@ const DirectoryPage = () => {
 
       const querySnapshot = await getDocs(q);
 
-      // Map the results and handle the category reference
       const businesses = querySnapshot.docs.map((doc) => {
         const data = doc.data();
+        const locationName =
+          locations.find(
+            (loc) =>
+              loc.id ===
+              (typeof data.locationId === "string"
+                ? data.locationId
+                : data.locationId.id)
+          )?.name || "Unknown Location";
+
         return {
           id: doc.id,
           ...data,
-          // If you need to display the category name in the UI
           categoryId:
             categories.find((cat) => cat.id === categoryId)?.title ||
             "Unknown Category",
+          location: locationName,
         } as Business;
       });
-      console.log("categoryId", categoryId);
-
-      console.log("querySnapshot", querySnapshot);
-
-      console.log("businesses", businesses);
 
       setSearchResults(businesses);
       setSelectedCategory({
@@ -201,15 +201,9 @@ const DirectoryPage = () => {
       const collectionRef = collection(firestore, BUSINESS_COLLECTION);
       let searchQuery;
 
-      console.log("Search input:", {
-        location: data.location,
-        businessName: data.businessName,
-      });
-
       // If searching by business name only
       if (data.businessName && !data.location) {
         // Search for businesses where name starts with the search term
-        console.log("search by business name", data.businessName);
         const searchTerm = data.businessName.toLowerCase();
         searchQuery = query(
           collectionRef,
@@ -249,13 +243,36 @@ const DirectoryPage = () => {
       }
 
       const querySnapshot = await getDocs(searchQuery);
-      const businesses = querySnapshot.docs.map(
-        (doc) =>
-          ({
-            id: doc.id,
-            ...doc.data(),
-          } as Business)
-      );
+      // const businesses = querySnapshot.docs.map(
+      //   (doc) =>
+      //     ({
+      //       id: doc.id,
+      //       ...doc.data(),
+      //     } as Business)
+      // );
+
+      const businesses = querySnapshot.docs.map((doc) => {
+        const data = doc.data();
+        const locationName =
+          locations.find(
+            (loc) =>
+              loc.id ===
+              (typeof data.locationId === "string"
+                ? data.locationId
+                : data.locationId.id)
+          )?.name || "Unknown Location";
+
+        const categoryName =
+          categories.find((cat) => cat.id === data.categoryId)?.title ||
+          "Unknown Category";
+
+        return {
+          id: doc.id,
+          ...data,
+          categoryId:  categoryName,
+          location: locationName,
+        } as Business;
+      });
 
       console.log("Found businesses:", businesses);
       setSearchResults(businesses);
@@ -267,17 +284,6 @@ const DirectoryPage = () => {
       setIsLoading(false);
     }
   };
-
-  // Effect to handle search when form values change
-  // useEffect(() => {
-  //   const delayDebounceFn = setTimeout(() => {
-  //     if (location || businessName) {
-  //       searchBusinesses({ location, businessName });
-  //     }
-  //   }, 500);
-
-  //   return () => clearTimeout(delayDebounceFn);
-  // }, [location, businessName]);
 
   const fetchCategories = async () => {
     try {
@@ -468,18 +474,18 @@ const DirectoryPage = () => {
                 <button
                   key={category.id}
                   onClick={() => fetchBusinessesByCategory(category.id)}
-                  className="flex items-center border border-primary gap-4 rounded-lg bg-black text-white hover:bg-black/90"
+                  className="flex items-center border border-primary min-h-[88px] gap-4 rounded-lg bg-black text-white hover:bg-black/90"
                 >
-                  <div className="flex h-full w-[80px] items-center justify-center rounded-l-lg bg-primary text-2xl text-black">
+                  <div className="flex h-full min-w-[80px] items-center justify-center rounded-l-lg bg-primary text-2xl text-black">
                     <div className="flex items-center justify-center w-[30px] h-[30px]">
                       {category.icon}
                     </div>
                   </div>
                   <div className="p-4 pl-0 text-left">
                     <h3 className="text-xl font-display">{category.title}</h3>
-                    <p className="text-sm text-gray-400">
+                    {/* <p className="text-sm text-gray-400">
                       {category.listings} Listings
-                    </p>
+                    </p> */}
                   </div>
                 </button>
               ))}
@@ -502,7 +508,7 @@ const DirectoryPage = () => {
 
               {/* View mode toggle */}
               <div className="flex items-center gap-4">
-                {selectedCategory && (
+                {(selectedCategory || searchResults.length) && (
                   <Button
                     variant="outline"
                     onClick={() => {
@@ -576,7 +582,9 @@ const DirectoryPage = () => {
 
                       {/* Location */}
                       <div className="flex items-center gap-2 text-gray-600 mb-2">
-                        {result.location}
+                        {result.location
+                          ? String(result.location)
+                          : "No Location"}
                       </div>
 
                       {/* Views Count */}
@@ -653,7 +661,9 @@ const DirectoryPage = () => {
 
                         {/* Location */}
                         <div className="flex items-center gap-2 text-gray-600 mb-2 md:mb-4">
-                          {result.location}
+                          {result.locationId
+                            ? String(result.location)
+                            : "No Location"}
                         </div>
 
                         {/* Views Count */}
