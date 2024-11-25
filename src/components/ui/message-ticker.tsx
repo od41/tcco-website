@@ -11,7 +11,7 @@ export const MessageTicker: React.FC<MessageTickerProps> = ({
   isReversed = false,
 }) => {
   return (
-    <div className="w-full overflow-hidden border-t border-b border-primary py-1.5">
+    <div className="w-full overflow-hidden border-t border-b border-muted py-1.5">
       <div
         className={`flex ${
           isReversed ? "animate-ticker-reverse" : "animate-ticker"
@@ -26,7 +26,7 @@ export const MessageTicker: React.FC<MessageTickerProps> = ({
               width="15"
               height="13"
               viewBox="0 0 15 13"
-              className="w-3 h-3 mr-4 text-primary"
+              className="w-3 h-3 mr-4 text-primary/50"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
             >
@@ -36,11 +36,11 @@ export const MessageTicker: React.FC<MessageTickerProps> = ({
                 rx="7.84587"
                 ry="5.07377"
                 transform="rotate(-26.5684 7.47064 6.30443)"
-                fill="#CCFF00"
+                fill="currentColor"
               />
             </svg>
 
-            <span>{message}</span>
+            <span className="text-white/60">{message}</span>
           </div>
         ))}
       </div>

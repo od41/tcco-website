@@ -1,5 +1,5 @@
 "use client";
-import { Fragment, useEffect, useRef } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import content from "@/data/home.content";
@@ -14,6 +14,21 @@ import Footer from "@/components/ui/footer";
 import Head from "next/head";
 import { AnimatedText } from "@/components/ui/animated-text";
 import { FadeIn } from "@/components/ui/fade-in";
+import AnimatedCounter from "@/components/ui/animated-counter";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import {
+  firestore,
+  BUSINESS_COLLECTION,
+  LOCATIONS_COLLECTION,
+} from "@/lib/firebase";
+import { Card } from "@/components/ui/card";
+import {
+  VerifiedIcon,
+  ViewsIcon,
+  ViewBusinessIcon,
+} from "@/components/ui/icons";
+import { Spinner } from "@/components/ui/spinner";
+import type { Business } from "@/api/directory";
 
 const heroPhoto = require("@/assets/hero-background-static.png");
 const videoThumbnailPhoto = require("@/assets/video-thumb.png");
@@ -102,6 +117,39 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Ticker */}
+        <MessageTicker message="Thriving Communities Inspire Growth" />
+
+        {/* Impact numbers */}
+        <section className="py-12">
+          <div className="container mx-auto">
+            {/* <h2 className="text-3xl font-bold text-center mb-12">Our Impact</h2> */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+              {content.impactNumbers.items.map((item, index) => (
+                <div key={`${index}-impact`} className="text-center p-4">
+                  <div className="text-4xl lg:text-5xl lg:text-[90px] font-display text-white mb-1 leading-none">
+                    <AnimatedCounter
+                      from={0}
+                      to={Number(item.value)}
+                      duration={3}
+                    />
+                    {item.suffix}
+                  </div>
+                  <div className="text-lg text-primary capitalize">
+                    {item.name}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Ticker */}
+        <MessageTicker
+          message="Thriving Communities Inspire Growth"
+          isReversed={true}
+        />
+
         {/* <div className="w-full flex justify-center items-center py-12 md:py-19">
           <FadeIn once>
             <p className="font-display uppercase text-base md:text-3xl">
@@ -179,7 +227,7 @@ export default function Home() {
         </section> */}
 
         {/* Brands Section */}
-        <section className="pt-28 pb-20">
+        {/* <section className="pt-28 pb-20">
           <div className="container md:px-20">
             <div className="flex flex-wrap justify-center gap-8">
               {content.brands.items.map((item: any, index: number) => {
@@ -205,6 +253,29 @@ export default function Home() {
               <FadeIn initialDelay={0.3} once>
                 <Button size="lg" asChild>
                   <Link href={"/engage"}>
+                    View All <ArrowRightIcon className="ml-3" />
+                  </Link>
+                </Button>
+              </FadeIn>
+            </div>
+          </div>
+        </section> */}
+
+        {/* Featured Businesses Section */}
+        <section className="pt-20 pb-12 lg:px-20">
+          <div className="container mx-auto">
+            <FadeIn initialDelay={0.1} once>
+              <h2 className="text-base md:text-xl font-display uppercase mb-8 text-center">
+                Featured Businesses
+              </h2>
+            </FadeIn>
+
+            <FeaturedBusinesses />
+
+            <div className="flex justify-center mt-8">
+              <FadeIn initialDelay={0.3} once>
+                <Button size="lg" asChild>
+                  <Link href={"/directory"}>
                     View All <ArrowRightIcon className="ml-3" />
                   </Link>
                 </Button>
@@ -312,5 +383,168 @@ export default function Home() {
       </main>
       <Footer />
     </>
+  );
+}
+
+function FeaturedBusinesses() {
+  const [businesses, setBusinesses] = useState<Business[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchFeaturedBusinesses() {
+      try {
+        // Fetch featured businesses
+        const businessesRef = collection(firestore, BUSINESS_COLLECTION);
+        const q = query(businessesRef, where("featured", "==", true));
+        const snapshot = await getDocs(q);
+
+        // Get all businesses first
+        const businessDocs = snapshot.docs.map(
+          (doc) =>
+            ({
+              id: doc.id,
+              ...doc.data(),
+            } as Business)
+        );
+
+        // Get unique location IDs
+        const locationIds = Array.from(
+          new Set(
+            businessDocs
+              .map((doc) =>
+                typeof doc.locationId === "object"
+                  ? doc.locationId.id
+                  : doc.locationId
+              )
+              .filter(Boolean)
+          )
+        );
+
+        // Fetch locations in one batch
+        const locationsRef = collection(firestore, LOCATIONS_COLLECTION);
+        const locationsSnapshot = await getDocs(locationsRef);
+        const locationsMap = new Map(
+          locationsSnapshot.docs.map((doc) => [doc.id, doc.data().name])
+        );
+
+        // Map businesses with location names
+        const featuredBusinesses = businessDocs
+          .map((business) => {
+            const locationId =
+              typeof business.locationId === "object"
+                ? business.locationId.id
+                : business.locationId;
+
+            return {
+              ...business,
+              location: locationsMap.get(locationId) || "No Location",
+            } as Business;
+          })
+          .slice(0, 3); // Limit to 3 businesses
+
+        setBusinesses(featuredBusinesses);
+        console.log("featuredBusinesses", featuredBusinesses);
+      } catch (error) {
+        console.error("Error fetching featured businesses:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    fetchFeaturedBusinesses();
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center py-12">
+        <Spinner className="h-8 w-8 text-primary" />
+      </div>
+    );
+  }
+
+  if (businesses.length === 0) {
+    return (
+      <div className="text-center py-12 text-muted-foreground">
+        No featured businesses found
+      </div>
+    );
+  }
+
+  return (
+    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+      {businesses.map((business) => (
+        <Card
+          key={business.id}
+          className="flex flex-col md:flex-row h-full w-full overflow-hidden border-primary bg-background shadow-custom-rem rounded-sm"
+        >
+          {/* Image Section */}
+          <div className="w-full h-full md:mb-0 md:w-2/5 relative">
+            <Image
+              src={business.image}
+              alt={business.name}
+              layout="fill"
+              objectFit="cover"
+              className="rounded-l-sm"
+            />
+            {/* {result.featured && (
+                          <span className="absolute left-4 top-4 rounded bg-primary px-3 py-1 text-sm font-medium">
+                            Featured
+                          </span>
+                        )} */}
+          </div>
+
+          {/* Content Section */}
+          <div className="w-full md:w-3/5 p-6 flex flex-col">
+            {/* Title and Verified Badge */}
+            <div className="flex items-center justify-between mb-2">
+              <h2 className="text-xl font-display">{business.name}</h2>
+              {business.verified && (
+                <span className="flex items-center gap-1 text-primary">
+                  <VerifiedIcon />
+                </span>
+              )}
+            </div>
+
+            {/* Location */}
+            <div className="flex items-center gap-2 text-gray-600 mb-2">
+              {business.location ? String(business.location) : "No Location"}
+            </div>
+
+            {/* Views Count */}
+            <div className="flex items-center gap-2 text-primary mb-4">
+              <ViewsIcon />
+              {business.views} views
+            </div>
+
+            {/* Buttons */}
+            <div className="flex gap-4 mt-auto">
+              {/* <Button
+                variant="outline"
+                size="lg"
+                className="flex-1"
+                onClick={() => {
+                  // setSelectedBusiness(result);
+                  // setIsContactModalOpen(true);
+                }}
+              >
+                Contact
+              </Button> */}
+              <Button
+                // size="icon"
+                className="aspect-square bg-black border border-black hover:border-primary hover:bg-black"
+                asChild
+              >
+                <Link href={`/directory/${business.slug}`} target="_blank">
+                  <span className="hidden md:block text-muted-foreground text-xs mr-3">
+                    Learn More{" "}
+                  </span>
+                  <ViewBusinessIcon />
+                </Link>
+              </Button>
+            </div>
+          </div>
+        </Card>
+      ))}
+    </div>
   );
 }

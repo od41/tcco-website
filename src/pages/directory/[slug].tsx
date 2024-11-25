@@ -21,6 +21,7 @@ import {
   getDocs,
 } from "firebase/firestore";
 import { firestore, BUSINESS_COLLECTION } from "@/lib/firebase";
+import { Share } from "lucide-react";
 
 export default function DirectoryDetailsPage() {
   const router = useRouter();
@@ -29,6 +30,7 @@ export default function DirectoryDetailsPage() {
   const [business, setBusiness] = useState<Business | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showCopied, setShowCopied] = useState(false);
 
   useEffect(() => {
     async function fetchBusiness() {
@@ -147,6 +149,32 @@ export default function DirectoryDetailsPage() {
                 {business.views} views
               </div>
             </div>
+          </div>
+
+          {/* Share Button */}
+          <div className="relative">
+            <Button
+              variant="outline"
+              size="lg"
+              className="flex-1"
+              onClick={() => {
+                // Get current URL
+                const url = window.location.href;
+                // Copy to clipboard
+                navigator.clipboard.writeText(url).then(() => {
+                  setShowCopied(true);
+                  setTimeout(() => setShowCopied(false), 2000);
+                });
+              }}
+            >
+              <Share className="w-4 h-4 mr-2" />
+              Share
+            </Button>
+            {showCopied && (
+              <div className="absolute top-11 left-1/2 w-full text-center -translate-x-1/2 bg-white/20 text-gray-200 px-2 py-0.5 text-sm rounded-full">
+                Link copied!
+              </div>
+            )}
           </div>
 
           {/* Content Section */}

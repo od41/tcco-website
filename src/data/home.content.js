@@ -6,6 +6,30 @@ const data = {
     buttonText: "Join the community",
     background: "",
   },
+  impactNumbers: {
+    items: [
+      {
+        value: "1",
+        suffix: "m+",
+        name: "Website Visitors",
+      },
+      {
+        value: "12",
+        suffix: "k+",
+        name: "connections",
+      },
+      {
+        value: "14",
+        suffix: "+",
+        name: "months operating",
+      },
+      {
+        value: "10",
+        suffix: "+",
+        name: "SMBs",
+      },
+    ],
+  },
   video: {
     title: "LIKE TO JOIN US?",
     src: "/your-video.mp4",

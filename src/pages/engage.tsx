@@ -113,12 +113,12 @@ export default function Engage() {
         </section>
 
         {/* Ticker */}
-        <MessageTicker message="Thriving Communities Inspire Growth" />
+        {/* <MessageTicker message="Thriving Communities Inspire Growth" /> */}
 
         {/* Impact numbers */}
-        <section className="py-12">
-          <div className="container mx-auto">
-            {/* <h2 className="text-3xl font-bold text-center mb-12">Our Impact</h2> */}
+        {/* <section className="py-12">
+           <div className="container mx-auto">
+            {/* <h2 className="text-3xl font-bold text-center mb-12">Our Impact</h2> 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
               {content.impactNumbers.items.map((item, index) => (
                 <div key={`${index}-impact`} className="text-center p-4">
@@ -137,13 +137,13 @@ export default function Engage() {
               ))}
             </div>
           </div>
-        </section>
+        </section> */}
 
         {/* Ticker */}
-        <MessageTicker
+        {/* <MessageTicker
           message="Thriving Communities Inspire Growth"
           isReversed={true}
-        />
+        /> */}
 
         {/* Mission Section */}
         <section className="py-20 lg:px-20 text-center">

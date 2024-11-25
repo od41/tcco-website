@@ -44,7 +44,7 @@ export default function AdminDashboard() {
   useEffect(() => {
     // Redirect if not admin
     if (!authLoading && !user) {
-      router.push("/");
+      router.push("/lido/admin/login");
     }
   }, [user, authLoading, router]);
 
