@@ -275,7 +275,7 @@ export default function Home() {
             <div className="flex justify-center mt-8">
               <FadeIn initialDelay={0.3} once>
                 <Button size="lg" asChild>
-                  <Link href={"/directory"}>
+                  <Link href={"/directory?browse=all"}>
                     View All <ArrowRightIcon className="ml-3" />
                   </Link>
                 </Button>

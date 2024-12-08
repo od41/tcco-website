@@ -49,6 +49,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useRouter } from "next/router";
 
 const schema = Yup.object().shape({
   location: Yup.string().required("Location is required"),
@@ -116,6 +117,8 @@ const DirectoryPage = () => {
   >([]);
   const [locations, setLocations] = useState<Location[]>([]);
   const [isLoadingLocations, setIsLoadingLocations] = useState(true);
+  const router = useRouter();
+  const { browse } = router.query;
 
   const {
     register,
@@ -269,7 +272,7 @@ const DirectoryPage = () => {
         return {
           id: doc.id,
           ...data,
-          categoryId:  categoryName,
+          categoryId: categoryName,
           location: locationName,
         } as Business;
       });
@@ -346,10 +349,62 @@ const DirectoryPage = () => {
     }
   };
 
+  // Add function to fetch all businesses
+  const fetchAllBusinesses = async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const q = query(
+        collection(firestore, BUSINESS_COLLECTION),
+        orderBy("views", "desc"),
+        limit(50)
+      );
+
+      const querySnapshot = await getDocs(q);
+      const businesses = querySnapshot.docs.map((doc) => {
+        const data = doc.data();
+        const locationName =
+          locations.find(
+            (loc) =>
+              loc.id ===
+              (typeof data.locationId === "string"
+                ? data.locationId
+                : data.locationId.id)
+          )?.name || "Unknown Location";
+
+        const categoryName =
+          categories.find((cat) => cat.id === data.categoryId)?.title ||
+          "Unknown Category";
+
+        return {
+          id: doc.id,
+          ...data,
+          categoryId: categoryName,
+          location: locationName,
+        } as Business;
+      });
+
+      setSearchResults(businesses);
+      setSelectedCategory(null);
+    } catch (err) {
+      console.error("Error fetching all businesses:", err);
+      setError("Failed to load businesses");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Modify useEffect to check for browse parameter
   useEffect(() => {
     fetchCategories();
     fetchLocations();
-  }, [setValue]);
+
+    if (router.isReady) {
+      if (browse === "all") {
+        fetchAllBusinesses();
+      }
+    }
+  }, [router.isReady, browse]);
 
   return (
     <div className="min-h-screen">
@@ -455,18 +510,16 @@ const DirectoryPage = () => {
 
       {/* Main Content */}
       <div className="mx-auto lg:px-20 px-4 py-16">
-        {!searchResults.length && !selectedCategory ? (
-          // Show categories when no search results
+        {!searchResults.length && !selectedCategory && browse !== "all" ? (
+          // Show categories view
           <>
             <h2 className="mb-8 text-center text-4xl font-display">
               Browse by Category
             </h2>
             <p className="mb-12 text-center w-full max-w-3xl mx-auto">
-              Find the best businesses near you in just a few clicks. Whether
-              you&apos;re searching for restaurants, services, or shops, our
-              curated listings connect you to trusted local providers. Explore
-              reviews, special offers, and essential details to make informed
-              choices. Your next favorite spot is just a search away
+              Explore our curated listings to connect with trusted local
+              providers, featuring exclusive packages and special discounts for
+              our community members.
             </p>
 
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -492,13 +545,15 @@ const DirectoryPage = () => {
             </div>
           </>
         ) : (
-          // Show search results or category results
+          // Show results view
           <div className="">
             <div className="mb-8 flex flex-col md:flex-row md:items-center justify-between">
               <div>
                 <h2 className="text-2xl font-bold">
                   {selectedCategory
                     ? `${selectedCategory.name} Businesses`
+                    : browse === "all"
+                    ? "All Businesses"
                     : "Search Results"}
                 </h2>
                 <p className="text-gray-600">
@@ -550,7 +605,7 @@ const DirectoryPage = () => {
                 {searchResults.map((result) => (
                   <Card
                     key={result.id}
-                    className="flex flex-col md:flex-row h-full w-full overflow-hidden border-primary bg-background shadow-custom-rem rounded-sm"
+                    className="flex flex-col md:flex-row h-full w-full overflow-hidden border-muted bg-background shadow-custom-rem rounded-sm"
                   >
                     {/* Image Section */}
                     <div className="w-full h-full md:mb-0 md:w-2/5 relative">
