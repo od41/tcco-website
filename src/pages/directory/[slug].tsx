@@ -12,7 +12,6 @@ import { Biz, ContactModal } from "@/components/contact-modal";
 import Head from "next/head";
 import {
   doc,
-  getDoc,
   updateDoc,
   increment,
   collection,
@@ -40,7 +39,6 @@ export default function DirectoryDetailsPage() {
       setError(null);
 
       try {
-        // Query the business by slug
         const businessesRef = collection(firestore, BUSINESS_COLLECTION);
         const q = query(businessesRef, where("slug", "==", slug));
         const querySnapshot = await getDocs(q);
@@ -53,15 +51,37 @@ export default function DirectoryDetailsPage() {
         const businessDoc = querySnapshot.docs[0];
         const businessData = businessDoc.data() as Business;
 
-        // Increment views
-        await updateDoc(doc(firestore, BUSINESS_COLLECTION, businessDoc.id), {
-          views: increment(1),
-        });
+        // Check if user has visited this business before
+        const visitedKey = `visited_${businessDoc.id}`;
+        const visitedData = localStorage.getItem(visitedKey);
+        const now = Date.now();
+        const EXPIRY_DAYS = 1; // Configure how many days until it expires
 
-        setBusiness({
-          ...businessData,
-          views: (businessData.views || 0) + 1, // Update local state with incremented views
-        });
+        const hasValidVisit =
+          visitedData && JSON.parse(visitedData).expiry > now;
+
+        if (!hasValidVisit) {
+          // Increment views for new or expired visits
+          await updateDoc(doc(firestore, BUSINESS_COLLECTION, businessDoc.id), {
+            views: increment(1),
+          });
+
+          // Store visit with expiration
+          localStorage.setItem(
+            visitedKey,
+            JSON.stringify({
+              visited: true,
+              expiry: now + EXPIRY_DAYS * 24 * 60 * 60 * 1000,
+            })
+          );
+
+          setBusiness({
+            ...businessData,
+            views: (businessData.views || 0) + 1,
+          });
+        } else {
+          setBusiness(businessData);
+        }
       } catch (err) {
         console.error("Error fetching business:", err);
         setError("Failed to load business details");
@@ -107,6 +127,8 @@ export default function DirectoryDetailsPage() {
     );
   }
 
+  console.log(business.description);
+
   return (
     <div className="container mx-auto lg:px-20 px-4 py-8 mt-20">
       <Head>
@@ -114,11 +136,20 @@ export default function DirectoryDetailsPage() {
       </Head>
 
       {/* Rest of your existing JSX using the business data */}
-      <div className="border border-none md:border-primary/10 rounded-md p-0 md:p-10">
+      <div className="border border-none md:border-primary/10 rounded-md p-0 md:p-10 md:pt-0">
+        <div className="min-w-[60px] md:min-w-[100px] h-[240px] md:h-[400px] relative mb-12">
+          <Image
+            src={business.image}
+            alt={business.name}
+            layout="fill"
+            objectFit="cover"
+            className="rounded-sm"
+          />
+        </div>
         <Card className="flex flex-col md:flex-row md:items-center h-full w-full overflow-hidden bg-background border-background shadow-custom-rem rounded-sm">
           {/* Image Section */}
           <div className="flex items-center justify-start gap-4 mb-6 md:mb-0 w-full">
-            <div className="min-w-[60px] md:min-w-[100px] h-[60px] md:h-[100px] relative">
+            {/* <div className="min-w-[60px] md:min-w-[100px] h-[60px] md:h-[100px] relative">
               <Image
                 src={business.image}
                 alt={business.name}
@@ -126,7 +157,7 @@ export default function DirectoryDetailsPage() {
                 objectFit="cover"
                 className="rounded-full"
               />
-            </div>
+            </div> */}
             <div className="flex flex-col">
               {/* Title and Verified Badge */}
               <div className="flex items-center justify-between mb-2">
@@ -151,34 +182,34 @@ export default function DirectoryDetailsPage() {
             </div>
           </div>
 
-          {/* Share Button */}
-          <div className="relative">
-            <Button
-              variant="outline"
-              size="lg"
-              className="flex-1"
-              onClick={() => {
-                // Get current URL
-                const url = window.location.href;
-                // Copy to clipboard
-                navigator.clipboard.writeText(url).then(() => {
-                  setShowCopied(true);
-                  setTimeout(() => setShowCopied(false), 2000);
-                });
-              }}
-            >
-              <Share className="w-4 h-4 mr-2" />
-              Share
-            </Button>
-            {showCopied && (
-              <div className="absolute top-11 left-1/2 w-full text-center -translate-x-1/2 bg-white/20 text-gray-200 px-2 py-0.5 text-sm rounded-full">
-                Link copied!
-              </div>
-            )}
-          </div>
-
           {/* Content Section */}
           <div className="md:ml-6 flex justify-between items-center gap-4">
+            {/* Share Button */}
+            <div className="relative">
+              <Button
+                variant="outline"
+                size="lg"
+                className="flex-1"
+                onClick={() => {
+                  // Get current URL
+                  const url = window.location.href;
+                  // Copy to clipboard
+                  navigator.clipboard.writeText(url).then(() => {
+                    setShowCopied(true);
+                    setTimeout(() => setShowCopied(false), 2000);
+                  });
+                }}
+              >
+                {!showCopied && <Share className="w-4 h-4 mr-2" />}
+                {showCopied ? "Link copied!" : "Share"}
+              </Button>
+              {/* {showCopied && (
+                <div className="absolute top-11 left-1/2 w-full text-center -translate-x-1/2 bg-white/20 text-gray-200 px-2 py-0.5 text-sm rounded-full">
+                  Link copied!
+                </div>
+              )} */}
+            </div>
+
             {/* Buttons */}
             <Button
               variant="outline"
@@ -188,26 +219,37 @@ export default function DirectoryDetailsPage() {
                 setIsContactModalOpen(true);
               }}
             >
-              Contact
+              Connect
             </Button>
           </div>
         </Card>
 
         <div className="mt-6">
-          <h3 className="text-lg font-display text-primary">About</h3>
-          <p className="text-white mt-3">{business.description}</p>
+          <h3 className="text-lg font-display text-foreground">About</h3>
+          <p className="text-white mt-3 whitespace-pre-line">
+            {business.description}
+          </p>
         </div>
 
         <div className="flex gap-4 flex-col md:flex-row">
           <div className="mt-6 w-full md:w-1/2">
-            <h3 className="text-lg font-display text-primary">
+            <h3 className="text-lg font-display text-foreground mb-2">
               Company Website
             </h3>
-            <p className="text-white mt-3">{business.website}</p>
+            <Link
+              href={business.website}
+              className="text-primary underline"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {business.website}
+            </Link>
           </div>
 
           <div className="mt-6 w-full md:w-1/2">
-            <h3 className="text-lg font-display text-primary">Social Media</h3>
+            <h3 className="text-lg font-display text-foreground">
+              Social Media
+            </h3>
             <div className="flex space-x-6 mt-3">
               {business.socials &&
                 business.socials.map((link: any, index: number) => (
@@ -216,7 +258,7 @@ export default function DirectoryDetailsPage() {
                     href={link.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-gray-600 hover:text-gray-800 transition-colors duration-200"
+                    className="text-gray-600 hover:text-gray-800 transition-colors duration-200 hover:text-primary"
                   >
                     {getIconForSocialMedia(link.name)}
                     <span className="sr-only">{link.name}</span>

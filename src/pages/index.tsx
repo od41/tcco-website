@@ -475,7 +475,7 @@ function FeaturedBusinesses() {
       {businesses.map((business) => (
         <Card
           key={business.id}
-          className="flex flex-col md:flex-row h-full w-full overflow-hidden border-primary bg-background shadow-custom-rem rounded-sm"
+          className="flex flex-col md:flex-row h-full w-full overflow-hidden border-muted bg-background shadow-custom-rem rounded-sm"
         >
           {/* Image Section */}
           <div className="w-full h-full md:mb-0 md:w-2/5 relative">
@@ -530,8 +530,9 @@ function FeaturedBusinesses() {
                 Contact
               </Button> */}
               <Button
-                // size="icon"
-                className="aspect-square bg-black border border-black hover:border-primary hover:bg-black"
+                size="sm"
+                variant="ghost"
+                className=" bg-backgrdound border border-muted hover:border-primary hover:bg-background"
                 asChild
               >
                 <Link href={`/directory/${business.slug}`} target="_blank">
