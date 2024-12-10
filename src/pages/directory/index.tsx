@@ -569,9 +569,12 @@ const DirectoryPage = () => {
                     onClick={() => {
                       setSelectedCategory(null);
                       setSearchResults([]);
+                      router.replace('/directory', undefined, { shallow: true });
                     }}
                   >
-                    Back to Categories
+                    {browse === "all"
+                      ? "Sort by categories"
+                      : "Back to Categories"}
                   </Button>
                 )}
                 <div className="flex rounded-full border">

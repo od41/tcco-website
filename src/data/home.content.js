@@ -42,7 +42,7 @@ const data = {
   mission: {
     title: "Mission",
     content:
-      "Invest and scale community-focused products and brands using ecosystem networks and partnerships to impact over 3 million connections within 3 years.",
+      "Transform SMB venture operations using ecosystem networks and digital infrastructure, aiming to positively impact over 3,000 businesses within the next 3 years",
   },
   grid: {
     image: "/grid-image.jpg",
