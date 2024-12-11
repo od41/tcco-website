@@ -121,7 +121,7 @@ export function ViewBusinessModal({
                   //   className="aspect-square bg-black border border-black hover:border-primary hover:bg-black"
                   asChild
                 >
-                  <Link href={`/directory/${business.slug}`} target="_blank">
+                  <Link href={`/discover/${business.slug}`} target="_blank">
                     Preview
                     <ViewBusinessIcon />
                   </Link>

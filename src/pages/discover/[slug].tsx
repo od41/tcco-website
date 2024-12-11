@@ -120,7 +120,7 @@ export default function DirectoryDetailsPage() {
         </p>
         <div className="flex gap-4">
           <Button asChild>
-            <Link href="/directory">Back to Directory</Link>
+            <Link href="/discover">Back to Directory</Link>
           </Button>
         </div>
       </div>

@@ -24,9 +24,9 @@ export const links: { title: string; href: string; description: string }[] = [
     description: "Engage with our brands and communitites",
   },
   {
-    title: "Directory",
-    href: "/directory/",
-    description: "Directory",
+    title: "Discover",
+    href: "/discover/",
+    description: "Discover businesses within the community",
   },
   {
     title: "Contact Us",

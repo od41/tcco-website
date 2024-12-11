@@ -275,7 +275,7 @@ export default function Home() {
             <div className="flex justify-center mt-8">
               <FadeIn initialDelay={0.3} once>
                 <Button size="lg" asChild>
-                  <Link href={"/directory?browse=all"}>
+                  <Link href={"/discover?browse=all"}>
                     View All <ArrowRightIcon className="ml-3" />
                   </Link>
                 </Button>
@@ -535,7 +535,7 @@ function FeaturedBusinesses() {
                 className=" bg-backgrdound border border-muted hover:border-primary hover:bg-background"
                 asChild
               >
-                <Link href={`/directory/${business.slug}`} target="_blank">
+                <Link href={`/discover/${business.slug}`} target="_blank">
                   <span className="hidden md:block text-muted-foreground text-xs mr-3">
                     Learn More{" "}
                   </span>

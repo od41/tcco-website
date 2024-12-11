@@ -569,7 +569,9 @@ const DirectoryPage = () => {
                     onClick={() => {
                       setSelectedCategory(null);
                       setSearchResults([]);
-                      router.replace('/directory', undefined, { shallow: true });
+                      router.replace("/discover", undefined, {
+                        shallow: true,
+                      });
                     }}
                   >
                     {browse === "all"
@@ -670,7 +672,7 @@ const DirectoryPage = () => {
                           asChild
                         >
                           <Link
-                            href={`/directory/${result.slug}`}
+                            href={`/discover/${result.slug}`}
                             target="_blank"
                           >
                             <ViewBusinessIcon />
@@ -751,10 +753,7 @@ const DirectoryPage = () => {
                         className="aspect-square bg-black border border-black hover:border-primary hover:bg-black"
                         asChild
                       >
-                        <Link
-                          href={`/directory/${result.slug}`}
-                          target="_blank"
-                        >
+                        <Link href={`/discover/${result.slug}`} target="_blank">
                           <ViewBusinessIcon />
                         </Link>
                       </Button>
