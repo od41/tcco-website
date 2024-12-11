@@ -351,6 +351,11 @@ const DirectoryPage = () => {
 
   // Add function to fetch all businesses
   const fetchAllBusinesses = async () => {
+    // if (locations.length === 0) {
+    //   console.log("Locations not yet loaded");
+    //   return;
+    // }
+
     setIsLoading(true);
     setError(null);
     try {
@@ -363,14 +368,14 @@ const DirectoryPage = () => {
       const querySnapshot = await getDocs(q);
       const businesses = querySnapshot.docs.map((doc) => {
         const data = doc.data();
+        const locationId =
+          typeof data.locationId === "string"
+            ? data.locationId
+            : data.locationId?.id;
+
         const locationName =
-          locations.find(
-            (loc) =>
-              loc.id ===
-              (typeof data.locationId === "string"
-                ? data.locationId
-                : data.locationId.id)
-          )?.name || "Unknown Location";
+          locations.find((loc) => loc.id === locationId)?.name ||
+          "Unknown Location";
 
         const categoryName =
           categories.find((cat) => cat.id === data.categoryId)?.title ||
@@ -394,17 +399,22 @@ const DirectoryPage = () => {
     }
   };
 
-  // Modify useEffect to check for browse parameter
+  
   useEffect(() => {
-    fetchCategories();
-    fetchLocations();
+    const init = async () => {
+      await fetchCategories();
+      await fetchLocations();
+    };
 
-    if (router.isReady) {
-      if (browse === "all") {
-        fetchAllBusinesses();
-      }
+    init();
+  }, []); 
+
+  // Second useEffect for fetching businesses when locations are ready
+  useEffect(() => {
+    if (router.isReady && browse === "all" && locations.length > 0) {
+      fetchAllBusinesses();
     }
-  }, [router.isReady, browse]);
+  }, [router.isReady, browse, locations]); // Run when these dependencies change
 
   return (
     <div className="min-h-screen">
