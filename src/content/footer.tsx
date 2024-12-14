@@ -6,7 +6,7 @@ import {
   Link2Icon,
 } from "@radix-ui/react-icons";
 
-import { FacebookIcon } from "lucide-react";
+import { FacebookIcon, YoutubeIcon } from "lucide-react";
 
 export const getIconForSocialMedia = (name: string) => {
   switch (name.toLowerCase()) {
@@ -25,6 +25,10 @@ export const getIconForSocialMedia = (name: string) => {
     case "facebook":
       return (
         <FacebookIcon className="w-6 h-6 text-white hover:text-primary transition-colors duration-200" />
+      );
+    case "youtube":
+      return (
+        <YoutubeIcon className="w-6 h-6 text-white hover:text-primary transition-colors duration-200" />
       );
     // Add more cases as needed
     default:

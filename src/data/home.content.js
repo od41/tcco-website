@@ -117,8 +117,8 @@ const data = {
       title: "",
       links: [
         { name: "Engage", url: "engage" },
+        { name: "Discover", url: "discover" },
         { name: "Contact Us", url: "contact-us" },
-        { name: "Directory", url: "directory" },
         { name: "Privacy Policy", url: "privacy-policy" },
       ],
     },
@@ -128,7 +128,7 @@ const data = {
         { name: "LinkedIn", url: "https://linkedin.com/company/tcco" },
         { name: "Instagram", url: "https://instagram.com/tcco" },
         { name: "X", url: "https://x.com/tcco" },
-        { name: "YouTube", url: "https://youtube.com/channel/tcco" },
+        // { name: "YouTube", url: "https://youtube.com/channel/tcco" },
       ],
     },
   },

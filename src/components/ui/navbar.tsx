@@ -19,14 +19,14 @@ export const links: { title: string; href: string; description: string }[] = [
     description: "Home page",
   },
   {
-    title: "Engage",
-    href: "/engage/",
-    description: "Engage with our brands and communitites",
-  },
-  {
     title: "Discover",
     href: "/discover/",
     description: "Discover businesses within the community",
+  },
+  {
+    title: "Engage",
+    href: "/engage/",
+    description: "Engage with our brands and communitites",
   },
   {
     title: "Contact Us",
