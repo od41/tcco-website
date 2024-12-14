@@ -83,7 +83,6 @@ export default function DirectoryDetailsPage() {
           setBusiness(businessData);
         }
       } catch (err) {
-        console.error("Error fetching business:", err);
         setError("Failed to load business details");
       } finally {
         setIsLoading(false);
@@ -126,8 +125,6 @@ export default function DirectoryDetailsPage() {
       </div>
     );
   }
-
-  console.log(business.description);
 
   return (
     <div className="container mx-auto lg:px-20 px-4 py-8 mt-20">

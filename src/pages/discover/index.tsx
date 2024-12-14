@@ -181,7 +181,6 @@ const DirectoryPage = () => {
           "Unknown Category",
       });
     } catch (err) {
-      console.error("Error fetching businesses:", err);
       setError("Failed to load businesses");
     } finally {
       setIsLoading(false);
@@ -218,7 +217,6 @@ const DirectoryPage = () => {
       }
       // If searching by location only
       else if (data.location && !data.businessName) {
-        console.log("search by location", data.location);
         const locationRef = doc(firestore, "locations", data.location);
         searchQuery = query(
           collectionRef,
@@ -231,7 +229,6 @@ const DirectoryPage = () => {
       else if (data.location && data.businessName) {
         const searchTerm = data.businessName.toLowerCase();
         const locationRef = doc(firestore, "locations", data.location);
-        console.log("search by both", data.location, data.businessName);
         searchQuery = query(
           collectionRef,
           where("locationId", "==", locationRef),
@@ -277,11 +274,9 @@ const DirectoryPage = () => {
         } as Business;
       });
 
-      console.log("Found businesses:", businesses);
       setSearchResults(businesses);
       setSelectedCategory(null);
     } catch (err) {
-      console.error("Error searching businesses:", err);
       setError("Failed to search businesses");
     } finally {
       setIsLoading(false);
@@ -309,11 +304,8 @@ const DirectoryPage = () => {
           icon: getCategoryIcon(category.name),
         }));
 
-      console.log("fetchedCategories", fetchedCategories);
-
       setCategories(fetchedCategories);
     } catch (error) {
-      console.error("Error fetching categories:", error);
       // Optionally set an error state here
     }
   };
@@ -343,7 +335,7 @@ const DirectoryPage = () => {
         setValue("location", lagos.id);
       }
     } catch (error) {
-      console.error("Error fetching locations:", error);
+      // error occured
     } finally {
       setIsLoadingLocations(false);
     }
@@ -351,11 +343,6 @@ const DirectoryPage = () => {
 
   // Add function to fetch all businesses
   const fetchAllBusinesses = async () => {
-    // if (locations.length === 0) {
-    //   console.log("Locations not yet loaded");
-    //   return;
-    // }
-
     setIsLoading(true);
     setError(null);
     try {
@@ -392,14 +379,12 @@ const DirectoryPage = () => {
       setSearchResults(businesses);
       setSelectedCategory(null);
     } catch (err) {
-      console.error("Error fetching all businesses:", err);
       setError("Failed to load businesses");
     } finally {
       setIsLoading(false);
     }
   };
 
-  
   useEffect(() => {
     const init = async () => {
       await fetchCategories();
@@ -407,7 +392,7 @@ const DirectoryPage = () => {
     };
 
     init();
-  }, []); 
+  }, []);
 
   // Second useEffect for fetching businesses when locations are ready
   useEffect(() => {

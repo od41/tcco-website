@@ -169,7 +169,7 @@ export function CreateBusinessModal({
         setLocations(fetchedLocations);
         setIsLoadingLocations(false);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        // do stuff
       }
     };
 
@@ -273,7 +273,6 @@ export function CreateBusinessModal({
       reset();
       onOpenChange(false);
     } catch (error: any) {
-      console.error("Failed to save business:", error);
       setError(error.message || "Failed to save business. Please try again.");
     } finally {
       setIsLoading(false);

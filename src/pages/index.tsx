@@ -443,9 +443,7 @@ function FeaturedBusinesses() {
           .slice(0, 3); // Limit to 3 businesses
 
         setBusinesses(featuredBusinesses);
-        console.log("featuredBusinesses", featuredBusinesses);
       } catch (error) {
-        console.error("Error fetching featured businesses:", error);
       } finally {
         setIsLoading(false);
       }

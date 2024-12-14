@@ -22,7 +22,6 @@ const ContactForm = () => {
   });
 
   const onSubmit = async (data: any) => {
-    console.log(data);
     const response = await fetch("/api/send-email", {
       method: "post",
       headers: {

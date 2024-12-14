@@ -62,7 +62,6 @@ export function ViewBusinessModal({
           const imageRef = ref(storage, imagePath);
           await deleteObject(imageRef);
         } catch (error) {
-          console.error("Error deleting image:", error);
           // Continue with business deletion even if image deletion fails
         }
       }
@@ -74,7 +73,6 @@ export function ViewBusinessModal({
       onOpenChange(false);
       onBusinessDeleted?.(business.id);
     } catch (error: any) {
-      console.error("Error deleting business:", error);
       setDeleteError("Failed to delete business. Please try again.");
     } finally {
       setIsDeleting(false);
