@@ -404,7 +404,7 @@ const DirectoryPage = () => {
   return (
     <div className="min-h-screen">
       <Head>
-        <title>Business Directory | TCCo. - Connecting SMB Communities</title>
+        <title>Business Discovery | TCCo. - Connecting SMB Communities</title>
       </Head>
       {/* Hero Section */}
       <div className="relative h-[650px] md:h-[500px] bg-black/50 pt-[240px]">
