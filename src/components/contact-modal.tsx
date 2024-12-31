@@ -60,7 +60,7 @@ export function ContactModal({ business, isOpen, onClose }: ContactModalProps) {
               )}
             </div>
 
-            <div className="flex items-center gap-2 text-sm text-gray-600">
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <MailIcon className="h-4 w-4" />
               <a
                 href={`mailto:${business.email}`}
@@ -70,7 +70,7 @@ export function ContactModal({ business, isOpen, onClose }: ContactModalProps) {
               </a>
             </div>
 
-            <div className="flex items-center gap-2 text-sm text-gray-600">
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <PhoneIcon className="h-4 w-4" />
               <a href={`tel:${business.phone}`} className="hover:text-primary">
                 {business.phone}
