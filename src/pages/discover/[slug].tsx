@@ -27,11 +27,13 @@ import { GetStaticProps, GetStaticPaths } from "next";
 interface DirectoryDetailsPageProps {
   business: Business | null;
   error?: string;
+  pageTitle: string;
 }
 
 export default function DirectoryDetailsPage({
   business,
   error,
+  pageTitle,
 }: DirectoryDetailsPageProps) {
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   const [showCopied, setShowCopied] = useState(false);
@@ -96,7 +98,7 @@ export default function DirectoryDetailsPage({
   return (
     <div className="container mx-auto lg:px-20 px-4 py-8 mt-20">
       <Head>
-        <title>{business.name} | TCCo. - Connecting SMB Communities</title>
+        <title>{pageTitle}</title>
       </Head>
 
       {/* Rest of your existing JSX using the business data */}
@@ -269,6 +271,7 @@ export const getStaticProps: GetStaticProps<
         props: {
           business: null,
           error: "Business not found",
+          pageTitle: "Business Not Found | TCCo.",
         },
         revalidate: 60,
       };
@@ -300,6 +303,7 @@ export const getStaticProps: GetStaticProps<
     return {
       props: {
         business: businessData,
+        pageTitle: `${data.name} | TCCo. - Connecting SMB Communities`,
       },
       revalidate: 60,
     };
@@ -308,6 +312,7 @@ export const getStaticProps: GetStaticProps<
       props: {
         business: null,
         error: "Failed to load business details",
+        pageTitle: "Error | TCCo.",
       },
       revalidate: 60,
     };
