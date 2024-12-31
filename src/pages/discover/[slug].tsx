@@ -75,27 +75,25 @@ export default function DirectoryDetailsPage({
     incrementViews();
   }, [business]);
 
-  // if (error || !business) {
-  //   return (
-  //     <div className="flex h-screen flex-col items-center justify-center gap-4">
-  //       <h1 className="text-2xl font-display text-white">
-  //         {error || "Business not found"}
-  //       </h1>
-  //       <p className="text-gray-200">
-  //         {error
-  //           ? "Please try again later"
-  //           : "The business you're looking for doesn't exist"}
-  //       </p>
-  //       <div className="flex gap-4">
-  //         <Button asChild>
-  //           <Link href="/discover">Back to Directory</Link>
-  //         </Button>
-  //       </div>
-  //     </div>
-  //   );
-  // }
-
-  if (error || !business) return;
+  if (error || !business) {
+    return (
+      <div className="flex h-screen flex-col items-center justify-center gap-4">
+        <h1 className="text-2xl font-display text-white">
+          {error || "Business not found"}
+        </h1>
+        <p className="text-gray-200">
+          {error
+            ? "Please try again later"
+            : "The business you're looking for doesn't exist"}
+        </p>
+        <div className="flex gap-4">
+          <Button asChild>
+            <Link href="/discover">Back to Directory</Link>
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto lg:px-20 px-4 py-8 mt-20">
