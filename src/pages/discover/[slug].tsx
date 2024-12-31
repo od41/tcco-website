@@ -95,9 +95,9 @@ export default function DirectoryDetailsPage() {
   if (isLoading) {
     return (
       <div className="flex h-screen items-center justify-center">
-        <Head>
+        {/* <Head>
           <title>Loading... | TCCo. - Connecting SMB Communities</title>
-        </Head>
+        </Head> */}
         <Spinner className="h-8 w-8 text-primary" />
       </div>
     );
@@ -106,9 +106,9 @@ export default function DirectoryDetailsPage() {
   if (error || !business) {
     return (
       <div className="flex h-screen flex-col items-center justify-center gap-4">
-        <Head>
+        {/* <Head>
           <title>Error | TCCo. - Connecting SMB Communities</title>
-        </Head>
+        </Head> */}
         <h1 className="text-2xl font-display text-white">
           {error || "Business not found"}
         </h1>
@@ -174,7 +174,7 @@ export default function DirectoryDetailsPage() {
               {/* Views Count */}
               <div className="flex items-center gap-2 text-primary">
                 <ViewsIcon />
-                {business.views} views
+                {business.views} {business.views == 1 ? "view" : "views"}
               </div>
             </div>
           </div>

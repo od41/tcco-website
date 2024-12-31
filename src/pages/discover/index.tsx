@@ -645,7 +645,7 @@ const DirectoryPage = () => {
                       {/* Views Count */}
                       <div className="flex items-center gap-2 text-primary mb-4">
                         <ViewsIcon />
-                        {result.views} views
+                        {result.views} {result.views == 1 ? "view" : "views"}
                       </div>
 
                       {/* Buttons */}
