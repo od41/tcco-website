@@ -21,52 +21,40 @@ import {
 } from "firebase/firestore";
 import { firestore, BUSINESS_COLLECTION } from "@/lib/firebase";
 import { Share } from "lucide-react";
+import { GetStaticProps, GetStaticPaths } from "next";
 
-export default function DirectoryDetailsPage() {
-  const router = useRouter();
-  const { slug } = router.query;
+// Add type for the page props
+interface DirectoryDetailsPageProps {
+  business: Business | null;
+  error?: string;
+}
+
+export default function DirectoryDetailsPage({
+  business,
+  error,
+}: DirectoryDetailsPageProps) {
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
-  const [business, setBusiness] = useState<Business | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [showCopied, setShowCopied] = useState(false);
+  const [localViews, setLocalViews] = useState(business?.views || 0);
 
   useEffect(() => {
-    async function fetchBusiness() {
-      if (!slug) return;
+    // Handle view counting on client side
+    async function incrementViews() {
+      if (!business) return;
 
-      setIsLoading(true);
-      setError(null);
+      const visitedKey = `visited_${business.id}`;
+      const visitedData = localStorage.getItem(visitedKey);
+      const now = Date.now();
+      const EXPIRY_DAYS = 1;
 
-      try {
-        const businessesRef = collection(firestore, BUSINESS_COLLECTION);
-        const q = query(businessesRef, where("slug", "==", slug));
-        const querySnapshot = await getDocs(q);
+      const hasValidVisit = visitedData && JSON.parse(visitedData).expiry > now;
 
-        if (querySnapshot.empty) {
-          setError("Business not found");
-          return;
-        }
-
-        const businessDoc = querySnapshot.docs[0];
-        const businessData = businessDoc.data() as Business;
-
-        // Check if user has visited this business before
-        const visitedKey = `visited_${businessDoc.id}`;
-        const visitedData = localStorage.getItem(visitedKey);
-        const now = Date.now();
-        const EXPIRY_DAYS = 1; // Configure how many days until it expires
-
-        const hasValidVisit =
-          visitedData && JSON.parse(visitedData).expiry > now;
-
-        if (!hasValidVisit) {
-          // Increment views for new or expired visits
-          await updateDoc(doc(firestore, BUSINESS_COLLECTION, businessDoc.id), {
+      if (!hasValidVisit) {
+        try {
+          await updateDoc(doc(firestore, BUSINESS_COLLECTION, business.id), {
             views: increment(1),
           });
 
-          // Store visit with expiration
           localStorage.setItem(
             visitedKey,
             JSON.stringify({
@@ -75,40 +63,19 @@ export default function DirectoryDetailsPage() {
             })
           );
 
-          setBusiness({
-            ...businessData,
-            views: (businessData.views || 0) + 1,
-          });
-        } else {
-          setBusiness(businessData);
+          setLocalViews((prev) => prev + 1);
+        } catch (err) {
+          console.error("Failed to increment views:", err);
         }
-      } catch (err) {
-        setError("Failed to load business details");
-      } finally {
-        setIsLoading(false);
       }
     }
 
-    fetchBusiness();
-  }, [slug]);
-
-  if (isLoading) {
-    return (
-      <div className="flex h-screen items-center justify-center">
-        {/* <Head>
-          <title>Loading... | TCCo. - Connecting SMB Communities</title>
-        </Head> */}
-        <Spinner className="h-8 w-8 text-primary" />
-      </div>
-    );
-  }
+    incrementViews();
+  }, [business]);
 
   if (error || !business) {
     return (
       <div className="flex h-screen flex-col items-center justify-center gap-4">
-        {/* <Head>
-          <title>Error | TCCo. - Connecting SMB Communities</title>
-        </Head> */}
         <h1 className="text-2xl font-display text-white">
           {error || "Business not found"}
         </h1>
@@ -174,7 +141,7 @@ export default function DirectoryDetailsPage() {
               {/* Views Count */}
               <div className="flex items-center gap-2 text-primary">
                 <ViewsIcon />
-                {business.views} {business.views == 1 ? "view" : "views"}
+                {localViews} {localViews === 1 ? "view" : "views"}
               </div>
             </div>
           </div>
@@ -273,3 +240,76 @@ export default function DirectoryDetailsPage() {
     </div>
   );
 }
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const businessesRef = collection(firestore, BUSINESS_COLLECTION);
+  const snapshot = await getDocs(businessesRef);
+
+  const paths = snapshot.docs.map((doc) => ({
+    params: { slug: doc.data().slug },
+  }));
+
+  return {
+    paths,
+    fallback: "blocking", // Show new paths without rebuilding
+  };
+};
+
+export const getStaticProps: GetStaticProps<
+  DirectoryDetailsPageProps
+> = async ({ params }) => {
+  try {
+    const slug = params?.slug as string;
+    const businessesRef = collection(firestore, BUSINESS_COLLECTION);
+    const q = query(businessesRef, where("slug", "==", slug));
+    const querySnapshot = await getDocs(q);
+
+    if (querySnapshot.empty) {
+      return {
+        props: {
+          business: null,
+          error: "Business not found",
+        },
+        revalidate: 60,
+      };
+    }
+
+    const businessDoc = querySnapshot.docs[0];
+    const data = businessDoc.data();
+
+    // Serialize the business data, handling any non-serializable fields
+    const businessData = {
+      id: businessDoc.id,
+      name: data.name,
+      slug: data.slug,
+      description: data.description,
+      image: data.image,
+      website: data.website,
+      location: data.location,
+      views: data.views || 0,
+      verified: data.verified || false,
+      socials: data.socials || [],
+      email: data.email,
+      address: data.address || "",
+      // categoryId: data.categoryId,
+      // locationId: data.locationId,
+      phone: data.phone,
+      featured: data.featured,
+    } as Business;
+
+    return {
+      props: {
+        business: businessData,
+      },
+      revalidate: 60,
+    };
+  } catch (err) {
+    return {
+      props: {
+        business: null,
+        error: "Failed to load business details",
+      },
+      revalidate: 60,
+    };
+  }
+};
