@@ -24,7 +24,7 @@ const data = {
         name: "months operating",
       },
       {
-        value: "10",
+        value: "50",
         suffix: "+",
         name: "SMBs",
       },
