@@ -7,6 +7,8 @@ import { AppProps } from "next/app";
 import { AnimatePresence, motion } from "framer-motion";
 import { AuthProvider } from "@/providers/auth-provider";
 
+import Script from "next/script";
+
 const fontSans = localFont({
   src: "../assets/recoleta-regular.ttf",
   variable: "--font-sans",
@@ -26,48 +28,64 @@ export const metadata: Metadata = {
 
 export default function MyApp({ Component, pageProps, router }: AppProps) {
   return (
-    <AuthProvider>
-      <AnimatePresence mode="wait">
-        <motion.div key={router.pathname}>
-          <div
-            className={`${fontSans.variable} font-sans ${displaySans.variable}`}
-          >
-            <ThemeProvider
-              attribute="class"
-              defaultTheme="dark"
-              enableSystem
-              disableTransitionOnChange
+    <>
+      <Script
+        strategy="lazyOnload"
+        src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS}`}
+      />
+
+      <Script strategy="lazyOnload" id="google-analytics">
+        {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', '${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS}',{
+          page_path: window.location.pathname});
+         `}
+      </Script>
+      <AuthProvider>
+        <AnimatePresence mode="wait">
+          <motion.div key={router.pathname}>
+            <div
+              className={`${fontSans.variable} font-sans ${displaySans.variable}`}
             >
-              <Navbar />
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{
-                  delay: 0.75,
-                  duration: 0.5,
-                  ease: [0.22, 1, 0.36, 1],
-                }}
+              <ThemeProvider
+                attribute="class"
+                defaultTheme="dark"
+                enableSystem
+                disableTransitionOnChange
               >
-                <Component {...pageProps} />
-              </motion.div>
-            </ThemeProvider>
-          </div>
-          <motion.div
-            className="slide-in"
-            initial={{ scaleY: 0 }}
-            animate={{ scaleY: 0 }}
-            exit={{ scaleY: 1 }}
-            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-          ></motion.div>
-          <motion.div
-            className="slide-out"
-            initial={{ scaleY: 1 }}
-            animate={{ scaleY: 0 }}
-            exit={{ scaleY: 0 }}
-            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-          ></motion.div>
-        </motion.div>
-      </AnimatePresence>
-    </AuthProvider>
+                <Navbar />
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{
+                    delay: 0.75,
+                    duration: 0.5,
+                    ease: [0.22, 1, 0.36, 1],
+                  }}
+                >
+                  <Component {...pageProps} />
+                </motion.div>
+              </ThemeProvider>
+            </div>
+            <motion.div
+              className="slide-in"
+              initial={{ scaleY: 0 }}
+              animate={{ scaleY: 0 }}
+              exit={{ scaleY: 1 }}
+              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+            ></motion.div>
+            <motion.div
+              className="slide-out"
+              initial={{ scaleY: 1 }}
+              animate={{ scaleY: 0 }}
+              exit={{ scaleY: 0 }}
+              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+            ></motion.div>
+          </motion.div>
+        </AnimatePresence>
+      </AuthProvider>
+    </>
   );
 }

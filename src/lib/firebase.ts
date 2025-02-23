@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { getAnalytics, isSupported } from "firebase/analytics";
+// import { getAnalytics, isSupported } from "firebase/analytics";
 import { getStorage } from "firebase/storage";
 import { getFirestore } from "firebase/firestore";
 
@@ -11,15 +11,15 @@ const firebaseConfig = {
   storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
   messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
-  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
+  // measurementId: process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS,
 };
 
 export const app = initializeApp(firebaseConfig);
-export const analytics = isSupported()
-  .then((_) => getAnalytics(app))
-  .catch((e: any) =>
-    console.warn("Analytics is not supported in this environment.", e.message)
-  );
+// export const analytics = isSupported()
+//   .then((_) => getAnalytics(app))
+//   .catch((e: any) =>
+//     console.warn("Analytics is not supported in this environment.", e.message)
+//   );
 export const auth = getAuth(app);
 export const storage = getStorage(app);
 export const firestore = getFirestore(app);
