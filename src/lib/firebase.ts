@@ -29,3 +29,5 @@ export const BUSINESS_COLLECTION = "business";
 export const BUSINESS_MEDIA_COLLECTION = "media";
 export const CATEGORIES_COLLECTION = "categories";
 export const LOCATIONS_COLLECTION = "locations";
+export const METRICS_COLLECTION = "metrics";
+export const METRICS_DOCUMENT_ID = "impact-numbers";
