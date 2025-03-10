@@ -1,9 +1,8 @@
-import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
-import { useAuth } from "@/providers/auth-provider";
+import { useState, useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 import { Button } from "@/components/ui/button";
-import Head from "next/head";
-import { Spinner } from "@/components/ui/spinner";
 import {
     collection,
     doc,
@@ -12,9 +11,7 @@ import {
     updateDoc,
 } from "firebase/firestore";
 import { firestore, METRICS_COLLECTION, METRICS_DOCUMENT_ID } from "@/lib/firebase";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
+import { AuthWrapper } from "@/components/admin/auth-wrapper";
 
 // Define the metrics schema
 interface Metric {
@@ -47,9 +44,6 @@ export default function MetricsPage() {
         message?: string;
     }>({ id: "", status: "idle" });
 
-    const { user, loading: authLoading } = useAuth();
-    const router = useRouter();
-
     const {
         register,
         handleSubmit,
@@ -59,13 +53,6 @@ export default function MetricsPage() {
     } = useForm({
         resolver: yupResolver(metricSchema),
     });
-
-    useEffect(() => {
-        // Redirect if not admin
-        if (!authLoading && !user) {
-            router.push("/lido/admin/login");
-        }
-    }, [user, authLoading, router]);
 
     useEffect(() => {
         // Fetch metrics from Firestore
@@ -115,10 +102,8 @@ export default function MetricsPage() {
             }
         };
 
-        if (user) {
-            fetchMetrics();
-        }
-    }, [user]);
+        fetchMetrics();
+    }, []);
 
     const handleEditMetric = (metricId: string) => {
         if (!metrics) return;
@@ -175,22 +160,18 @@ export default function MetricsPage() {
         }
     };
 
-    if (isLoading || authLoading) {
+    if (isLoading) {
         return (
-            <div className="flex h-screen items-center justify-center">
-                <Head>
-                    <title>Loading... | TCCo. - Connecting SMB Communities</title>
-                </Head>
-                <Spinner className="h-8 w-8 text-primary" />
-            </div>
+            <AuthWrapper title="Impact Metrics">
+                <div className="flex justify-center">
+                    <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+                </div>
+            </AuthWrapper>
         );
     }
 
     return (
-        <div className="container mx-auto py-8 mt-20">
-            <Head>
-                <title>Impact Metrics | TCCo. - Connecting SMB Communities</title>
-            </Head>
+        <AuthWrapper title="Impact Metrics">
             <div className="mb-8">
                 <h1 className="text-2xl font-display">Impact Metrics Management</h1>
                 <p className="text-gray-400 mt-2">
@@ -288,6 +269,6 @@ export default function MetricsPage() {
                     ))}
                 </div>
             </div>
-        </div>
+        </AuthWrapper>
     );
 } 

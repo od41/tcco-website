@@ -27,6 +27,9 @@ export const metadata: Metadata = {
 };
 
 export default function MyApp({ Component, pageProps, router }: AppProps) {
+  // Check if current path is an admin auth page
+  const isAdminAuthPage = router.pathname.startsWith('/lido/admin/auth/');
+
   return (
     <>
       <Script
@@ -55,7 +58,8 @@ export default function MyApp({ Component, pageProps, router }: AppProps) {
                 enableSystem
                 disableTransitionOnChange
               >
-                <Navbar />
+                {/* Only show Navbar if not on admin auth pages */}
+                {!isAdminAuthPage && <Navbar />}
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}

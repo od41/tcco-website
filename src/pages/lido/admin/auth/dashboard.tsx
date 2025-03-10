@@ -1,6 +1,4 @@
-import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
-import { useAuth } from "@/providers/auth-provider";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -27,26 +25,14 @@ import {
   CATEGORIES_COLLECTION,
   LOCATIONS_COLLECTION,
 } from "@/lib/firebase";
-import Head from "next/head";
-import { Spinner } from "@/components/ui/spinner";
 import { Location } from "@/components/admin/create-business-modal";
+import { AuthWrapper } from "@/components/admin/auth-wrapper";
 
 export default function AdminDashboard() {
   const [businesses, setBusinesses] = useState<Business[]>([]);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [selectedBusiness, setSelectedBusiness] = useState<Business | null>(
-    null
-  );
+  const [selectedBusiness, setSelectedBusiness] = useState<Business | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const { user, loading: authLoading } = useAuth();
-  const router = useRouter();
-
-  useEffect(() => {
-    // Redirect if not admin
-    if (!authLoading && !user) {
-      router.push("/lido/admin/login");
-    }
-  }, [user, authLoading, router]);
 
   useEffect(() => {
     // Fetch businesses from Firestore
@@ -130,25 +116,19 @@ export default function AdminDashboard() {
     setSelectedBusiness(null); // Close the modal
   };
 
-  if (isLoading || authLoading) {
+  if (isLoading) {
     return (
-      <div className="flex h-screen items-center justify-center">
-        <Head>
-          <title>Loading... | TCCo. - Connecting SMB Communities</title>
-        </Head>
-        <Spinner className="h-8 w-8 text-primary" />
-      </div>
+      <AuthWrapper>
+        <div className="flex justify-center">
+          <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+        </div>
+      </AuthWrapper>
     );
   }
 
-  if (!authLoading && businesses.length === 0) {
+  if (businesses.length === 0) {
     return (
-      <div className="container mx-auto py-8 mt-20">
-        <Head>
-          <title>
-            Business Management | TCCo. - Connecting SMB Communities
-          </title>
-        </Head>
+      <AuthWrapper>
         <div className="mb-8 flex items-center justify-between">
           <h1 className="text-2xl font-display">Business Management</h1>
           <Button
@@ -191,15 +171,12 @@ export default function AdminDashboard() {
             setIsCreateModalOpen(false);
           }}
         />
-      </div>
+      </AuthWrapper>
     );
   }
 
   return (
-    <div className="container mx-auto py-8 mt-20">
-      <Head>
-        <title>Business Management | TCCo. - Connecting SMB Communities</title>
-      </Head>
+    <AuthWrapper>
       <div className="mb-8 flex items-center justify-between">
         <h1 className="text-2xl font-display">Business Management</h1>
         <Button
@@ -275,6 +252,6 @@ export default function AdminDashboard() {
         onBusinessUpdated={handleBusinessUpdated}
         onBusinessDeleted={handleBusinessDeleted}
       />
-    </div>
+    </AuthWrapper>
   );
 }
