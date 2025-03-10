@@ -89,3 +89,17 @@
     z-index: 1000;
   }
 }
+
+.zoho-form-container {
+  width: 100%;
+  background-color: transparent;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* Adjust iframe height for different screen sizes */
+@media (max-width: 768px) {
+  .zoho-form-container iframe {
+    height: 650px;
+  }
+}

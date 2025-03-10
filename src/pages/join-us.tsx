@@ -1,8 +1,8 @@
 import Image from "next/image";
-import ContactForm from "../components/containers/contact-form";
 import Footer from "@/components/ui/footer";
 import Head from "next/head";
 import { FadeIn } from "@/components/ui/fade-in";
+import ZohoFormEmbed from "@/components/containers/zoho-form-embed";
 
 const visionCollage = require("@/assets/contact-us-photo.png");
 
@@ -10,7 +10,7 @@ export default function ContactUs() {
   return (
     <>
       <Head>
-        <title>Contact Us | TCCo. - Connecting SMB Communities</title>
+        <title>Join Us | TCCo. - Connecting SMB Communities</title>
       </Head>
       <main className="min-h-screen">
         {/* Hero Section */}
@@ -19,7 +19,7 @@ export default function ContactUs() {
             <FadeIn direction="down" initialDelay={0.7} once>
               <div className="lg:p-5 mb-10">
                 <h1 className="text-3xl font-display mb-8">Connect</h1>
-                <p className="text-lg mb-8">Be part of a thriving community</p>
+                <p className="text-lg">Be part of a thriving community</p>
                 {/* <div className="flex items-center gap-4 mb-4">
                   <div className="bg-primary text-background rounded-full p-2">
                     <svg
@@ -37,6 +37,8 @@ export default function ContactUs() {
                   </div>
                   080 000 000
                 </div> */}
+                <hr className="bg-border my-8" />
+                <p className="text-lg mb-4">For general enquiries</p>
                 <div className="flex items-center gap-4">
                   <div className="bg-primary text-background rounded-full p-2">
                     <svg
@@ -67,8 +69,8 @@ export default function ContactUs() {
               </div>
             </FadeIn>
           </div>
-          <FadeIn className=" w-full" initialDelay={1} once>
-            <ContactForm />
+          <FadeIn className="w-full" initialDelay={1} once>
+            <ZohoFormEmbed className="lg:ml-20" />
           </FadeIn>
         </section>
         <div className="w-full h-[100vw] lg:h-[350px] aspect-square relative block lg:hidden">
