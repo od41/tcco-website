@@ -29,6 +29,9 @@ import {
 } from "@/components/ui/icons";
 import { Spinner } from "@/components/ui/spinner";
 import type { Business } from "@/api/directory";
+import { GetStaticProps } from 'next';
+import { doc, getDoc } from "firebase/firestore";
+import { firestore as firebaseFirestore, METRICS_COLLECTION, METRICS_DOCUMENT_ID } from "@/lib/firebase";
 
 const heroPhoto = require("@/assets/hero-background-static.png");
 const videoThumbnailPhoto = require("@/assets/video-thumb.png");
@@ -55,7 +58,27 @@ const brandPhotosList = [
   brandPhoto5.default.src,
 ];
 
-export default function Home() {
+// Define the metrics interface
+interface Metric {
+  id: string;
+  name: string;
+  value: string;
+  suffix: string;
+}
+
+interface MetricsData {
+  websiteVisitors: Metric;
+  connections: Metric;
+  monthsOperating: Metric;
+  smbs: Metric;
+}
+
+// Add this type for the page props
+interface HomeProps {
+  impactMetrics: MetricsData | null;
+}
+
+export default function Home({ impactMetrics }: HomeProps) {
   // const videoRef = useRef(null);
 
   // useEffect(() => {
@@ -123,9 +146,8 @@ export default function Home() {
         {/* Impact numbers */}
         <section className="py-12">
           <div className="container mx-auto">
-            {/* <h2 className="text-3xl font-bold text-center mb-12">Our Impact</h2> */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-              {content.impactNumbers.items.map((item, index) => (
+              {impactMetrics && Object.values(impactMetrics).map((item, index) => (
                 <div key={`${index}-impact`} className="text-center p-4">
                   <div className="text-4xl lg:text-5xl lg:text-[90px] font-display text-white mb-1 leading-none">
                     <AnimatedCounter
@@ -546,3 +568,58 @@ function FeaturedBusinesses() {
     </div>
   );
 }
+
+// Add getStaticProps to fetch metrics data at build time
+export const getStaticProps: GetStaticProps<HomeProps> = async () => {
+  try {
+    const metricsRef = doc(firestore, METRICS_COLLECTION, METRICS_DOCUMENT_ID);
+    const metricsSnapshot = await getDoc(metricsRef);
+
+    let impactMetrics = null;
+
+    if (metricsSnapshot.exists()) {
+      // Get the metrics data
+      const metricsData = metricsSnapshot.data() as MetricsData;
+
+      // Sort the metrics by value in descending order
+      impactMetrics = Object.fromEntries(
+        Object.entries(metricsData)
+          .sort(([, a], [, b]) => {
+            // Convert values to numbers for comparison
+            const aValue = parseFloat(a.value);
+            const bValue = parseFloat(b.value);
+
+            // Apply multiplier based on suffix (m > k > plain numbers)
+            const getMultiplier = (suffix: string) => {
+              if (suffix.includes('m')) return 1000000;
+              if (suffix.includes('k')) return 1000;
+              return 1;
+            };
+
+            const aMultiplier = getMultiplier(a.suffix);
+            const bMultiplier = getMultiplier(b.suffix);
+
+            // Compare the actual values with multipliers applied
+            return (bValue * bMultiplier) - (aValue * aMultiplier);
+          })
+      ) as MetricsData;
+    }
+
+    return {
+      props: {
+        impactMetrics,
+      },
+      // Revalidate every hour (3600 seconds)
+      // This enables Incremental Static Regeneration
+      revalidate: 3600,
+    };
+  } catch (error) {
+    console.error("Error fetching metrics:", error);
+    return {
+      props: {
+        impactMetrics: null,
+      },
+      revalidate: 3600,
+    };
+  }
+};
