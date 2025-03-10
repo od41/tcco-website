@@ -36,7 +36,7 @@ const Footer = ({ isMini = false }: { isMini?: boolean }) => {
             </FadeIn>
             <FadeIn initialDelay={0.6} once>
               <Button size="lg" asChild>
-                <Link href={"/contact-us"}>
+                <Link href={"/join-us"}>
                   {content.footer.about.buttonText}{" "}
                   <ArrowRightIcon className="ml-3" />
                 </Link>
@@ -61,7 +61,7 @@ const Footer = ({ isMini = false }: { isMini?: boolean }) => {
                 </Link>
               </div>
               <div className="flex gap-24 md:justify-end md:col-span-2">
-                <div className="grid gap-2">
+                <div className="flex gap-8">
                   {content.footer.footerPages.links.map(
                     (link: any, index: any) => (
                       <Link
@@ -74,7 +74,7 @@ const Footer = ({ isMini = false }: { isMini?: boolean }) => {
                     )
                   )}
                 </div>
-                <div>
+                {/* <div>
                   <div className="hidden md:flex space-x-6 ">
                     {content.footer.social.links.map(
                       (link: any, index: number) => (
@@ -91,7 +91,7 @@ const Footer = ({ isMini = false }: { isMini?: boolean }) => {
                       )
                     )}
                   </div>
-                </div>
+                </div> */}
               </div>
             </div>
             <div className="container lg:px-20">

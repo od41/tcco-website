@@ -109,7 +109,7 @@ export default function Home() {
             </FadeIn>
             <FadeIn initialDelay={1.2} once>
               <Button size="lg" asChild>
-                <Link href={"/contact-us"}>
+                <Link href={"/join-us"}>
                   {content.hero.buttonText} <ArrowRightIcon className="ml-3" />
                 </Link>
               </Button>
@@ -299,9 +299,8 @@ export default function Home() {
                       <span className="mx-2 text-white text-2xl">—</span>
                     )}
                     <span
-                      className={`text-lg md:text-2xl lg:text-3xl ${
-                        index % 2 === 0 ? "text-white" : "text-primary"
-                      }`}
+                      className={`text-lg md:text-2xl lg:text-3xl ${index % 2 === 0 ? "text-white" : "text-primary"
+                        }`}
                     >
                       {word}
                     </span>
@@ -401,10 +400,10 @@ function FeaturedBusinesses() {
         // Get all businesses first
         const businessDocs = snapshot.docs.map(
           (doc) =>
-            ({
-              id: doc.id,
-              ...doc.data(),
-            } as Business)
+          ({
+            id: doc.id,
+            ...doc.data(),
+          } as Business)
         );
 
         // Get unique location IDs

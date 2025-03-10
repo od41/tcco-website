@@ -126,8 +126,7 @@ const data = {
       links: [
         { name: "Engage", url: "engage" },
         { name: "Discover", url: "discover" },
-        { name: "Contact Us", url: "contact-us" },
-        { name: "Privacy Policy", url: "privacy-policy" },
+        { name: "Join Us", url: "join-us" },
       ],
     },
     social: {
