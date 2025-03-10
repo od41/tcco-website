@@ -68,7 +68,7 @@ const data = {
         subHeading: "Activation Event",
         bodyText:
           "Experience the energy at Culture Night Pop-Up & Fireside, both events bringing together creators, entrepreneurs, storytellers, and mentors for moments of fun and engaging conversations, connecting with a true sense of community.",
-        learnMoreLink: "#",
+        learnMoreLink: "https://www.instagram.com/culturenight.popup",
       },
       {
         imageUrl:
@@ -95,6 +95,14 @@ const data = {
         bodyText:
           "Stay in the loop with The Culture Mail, your curated digest of all things culture, arts, and community. Our digital newsletter brings you the latest local events, artist spotlights, and thought-provoking articles right to your inbox. Subscribe to become part of a growing community of culture enthusiasts and never miss a beat in your city's vibrant scene.",
         learnMoreLink: "https://caffa-house.ck.page/posts",
+      },
+      {
+        imageUrl: "/venture_stack_tcco.jpg",
+        heading: "Venture Stack",
+        subHeading: "Amplifying African Innovation",
+        bodyText:
+          "Discover the diverse voices of entrepreneurs and innovators across African communities, highlighting their journeys, challenges, and successes. We celebrate the spirit of innovation and collaboration that drives growth and transformation in the continent's vibrant startup ecosystem.",
+        learnMoreLink: "https://www.instagram.com/venturestack_/",
       },
     ],
   },

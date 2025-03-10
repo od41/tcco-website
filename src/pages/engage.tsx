@@ -1,12 +1,10 @@
 import Image from "next/image";
 import content from "@/data/engage.content";
 import homeContent from "@/data/home.content";
-import { MessageTicker } from "@/components/ui/message-ticker";
 import { BrandCard } from "@/components/ui/brand-card";
 import Footer from "@/components/ui/footer";
 import Head from "next/head";
 import { FadeIn } from "@/components/ui/fade-in";
-import AnimatedCounter from "@/components/ui/animated-counter";
 
 const heroPhoto = require("@/assets/engage-hero-4.jpg");
 
@@ -19,6 +17,7 @@ const brandPhoto2 = require("@/assets/brand-2.jpg");
 const brandPhoto3 = require("@/assets/brand-apartments.jpg");
 const brandPhoto4 = require("@/assets/brand-traydah.png");
 const brandPhoto5 = require("@/assets/brand-5.jpg");
+const brandPhoto6 = require("@/assets/brand-6.jpg");
 
 const brandPhotosList = [
   brandPhoto1.default.src,
@@ -27,6 +26,7 @@ const brandPhotosList = [
   brandPhoto3.default.src,
   brandPhoto4.default.src,
   brandPhoto5.default.src,
+  brandPhoto6.default.src,
 ];
 
 export default function Engage() {
